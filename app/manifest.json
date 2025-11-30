@@ -1,0 +1,9 @@
+{
+  "name": "Max von Storch",
+  "short_name": "MvS",
+  "description": "Personal website of Max von Storch",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000"
+}
