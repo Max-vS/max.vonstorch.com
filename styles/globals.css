@@ -8,19 +8,28 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-molten: #ff0000;
+  --color-lime: #bbdb06;
+  --color-charcoal: #100c0b;
+  --font-sans: var(--font-helvetica-neue);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: #ffffff;
+  color: var(--foreground);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Underline animation effect */
+.underline-animate {
+  @apply relative;
+}
+
+.underline-animate::after {
+  content: "";
+  @apply absolute bottom-0 left-0 w-full h-px bg-molten origin-right scale-x-0 transition-transform duration-400 ease-out;
+}
+
+.group:hover .underline-animate::after {
+  @apply origin-left scale-x-100;
 }

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
 import { Analytics } from "@vercel/analytics/next";
+import Footer from "@/components/Footer";
+import { helveticaNeue } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -29,10 +31,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={helveticaNeue.variable}>
       <head />
-      <body>
+      <body className={helveticaNeue.className}>
         {children}
+        <Footer />
         <Analytics />
       </body>
     </html>
