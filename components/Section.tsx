@@ -27,9 +27,11 @@ SectionHeader.displayName = "SectionHeader";
 export const Section = ({
   children,
   className,
+  noHeader = false,
 }: {
   children: React.ReactNode;
   className?: string;
+  noHeader?: boolean;
 }) => {
   const getDisplayName = (child: React.ReactNode) =>
     React.isValidElement(child) &&
@@ -77,7 +79,11 @@ export const Section = ({
       )}
       style={{ gridTemplateColumns: "12rem 28rem 1fr" }}
     >
-      {header || <SectionHeader />}
+      {noHeader ? (
+        <div className="hidden md:block md:border-r border-molten" />
+      ) : (
+        header || <SectionHeader />
+      )}
       <div className="md:border-r border-molten">
         {processedContents.length > 0 ? processedContents : others}
       </div>
