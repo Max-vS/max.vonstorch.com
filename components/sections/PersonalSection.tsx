@@ -5,10 +5,10 @@ import { SpotifyTopTrack } from "@/components/SpotifyTopTrack";
 export default function PersonalSection() {
   return (
     <Section>
-      <SectionHeader className="pt-12">
+      <SectionHeader className="hidden md:pt-12 md:flex">
         <Origami />
       </SectionHeader>
-      <SectionContent className="flex flex-col gap-6 pt-10 text-sm">
+      <SectionContent className="flex flex-col gap-6 md:pt-10 text-sm">
         <div className="flex flex-col">
           <h1 className="text-xl text-charcoal font-medium">Max von Storch</h1>
           <p className="font-normal">Full-Stack Engineer, Designer, Founder</p>

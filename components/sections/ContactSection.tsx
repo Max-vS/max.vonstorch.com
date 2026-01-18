@@ -1,4 +1,5 @@
 import { Github, Linkedin, type LucideIcon, Mail } from "lucide-react";
+import React from "react";
 import { Section, SectionContent, SectionHeader } from "@/components/Section";
 
 interface ContactItem {
@@ -35,30 +36,26 @@ export default function ContactSection() {
       <SectionHeader>
         <h2 className="font-medium">Contact</h2>
       </SectionHeader>
-      <SectionContent>
-        <div
-          className="grid gap-3"
-          style={{ gridTemplateColumns: "auto auto 1fr" }}
-        >
-          {contactItems.map((item) => (
-            <>
-              <item.icon key={`${item.name}-icon`} className="w-4 h-4" />
-              <p key={`${item.name}-name`} className="font-medium">
-                {item.name}
-              </p>
-              <div key={`${item.name}-link`} className="group w-fit">
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="leading-tight underline-animate cursor-pointer"
-                >
-                  {item.handle}
-                </a>
-              </div>
-            </>
-          ))}
-        </div>
+      <SectionContent
+        className="grid gap-3"
+        style={{ gridTemplateColumns: "auto auto 1fr" }}
+      >
+        {contactItems.map((item) => (
+          <React.Fragment key={item.name}>
+            <item.icon className="w-4 h-4" />
+            <p className="font-medium">{item.name}</p>
+            <div className="group w-fit">
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="leading-tight underline-animate cursor-pointer"
+              >
+                {item.handle}
+              </a>
+            </div>
+          </React.Fragment>
+        ))}
       </SectionContent>
     </Section>
   );

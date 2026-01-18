@@ -5,7 +5,7 @@ export const SectionContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-3", className)} {...props} />
+  <div ref={ref} className={cn("p-5 md:p-3", className)} {...props} />
 ));
 SectionContent.displayName = "SectionContent";
 
@@ -16,7 +16,7 @@ export const SectionHeader = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "p-3 border-r border-molten flex items-start justify-end",
+      "p-5 md:p-3 font-medium text-lg md:text-sm flex items-start justify-start md:justify-end md:border-r border-molten",
       className,
     )}
     {...props}
@@ -72,16 +72,16 @@ export const Section = ({
   return (
     <section
       className={cn(
-        "grid w-full border-b border-molten text-molten text-sm",
+        "flex flex-col md:grid w-full border-b border-molten text-molten text-sm",
         className,
       )}
       style={{ gridTemplateColumns: "12rem 28rem 1fr" }}
     >
       {header || <SectionHeader />}
-      <div className="border-r border-molten">
+      <div className="md:border-r border-molten">
         {processedContents.length > 0 ? processedContents : others}
       </div>
-      <div />
+      <div className="hidden md:block" />
     </section>
   );
 };

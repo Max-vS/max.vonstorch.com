@@ -21,18 +21,18 @@ export default function ExperienceSection() {
       url: "https://dryft.ai",
     },
     {
-      company: "Avelios Medical",
-      role: "Frontend Developer",
-      startDate: "2025",
-      url: "https://www.avelios.com",
-    },
-    {
       company: "Stealth Startup @ Picus Capital",
       role: "Tech Lead",
       startDate: "2025",
       description:
         "Built full system architecture, backend, and frontend for an automated medical encoding system.",
       url: "https://www.picuscap.com/",
+    },
+    {
+      company: "Avelios Medical",
+      role: "Frontend Developer",
+      startDate: "2025",
+      url: "https://www.avelios.com",
     },
     {
       company: "Kühne+Nagel",
@@ -44,9 +44,7 @@ export default function ExperienceSection() {
 
   return (
     <Section>
-      <SectionHeader>
-        <h2 className="font-medium">Experience</h2>
-      </SectionHeader>
+      <SectionHeader>Experience</SectionHeader>
       {experienceItems.map((item) => (
         <SectionContent key={item.company}>
           <div className="flex flex-row gap-2 justify-between items-end">

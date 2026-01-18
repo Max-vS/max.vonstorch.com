@@ -11,7 +11,7 @@ export default function ProjectSection() {
     {
       name: "Rémi.fr Website",
       description:
-        "A retro-trash inspired website for my friend and artist Rémi.",
+        "A retro-trash-inspired website created for my friend, the artist Rémi.",
       url: "https://www.xn--rmi-bma.fr/",
     },
     {

@@ -36,25 +36,34 @@ export default function Footer() {
   });
 
   return (
-    <footer
-      className="grid w-full bg-molten text-lime text-sm h-24"
-      style={{ gridTemplateColumns: "12rem 28rem 1fr" }}
-    >
-      {/* Left column - Origami */}
-      <div className="p-3 border-r border-lime flex items-center justify-end">
-        <Origami />
+    <footer className="w-full bg-molten text-lime text-sm md:h-24">
+      {/* Mobile layout - flexbox with space-between */}
+      <div className="flex md:hidden justify-between p-3">
+        <div className="flex items-center">
+          <Origami />
+        </div>
+        <div className="flex flex-col gap-0">
+          <p>Last updated on {lastUpdate}</p>
+          <p>San Francisco, USA {time && <span>- {time}</span>}</p>
+        </div>
       </div>
 
-      {/* Middle column - Last updated */}
-      <div className="p-3 border-r border-lime flex items-center">
-        <p>Last updated on {lastUpdate}</p>
-      </div>
-
-      {/* Right column - Location & Time */}
-      <div className="p-3 flex items-center justify-end">
-        <div className="text-right">
-          <p>San Francisco, USA</p>
-          {time && <p>{time}</p>}
+      {/* Desktop layout - 3 columns */}
+      <div
+        className="hidden md:grid h-full"
+        style={{ gridTemplateColumns: "12rem 28rem 1fr" }}
+      >
+        <div className="p-3 border-r border-lime flex items-center justify-end">
+          <Origami />
+        </div>
+        <div className="p-3 border-r border-lime flex items-center">
+          <p>Last updated on {lastUpdate}</p>
+        </div>
+        <div className="p-3 flex items-center justify-end">
+          <div className="text-right">
+            <p>San Francisco, USA</p>
+            {time && <p>{time}</p>}
+          </div>
         </div>
       </div>
     </footer>

@@ -1,5 +1,6 @@
 import GrainEffect from "@/components/GrainEffect";
-import ASCIISection from "@/components/sections/ASCIISection";
+import ASCIIBirdSection from "@/components/sections/ASCIIBirdSection";
+import ASCIIHeadshotSection from "@/components/sections/ASCIIHeadshotSection";
 import ContactSection from "@/components/sections/ContactSection";
 import ExperienceSection from "@/components/sections/ExperienceSection";
 import PersonalSection from "@/components/sections/PersonalSection";
@@ -12,15 +13,18 @@ export default function Home() {
     <div className="relative">
       <ViewCounter />
       <GrainEffect />
-      <Shader
-        videoSrc="https://hhw23zoadoqdwjht.public.blob.vercel-storage.com/american-spirit-2.mp4"
-        adaptiveQuality
-      />
+      <div className="hidden md:block">
+        <Shader
+          videoSrc="https://hhw23zoadoqdwjht.public.blob.vercel-storage.com/Untitled%20Jan%2017%202026.mp4"
+          adaptiveQuality
+        />
+      </div>
       <div className="relative flex flex-col">
         <PersonalSection />
-        <ASCIISection />
+        <ASCIIHeadshotSection />
         <ExperienceSection />
         <ProjectSection />
+        <ASCIIBirdSection />
         <ContactSection />
       </div>
     </div>
