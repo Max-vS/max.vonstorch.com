@@ -22,7 +22,7 @@ export default function ProjectSection() {
     {
       name: "curava",
       description:
-        "Winning Project at CDTM Hacks 2025. A platform for digitizing, managing, and effortlessly sharing medical records with maximum simplicity.",
+        "Winning Project at CDTM Hacks 2025. A platform for digitizing, managing, and sharing medical records with maximum simplicity.",
       url: "https://www.curava.eu/",
     },
   ];

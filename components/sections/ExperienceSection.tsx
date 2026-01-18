@@ -17,7 +17,7 @@ export default function ExperienceSection() {
       startDate: "2025",
       endDate: "present",
       description:
-        "Combining AI agents with mathematical optimization & simulation to automate complex human decisions in manufacturing operations.",
+        "Combining AI agents with mathematical optimization & simulation to automate human decisions in manufacturing operations.",
       url: "https://dryft.ai",
     },
     {
@@ -32,6 +32,8 @@ export default function ExperienceSection() {
       company: "Avelios Medical",
       role: "Frontend Developer",
       startDate: "2025",
+      description:
+        "Building the next generation of Hospital Information Systems.",
       url: "https://www.avelios.com",
     },
     {

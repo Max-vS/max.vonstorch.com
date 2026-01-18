@@ -37,7 +37,7 @@ export default function ContactSection() {
         <h2 className="font-medium">Contact</h2>
       </SectionHeader>
       <SectionContent
-        className="grid gap-3 md:mb-10"
+        className="grid gap-3 mb-6 md:mb-10"
         style={{ gridTemplateColumns: "auto auto 1fr" }}
       >
         {contactItems.map((item) => (

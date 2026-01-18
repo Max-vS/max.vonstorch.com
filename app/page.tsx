@@ -23,8 +23,8 @@ export default function Home() {
         <PersonalSection />
         <ASCIIHeadshotSection />
         <ExperienceSection />
-        <ProjectSection />
         <ASCIIBirdSection />
+        <ProjectSection />
         <ContactSection />
       </div>
     </div>

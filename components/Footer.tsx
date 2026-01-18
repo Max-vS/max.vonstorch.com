@@ -36,7 +36,7 @@ export default function Footer() {
   });
 
   return (
-    <footer className="w-full bg-molten text-lime text-sm md:h-24">
+    <footer className="w-full bg-molten text-lime text-sm md:h-18">
       {/* Mobile layout - flexbox with space-between */}
       <div className="flex md:hidden justify-between p-3">
         <div className="flex items-center">
