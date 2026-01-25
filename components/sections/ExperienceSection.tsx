@@ -32,8 +32,7 @@ export default function ExperienceSection() {
       company: "Avelios Medical",
       role: "Frontend Developer",
       startDate: "2025",
-      description:
-        "Building the next generation of Hospital Information Systems.",
+      description: "Built the next generation of Hospital Information Systems.",
       url: "https://www.avelios.com",
     },
     {

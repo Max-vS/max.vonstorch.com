@@ -96,7 +96,7 @@ void main() {
 }
 `;
 
-const INK_COLOR: [number, number, number] = [1, 0, 0];
+const INK_COLOR: [number, number, number] = [0, 0, 1];
 
 // Device capability detection for adaptive quality
 function getDeviceQuality() {
