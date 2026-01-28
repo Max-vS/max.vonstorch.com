@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   manifest: "/manifest.json",
+  icons: {
+    icon: "/favicon.svg",
+  },
   robots: {
     index: true,
     follow: true,

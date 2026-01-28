@@ -1,6 +1,6 @@
 "use client";
 
-import { Origami } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Footer() {
@@ -40,7 +40,13 @@ export default function Footer() {
       {/* Mobile layout - flexbox with space-between */}
       <div className="flex md:hidden justify-between p-3">
         <div className="flex items-center">
-          <Origami />
+          <Image
+            src="/logo-lime.svg"
+            alt="Stork Logo"
+            width={24}
+            height={24}
+            priority
+          />
         </div>
         <div className="flex flex-col gap-0">
           <p>Last updated on {lastUpdate}</p>
@@ -54,7 +60,13 @@ export default function Footer() {
         style={{ gridTemplateColumns: "12rem 28rem 1fr" }}
       >
         <div className="p-3 border-r border-lime flex items-center justify-end">
-          <Origami />
+          <Image
+            src="/logo-lime.svg"
+            alt="Stork Logo"
+            width={24}
+            height={24}
+            priority
+          />
         </div>
         <div className="p-3 border-r border-lime flex items-center">
           <p>Last updated on {lastUpdate}</p>
