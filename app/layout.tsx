@@ -9,14 +9,17 @@ export const metadata: Metadata = {
     default: "MvS",
     template: "%s | MvS",
   },
-  description: "Personal website of Max von Storch",
+  description:
+    "Max von Storch - Full-Stack Engineer, Designer, and Founder based in San Francisco. Passionate about building products people actually love to use.",
   metadataBase: new URL("https://max.vonstorch.com"),
   alternates: {
     canonical: "/",
   },
   manifest: "/manifest.json",
   icons: {
+    shortcut: "/favicon.svg",
     icon: "/favicon.svg",
+    apple: "/favicon.svg",
   },
   robots: {
     index: true,
