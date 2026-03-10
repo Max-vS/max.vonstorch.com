@@ -1,28 +1,26 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import "../styles/globals.css";
+import { Analytics } from "@vercel/analytics/next";
+import Footer from "@/components/Footer";
+import { helveticaNeue } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: {
     default: "MvS",
     template: "%s | MvS",
   },
-  description: "Personal website of Max von Storch",
+  description:
+    "Max von Storch - Full-Stack Engineer, Designer, and Founder based in San Francisco. Passionate about building products people actually love to use.",
   metadataBase: new URL("https://max.vonstorch.com"),
   alternates: {
     canonical: "/",
   },
   manifest: "/manifest.json",
+  icons: {
+    shortcut: "/favicon.svg",
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   robots: {
     index: true,
     follow: true,
@@ -39,12 +37,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={helveticaNeue.variable}>
       <head />
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={helveticaNeue.className}>
         {children}
+        <Footer />
+        <Analytics />
       </body>
     </html>
   );
