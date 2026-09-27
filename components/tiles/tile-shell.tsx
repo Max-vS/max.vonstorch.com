@@ -147,8 +147,7 @@ export function TileShell({ children }: { children: ReactNode }) {
 
   return (
     <TileSceneContext value={setScene}>
-      {/* One spacing step is one design pixel (tile ÷ 65 on mobile, ÷ 90 on desktop), so all sizes scale with the tile.
-          The browser gets only horizontal pans, so a vertical swipe changes the pattern and never pulls to refresh. */}
+      {/* One spacing step is one design pixel (tile ÷ 65 on mobile, ÷ 90 on desktop), and touch-pan-x leaves vertical swipes to the pattern instead of pull-to-refresh. */}
       <div
         className="fixed inset-0 touch-pan-x touch-pinch-zoom overflow-hidden [--spacing:calc(var(--tile)/65)] sm:[--spacing:calc(var(--tile)/90)]"
         onWheel={input.onWheel}

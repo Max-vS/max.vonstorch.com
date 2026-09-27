@@ -11,6 +11,7 @@ import {
   ADMIN_MARKS_PAGE_SIZE,
   getApprovedMarksForAdmin,
   getPendingMarks,
+  parsePage,
 } from "@/lib/queries/marks";
 import { getSpotifyStatus } from "@/lib/queries/spotify";
 import type { MarkTile } from "@/lib/schemas/mark";
@@ -45,7 +46,7 @@ async function Moderation({
   await requireOwner();
   const { page: pageParam, error } = await searchParams;
   // `?page=2` is the second page of approved marks; anything else is the first.
-  const page = Math.max(1, Math.trunc(Number(pageParam)) || 1);
+  const page = parsePage(pageParam) ?? 1;
   const [pending, approved, spotify] = await Promise.all([
     getPendingMarks(),
     getApprovedMarksForAdmin({ page: page - 1 }),

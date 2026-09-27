@@ -41,7 +41,7 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
 export function CommunityWall({ first }: { first: MarksPage }) {
   const [marks, setMarks] = useState(first.marks);
   const [total, setTotal] = useState(first.total);
-  const [nextPage, setNextPage] = useState(1);
+  const [nextPage, setNextPage] = useState<number | null>(1);
   const loading = useRef(false);
   const [view, setView] = useState<{ index: number; from: Corner }>({
     index: 0,
@@ -67,12 +67,13 @@ export function CommunityWall({ first }: { first: MarksPage }) {
       date: dateFormat.format(new Date(mark.createdAt)),
     })),
   ];
-  const count = total + (pending ? 1 : 0);
-  const allLoaded = marks.length >= total;
+  // A mark approved during the visit joins the first page, which is never fetched again, so the total can stay out of reach until a page comes back empty.
+  const allLoaded = nextPage === null || marks.length >= total;
+  const count = allLoaded ? entries.length : total + (pending ? 1 : 0);
   const index = Math.max(0, Math.min(view.index, entries.length - 1));
 
   async function loadMore() {
-    if (loading.current) return;
+    if (loading.current || nextPage === null) return;
     loading.current = true;
     try {
       const response = await fetch(`/api/marks/${nextPage}`);
@@ -86,7 +87,7 @@ export function CommunityWall({ first }: { first: MarksPage }) {
         ),
       ]);
       setTotal(page.total);
-      setNextPage((current) => current + 1);
+      setNextPage(page.marks.length > 0 ? nextPage + 1 : null);
     } catch {
       // Browsing stops at the last loaded mark, and the next step there tries again.
     } finally {

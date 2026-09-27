@@ -35,7 +35,7 @@
   }
 }
 
-/* The typography plugin's gray palette, swapped for the site's colors and fonts. Use as `prose prose-site`. */
+/* Goes next to `prose` and swaps the typography plugin's gray palette for the site's colors and fonts. */
 @utility prose-site {
   --tw-prose-body: var(--color-ink);
   --tw-prose-headings: var(--color-ink);

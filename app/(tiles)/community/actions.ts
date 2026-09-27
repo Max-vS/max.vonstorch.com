@@ -34,9 +34,12 @@ export async function submitMark(
     }
 
     // Wrapped, because ipAddress() would read the raw Node headers that Next keeps on its own `headers` field.
-    // Vercel sets x-real-ip; without it (local dev) all requests share one rate-limit bucket.
-    const ip = ipAddress({ headers: await headers() }) ?? "unknown";
-    const created = await createPendingMark(parsed.data, hashIp(ip));
+    const ip = ipAddress({ headers: await headers() });
+    // Only Vercel sets x-real-ip, so in local development all requests share one rate-limit bucket.
+    const created = await createPendingMark(
+      parsed.data,
+      hashIp(ip ?? "unknown"),
+    );
     return created.ok
       ? { ok: true, id: created.id }
       : { ok: false, error: "too_many" };

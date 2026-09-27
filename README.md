@@ -21,10 +21,10 @@ bun install
 cp .env.example .env.development.local   # then fill in the values
 bun run db:local                          # local Postgres (PGlite) on 127.0.0.1:5433; keep it running
 bun run db:mig                            # in a second terminal
-bun run dev -- -H 127.0.0.1
+bun run dev
 ```
 
-Open http://127.0.0.1:3000, not `localhost`: Spotify accepts only HTTPS or `127.0.0.1` redirect URIs.
+The dev server listens on http://127.0.0.1:3000, not `localhost`: Spotify accepts only HTTPS or `127.0.0.1` redirect URIs, and the auth cookies must live on the same host as the OAuth callbacks.
 
 For PGlite, both database URLs are `postgres://postgres:postgres@127.0.0.1:5433/postgres?sslmode=disable`. A production build needs the same env: `bun --env-file=.env.development.local run build`.
 
@@ -32,7 +32,7 @@ For PGlite, both database URLs are `postgres://postgres:postgres@127.0.0.1:5433/
 
 | Script | Does |
 |---|---|
-| `bun run dev` | Dev server |
+| `bun run dev` | Dev server on http://127.0.0.1:3000 |
 | `bun run build` / `bun run start` | Production build / server |
 | `bun run lint` / `bun run format` | Biome check / format |
 | `bun run typecheck` | Route types, then `tsc` |

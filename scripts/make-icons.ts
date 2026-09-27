@@ -1,4 +1,4 @@
-// Writes app/favicon.ico, app/icon.png and app/apple-icon.png. Run once with `bun scripts/make-icons.ts` and commit the files.
+// Run once with `bun scripts/make-icons.ts` and commit the app/favicon.ico, app/icon.png and app/apple-icon.png it writes.
 import { writeFile } from "node:fs/promises";
 import { ImageResponse } from "next/og";
 import { createElement as h } from "react";
@@ -20,7 +20,7 @@ async function png(size: number) {
   return Buffer.from(await image.arrayBuffer());
 }
 
-// An ICO can hold a PNG as is. Header: reserved, type 1 (icon), 1 image. Entry: width, height, colors, reserved, planes, bits per pixel, PNG size, PNG offset.
+// An ICO can hold a PNG as is, behind a 6-byte header (type 1, one image) and a 16-byte entry (width, height, 1 plane, 32 bits per pixel, PNG size and offset).
 function ico(png: Buffer, size: number) {
   const header = Buffer.alloc(22);
   header.writeUInt16LE(1, 2);
