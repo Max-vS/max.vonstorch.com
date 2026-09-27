@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Familjen_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "cn";
+import { SITE_URL } from "@/lib/metadata";
 import { measureGrid, setGridVariables } from "@/lib/tiles/grid";
 
 const familjenGrotesk = Familjen_Grotesk({
@@ -15,7 +16,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://max.vonstorch.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Max von Storch",
     template: "%s | Max von Storch",
