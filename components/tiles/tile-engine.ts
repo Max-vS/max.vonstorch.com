@@ -26,6 +26,19 @@ type Wave = {
   stages: Uint8Array;
 };
 
+function cellKey({ row, col }: Cell) {
+  return `${row},${col}`;
+}
+
+// Rotation only grows, so a change from 270° to 0° shows as a quarter turn forward, not three back.
+function turnForward(tile: PlacedTile, shown: TileView | undefined): TileView {
+  if (!shown) return tile;
+  return {
+    ...tile,
+    rot: shown.rot + ((((tile.rot - shown.rot) % 360) + 360) % 360),
+  };
+}
+
 // The frame loop reads and writes tiles synchronously, so they live here and React renders snapshots.
 export function createTileEngine() {
   let tiles: readonly TileView[] = [];
@@ -108,24 +121,27 @@ export function createTileEngine() {
     run();
   }
 
-  function show(next: readonly PlacedTile[], origin: Cell) {
+  /** With an origin the tiles flip over in a wave from it; without one they change in place. */
+  function show(next: readonly PlacedTile[], origin?: Cell) {
     flips = [];
-    const first = tiles.length === 0;
-    const sameCells =
-      next.length === tiles.length &&
-      next.every(
-        (tile, i) => tile.row === tiles[i].row && tile.col === tiles[i].col,
-      );
-    if (!motion.waves || !(first || sameCells)) {
+    const shown = new Map(tiles.map((tile) => [cellKey(tile), tile]));
+    if (!origin || !motion.waves) {
       wave = null;
-      commit(next);
+      commit(next.map((tile) => turnForward(tile, shown.get(cellKey(tile)))));
     } else {
-      if (first) commit(next.map((tile) => ({ ...tile, folded: true })));
+      // A cell without a tile yet (the first show, or the cells behind the title block) unfolds from nothing.
+      commit(
+        next.map(
+          (tile) => shown.get(cellKey(tile)) ?? { ...tile, folded: true },
+        ),
+      );
       wave = {
         start: performance.now(),
         next,
         delays: next.map((tile) => waveDelay(tile, origin)),
-        stages: new Uint8Array(next.length).fill(first ? FOLDED : WAITING),
+        stages: Uint8Array.from(next, (tile) =>
+          shown.has(cellKey(tile)) ? WAITING : FOLDED,
+        ),
       };
     }
     run();

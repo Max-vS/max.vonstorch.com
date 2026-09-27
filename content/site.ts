@@ -1,4 +1,5 @@
 import type { Route } from "next";
+import type { BrushColor, BrushShape } from "@/lib/schemas/mark";
 import type { PageId } from "@/lib/tiles/types";
 
 export type SitePage = {
@@ -133,6 +134,52 @@ export const contact = {
 };
 
 export const community = {
-  // Phase 8 adds the marks and the paint mode.
   empty: "Be the first to leave your mark.",
+  loadError: "Marks cannot load right now.",
+  start: "Leave your mark",
+  // The design prints the date in mixed case, so these are not uppercased in CSS.
+  count: (n: number, total: number) => `MARK ${n} / ${total}`,
+  thanks: "THANK YOU",
+  waiting: "Waiting for approval",
+  thanksStatus: "Thank you. Your mark is waiting for approval.",
+  position: (n: number, total: number) => `Mark ${n} of ${total}`,
+  anonymous: "Anonymous",
+  yourMark: "Your mark",
+  paintArea: "Your mark, 4 by 4 tiles. Arrow keys move, Enter paints.",
+  paintCell: (row: number, col: number) => `Row ${row}, column ${col}`,
+  brush: {
+    shape: "Shape",
+    colour: "Colour",
+    ground: "Ground",
+  },
+  shapes: {
+    qdisc: "Quarter disc",
+    half: "Half disc",
+    tri: "Triangle",
+    dot: "Dot",
+    qring: "Quarter ring",
+    leaf: "Leaf",
+    squares: "Square",
+    arc: "Arcs",
+  } satisfies Record<BrushShape, string>,
+  colours: {
+    "#E2573B": "Red",
+    "#2F4FD8": "Blue",
+    "#F2C14E": "Yellow",
+    "#9DB39A": "Sage",
+    "#1D1D1B": "Black",
+    "#E9B8A6": "Pink",
+    "#EFEBE4": "Off-white",
+  } satisfies Record<BrushColor, string>,
+  name: "Name",
+  namePlaceholder: "Your name (optional)",
+  note: "Note",
+  notePlaceholder: "Leave a note…",
+  noteLeft: "characters left",
+  submit: "Submit mark",
+  sending: "Sending…",
+  cancel: "Cancel",
+  // Spec §15: the same message for the rate limit and the pending cap; a bot learns nothing.
+  tooMany: "Too many marks right now. Try again later.",
+  failed: "Your mark could not be sent. Try again later.",
 };

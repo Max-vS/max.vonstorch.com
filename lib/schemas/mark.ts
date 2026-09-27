@@ -1,9 +1,9 @@
 // Shared by the mark form and the submit action, so it must stay free of server imports.
 import * as z from "zod";
+import { MOTIF_SIDE } from "@/lib/tiles/motif";
 
 export const MARK_NAME_MAX = 40;
 export const MARK_NOTE_MAX = 140;
-export const MOTIF_SIDE = 4;
 export const MOTIF_TILES = MOTIF_SIDE * MOTIF_SIDE;
 
 export const BRUSH_SHAPES = [
@@ -55,5 +55,7 @@ export const markSubmissionSchema = z.object({
     ),
 });
 
+export type BrushShape = (typeof BRUSH_SHAPES)[number];
+export type BrushColor = (typeof BRUSH_COLORS)[number];
 export type MarkTile = z.infer<typeof markTileSchema>;
 export type MarkSubmission = z.infer<typeof markSubmissionSchema>;

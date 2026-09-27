@@ -2,7 +2,7 @@ import type { BetterAuthOptions } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import * as schema from "@/lib/db/schema";
 
-// Shared by the runtime instance, the schema generator and the seed script, so the three never disagree.
+// Shared by the runtime instance and the schema generator, so the two never disagree.
 
 export function isOwnerEmail(email: string | null | undefined): boolean {
   const owner = process.env.OWNER_EMAIL?.trim().toLowerCase();
@@ -20,15 +20,19 @@ const allowedHosts = [
 
 export const authOptions = {
   baseURL: { allowedHosts },
-  emailAndPassword: {
-    enabled: true,
-    // Also blocks server-side sign-up; scripts/seed-owner.ts creates the owner.
-    disableSignUp: true,
-    minPasswordLength: 12,
+  // The provider's default scopes include user:email, so a hidden profile email still arrives.
+  socialProviders: {
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID ?? "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
+    },
   },
   user: {
+    // Runs on every GitHub sign-in; GitHub also reports addresses an account never confirmed, so those fail too.
     validateUserInfo: ({ user }) => {
-      if (!isOwnerEmail(user.email)) return { error: "owner_only" };
+      if (!isOwnerEmail(user.email) || user.emailVerified !== true) {
+        return { error: "owner_only" };
+      }
     },
   },
   session: {
@@ -38,7 +42,6 @@ export const authOptions = {
   rateLimit: {
     // Memory storage is per instance, so it would not limit anything across Vercel functions.
     storage: "database",
-    customRules: { "/sign-in/email": { window: 15 * 60, max: 5 } },
   },
   // nextCookies() must stay last: it forwards cookies that other plugins set.
   plugins: [nextCookies()],

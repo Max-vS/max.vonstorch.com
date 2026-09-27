@@ -1,3 +1,4 @@
+import { MOTIF_SIDE } from "./motif";
 import type { Cell, Grid } from "./types";
 
 export type GridMetrics = Grid & {
@@ -30,6 +31,9 @@ export function measureGrid(width: number, height: number): GridMetrics {
     rows,
     titleCols,
     titleRows,
+    // A cut under half a pixel does not show, so that track still counts as full.
+    firstFullRow: cutY > 0.5 ? 1 : 0,
+    firstFullCol: cutX > 0.5 ? 1 : 0,
     tile,
     titleWidth: titleCols * tile - cutX,
     titleHeight: titleRows * tile - cutY,
@@ -73,16 +77,42 @@ function contains(rect: Rect, { row, col }: Cell) {
   );
 }
 
-function isCovered(grid: Grid, cell: Cell) {
-  return contains(titleRect(grid), cell) || contains(panelRect(grid), cell);
+function overlaps(a: Rect, b: Rect) {
+  return (
+    a.row < b.row + b.rows &&
+    b.row < a.row + a.rows &&
+    a.col < b.col + b.cols &&
+    b.col < a.col + a.cols
+  );
 }
 
-export function tileCells(grid: Grid): Cell[] {
+/** `behindTitle` keeps the cells under the title block, for a page where it can slide away. */
+export function tileCells(grid: Grid, behindTitle = false): Cell[] {
+  const title = titleRect(grid);
+  const panel = panelRect(grid);
   const cells: Cell[] = [];
   for (let row = 0; row < grid.rows; row++) {
     for (let col = 0; col < grid.cols; col++) {
-      if (!isCovered(grid, { row, col })) cells.push({ row, col });
+      const cell = { row, col };
+      if (contains(panel, cell)) continue;
+      if (!behindTitle && contains(title, cell)) continue;
+      cells.push(cell);
     }
   }
   return cells;
+}
+
+/** The first fully visible 4×4 area that the panel and, unless it slid away, the title block leave free. */
+export function masterBlock(grid: Grid, titleAway: boolean): Cell | null {
+  const panel = panelRect(grid);
+  const title = titleRect(grid);
+  for (let row = grid.firstFullRow; row + MOTIF_SIDE <= grid.rows; row++) {
+    for (let col = grid.firstFullCol; col + MOTIF_SIDE <= grid.cols; col++) {
+      const block = { row, col, rows: MOTIF_SIDE, cols: MOTIF_SIDE };
+      if (overlaps(block, panel)) continue;
+      if (!titleAway && overlaps(block, title)) continue;
+      return { row, col };
+    }
+  }
+  return null;
 }

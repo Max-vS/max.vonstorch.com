@@ -1,4 +1,4 @@
-import { panelRect, tileCells } from "./grid";
+import { panelRect } from "./grid";
 import {
   contactColors as contact,
   cvColors as cv,
@@ -10,6 +10,7 @@ import {
 } from "./palettes";
 import { createRandom, pick, pickOther, quarterTurn } from "./random";
 import type {
+  Cell,
   Grid,
   PageId,
   Pattern,
@@ -402,7 +403,7 @@ export const PATTERNS: Record<PageId, readonly Pattern[]> = {
       },
     },
   ],
-  // The empty state until visitors leave marks (spec §9); phase 8 replaces it.
+  // The empty state; marks replace it once visitors leave some (spec §9).
   community: [bauhaus],
 };
 
@@ -410,12 +411,13 @@ export function buildPattern(
   page: PageId,
   pattern: number,
   grid: Grid,
+  cells: readonly Cell[],
   seed: number,
 ): PlacedTile[] {
   const { tile } = PATTERNS[page][pattern];
   const random = createRandom(seed);
   const blocks = new Map<string, Tile>();
-  return tileCells(grid).map(({ row, col }) => ({
+  return cells.map(({ row, col }) => ({
     ...tile({ row, col, random, blocks, grid }),
     row,
     col,

@@ -19,6 +19,9 @@ export type Grid = {
   rows: number;
   titleCols: number;
   titleRows: number;
+  // 1 when the first row or column is cut at the window edge, else 0.
+  firstFullRow: number;
+  firstFullCol: number;
 };
 
 export type Tile = {

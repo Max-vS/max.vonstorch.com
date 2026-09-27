@@ -2,11 +2,15 @@ import { cn } from "cn";
 import type { SitePage } from "@/content/site";
 import { titleColors } from "@/lib/tiles/palettes";
 
-export function TitleBlock({ page }: { page: SitePage }) {
+/** `away` slides the block up and out, to free the tiles behind it. */
+export function TitleBlock({ page, away }: { page: SitePage; away: boolean }) {
   const colors = titleColors[page.id];
   return (
     <header
-      className="@container absolute top-0 left-0 flex h-(--title-height) w-(--title-width) flex-col justify-between px-18 py-16 [transition:background-color_600ms_var(--ease-turn),color_600ms] sm:px-30 sm:py-26"
+      className={cn(
+        "@container absolute top-0 left-0 flex h-(--title-height) w-(--title-width) flex-col justify-between px-18 py-16 [transition:background-color_600ms_var(--ease-turn),color_600ms] sm:px-30 sm:py-26 motion-safe:[transition:background-color_600ms_var(--ease-turn),color_600ms,translate_750ms_var(--ease-turn)]",
+        away && "-translate-y-full",
+      )}
       style={{ backgroundColor: colors.bg, color: colors.fg }}
     >
       <p className="font-mono text-[length:--spacing(9)] uppercase tracking-[0.06em] opacity-80 sm:text-[length:--spacing(12)]">

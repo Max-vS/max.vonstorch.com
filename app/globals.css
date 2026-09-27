@@ -12,6 +12,7 @@
   --color-ground: #efebe4;
   --color-ink: #1d1d1b;
   --color-muted: #6b665e;
+  --color-danger: #c0392b;
   --ease-flip: cubic-bezier(0.5, 0, 0.5, 1);
   --ease-turn: cubic-bezier(0.65, 0, 0.25, 1);
   /* In px like the grid switch in lib/tiles/grid.ts, so CSS and JS change layout at the same width. */

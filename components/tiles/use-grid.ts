@@ -17,18 +17,33 @@ function subscribe(onChange: () => void) {
 
 // A new object only when the cell layout changes, so a resize that only scales the tiles keeps the pattern.
 function getGrid() {
-  const { mobile, cols, rows, titleCols, titleRows } = measureGrid(
-    window.innerWidth,
-    window.innerHeight,
-  );
+  const {
+    mobile,
+    cols,
+    rows,
+    titleCols,
+    titleRows,
+    firstFullRow,
+    firstFullCol,
+  } = measureGrid(window.innerWidth, window.innerHeight);
   if (
     current?.mobile !== mobile ||
     current.cols !== cols ||
     current.rows !== rows ||
     current.titleCols !== titleCols ||
-    current.titleRows !== titleRows
+    current.titleRows !== titleRows ||
+    current.firstFullRow !== firstFullRow ||
+    current.firstFullCol !== firstFullCol
   ) {
-    current = { mobile, cols, rows, titleCols, titleRows };
+    current = {
+      mobile,
+      cols,
+      rows,
+      titleCols,
+      titleRows,
+      firstFullRow,
+      firstFullCol,
+    };
   }
   return current;
 }
