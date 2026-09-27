@@ -12,7 +12,8 @@
     "db:gen": "drizzle-kit generate",
     "db:mig": "drizzle-kit migrate",
     "db:local": "pglite-server --db=.pglite --host=127.0.0.1 --port=5433 --max-connections=10",
-    "auth:gen": "bun x auth@1.7.6 generate --config lib/auth/auth.cli.ts --output lib/db/schema/auth.ts --yes && biome check --write lib/db/schema/auth.ts"
+    "auth:gen": "bun x auth@1.7.6 generate --config lib/auth/auth.cli.ts --output lib/db/schema/auth.ts --yes && biome check --write lib/db/schema/auth.ts",
+    "seed:owner": "bun scripts/seed-owner.ts"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "1.7.6",
