@@ -31,6 +31,17 @@
     "enabled": true,
     "rules": {
       "preset": "recommended",
+      "style": {
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "@/lib/db": "The database client belongs to the data access layer. Import from lib/queries/* or lib/mutations/* instead.",
+              "@/lib/auth/auth": "Import getSession, requireOwner or checkOwner from @/lib/auth/session instead, so the owner check cannot be skipped."
+            }
+          }
+        }
+      },
       "nursery": {
         "useSortedClasses": {
           "level": "error",
@@ -51,5 +62,25 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "lib/queries/**",
+        "lib/mutations/**",
+        "lib/db/**",
+        "lib/auth/**",
+        "scripts/**",
+        "drizzle.config.ts",
+        "app/api/auth/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": "off"
+          }
+        }
+      }
+    }
+  ]
 }
