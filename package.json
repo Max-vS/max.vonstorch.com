@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "typecheck": "next typegen && tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit",
+    "auth:gen": "bun x auth@1.7.6 generate --config lib/auth/auth.cli.ts --output lib/db/schema/auth.ts --yes && biome check --write lib/db/schema/auth.ts"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "1.7.6",
