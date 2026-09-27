@@ -112,7 +112,7 @@ export const writing = {
 };
 
 export const music = {
-  // Phase 9 shows the live Spotify tracks and keeps this as the fallback.
+  intro: "My top 3 tracks lately:",
   fallback: "Spotify is quiet right now.",
 };
 
