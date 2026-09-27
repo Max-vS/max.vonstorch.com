@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>23 — Tile System v3</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EFEBE4;color:#1D1D1B;font-family:'Familjen Grotesk',sans-serif}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:4px}
+.tt-flip{transition:transform .26s cubic-bezier(.5,0,.5,1)}
+.tt-rot{transition:transform .7s cubic-bezier(.65,0,.25,1)}
+.tt-sc{transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.tt-blk{transition:background .6s cubic-bezier(.65,0,.25,1), color .6s}
+.tt-panel{transition:left .75s cubic-bezier(.65,0,.25,1),top .75s cubic-bezier(.65,0,.25,1),width .75s cubic-bezier(.65,0,.25,1),height .75s cubic-bezier(.65,0,.25,1)}
+.tt-row{transition:padding .3s cubic-bezier(.19,.8,.12,1)}
+.tt-row:hover{padding-left:8px !important;text-decoration:none !important}
+.tt-nav{transition:background .25s,color .25s,border-color .25s}
+.tt-nav:hover{color:#1D1D1B !important}
+.tt-re{transition:transform .5s cubic-bezier(.65,0,.25,1),opacity .2s}
+.tt-re:hover{transform:rotate(180deg)}
+.tt-ext:hover{opacity:.6}
+.tt-tick{transition:height .45s cubic-bezier(.65,0,.25,1),background .3s}
+.tt-lnk{transition:opacity .2s}
+.tt-lnk:hover{opacity:.6}
+.tt-btn{transition:background .2s,color .2s}
+.tt-btn:hover{background:#1D1D1B;color:#EFEBE4}
+@media (prefers-reduced-motion: reduce){.tt-flip,.tt-rot,.tt-sc{transition:none}}
+</style>
+</helmet>
+<div onWheel="{{onWheel}}" style="width: 1440px; height: 900px; position: relative; overflow: hidden; background: #EFEBE4; color: #1D1D1B; font-family: 'Familjen Grotesk', sans-serif; display: grid; grid-template-columns: repeat(16, 90px); grid-template-rows: repeat(10, 90px)">
+
+<sc-for list="{{tiles}}" as="t" hint-placeholder-count="116">
+<button type="button" tabindex="-1" aria-hidden="true" onMouseEnter="{{t.hit}}" onClick="{{t.paint}}" style="grid-column: {{t.col}}; grid-row: {{t.row}}; width: 90px; height: 90px; overflow: hidden; margin: 0; padding: 0; border: 0; background: transparent; cursor: {{t.cur}}">
+<div class="tt-flip" style="width: 90px; height: 90px; background: {{t.bg}}; transform: scale({{t.s}}, 1)">
+<svg aria-hidden="true" class="tt-rot" width="90" height="90" viewBox="0 0 120 120" style="display: block; transform: rotate({{t.rot}}deg)">
+<g class="tt-sc" style="transform: scale({{t.sc}}); transform-origin: 60px 60px">
+<path d="{{t.a}}" fill="{{t.fg}}" fill-rule="evenodd"></path>
+<path d="{{t.b}}" fill="{{t.fg2}}" fill-rule="evenodd"></path>
+<path d="{{t.st}}" fill="none" stroke="{{t.fg}}" stroke-width="16"></path>
+</g>
+</svg>
+</div>
+</button>
+</sc-for>
+
+<div class="tt-blk" style="grid-column: 1 / span 8; grid-row: 1 / span 3; background: {{titleBg}}; color: {{titleFg}}; box-sizing: border-box; padding: 26px 30px; display: flex; flex-direction: column; justify-content: space-between">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; opacity: 0.8; text-transform: uppercase">{{kicker}}</span>
+<sc-if value="{{isIndex}}" hint-placeholder-val="{{ true }}"><h1 style="margin: 0; font-size: 104px; line-height: 0.88; font-weight: 700; letter-spacing: -0.045em">Max von Storch</h1></sc-if>
+<sc-if value="{{notIndex}}" hint-placeholder-val="{{ false }}"><h1 style="margin: 0; font-size: 132px; line-height: 0.85; font-weight: 700; letter-spacing: -0.05em">{{title}}</h1></sc-if>
+</div>
+
+<div class="tt-panel" style="position: absolute; left: {{px}}px; top: {{py}}px; width: {{pw}}px; height: {{ph}}px; background: #EFEBE4; box-sizing: border-box; padding: 26px 30px; display: flex; flex-direction: column; gap: 14px; overflow: hidden">
+<sc-if value="{{simple}}" hint-placeholder-val="{{ true }}">
+<p style="margin: 0; font-size: 22px; line-height: 1.3; font-weight: 500">{{body}}</p>
+</sc-if>
+<sc-if value="{{hasList}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; border-top: 1.5px solid #1D1D1B">
+<sc-for list="{{rows}}" as="x" hint-placeholder-count="4">
+<a href="{{x.href}}" class="tt-row" style="display: grid; grid-template-columns: {{x.cols}}; column-gap: 14px; align-items: center; padding: 11px 0; border-bottom: 1px solid rgba(29,29,27,0.18); text-decoration: none">
+<sc-if value="{{x.hasCover}}" hint-placeholder-val="{{ false }}"><span style="width: 48px; height: 48px; background: {{x.cover}}; display: block; position: relative; overflow: hidden"><span style="position: absolute; left: 0; top: 0; width: 48px; height: 48px; border-radius: 0 0 100% 0; background: {{x.cover2}}"></span></span></sc-if>
+<span style="display: flex; align-items: baseline; gap: 10px; min-width: 0; white-space: nowrap; overflow: hidden"><span style="font-size: 18px; font-weight: 600">{{x.title}}</span><span style="font-size: 15px; color: #6B665E; overflow: hidden; text-overflow: ellipsis">{{x.sub}}</span></span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B665E; text-align: right; white-space: nowrap">{{x.meta}}</span>
+</a>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{hasCta}}" hint-placeholder-val="{{ false }}"><div style="display: flex; align-items: center; gap: 14px"><a href="{{ctaHref}}" download="" class="tt-btn" style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 18px; background: #1D1D1B; color: #EFEBE4; border: 1.5px solid #1D1D1B; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-decoration: none">{{ctaLabel}}</a><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.04em; color: #8A857C">{{ctaNote}}</span></div></sc-if>
+<sc-if value="{{hasLink}}" hint-placeholder-val="{{ false }}"><a href="{{href}}" class="tt-ext" style="align-self: flex-start; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.02em; color: #1D1D1B; text-decoration: underline; text-underline-offset: 4px">{{linkShort}}</a></sc-if>
+<sc-if value="{{browsing}}" hint-placeholder-val="{{ false }}">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: #6B665E">{{eCount}} · {{eDate}}</span>
+<p style="margin: 0; font-size: 19px; line-height: 1.32; font-weight: 500">“{{eNote}}”</p>
+<span style="font-size: 15px; color: #6B665E">— {{eName}}</span>
+<button type="button" class="tt-btn" onClick="{{startMark}}" style="align-self: flex-start; min-height: 40px; padding: 0 18px; background: #1D1D1B; color: #EFEBE4; border: 1.5px solid #1D1D1B; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; cursor: pointer">LEAVE YOUR MARK</button>
+</sc-if>
+<sc-if value="{{editing}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 6px"><span style="width: 64px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: #6B665E">SHAPE</span>
+<sc-for list="{{bMotifs}}" as="m" hint-placeholder-count="8"><button type="button" onClick="{{m.pick}}" aria-label="{{m.name}}" aria-pressed="{{m.on}}" style="width: 32px; height: 32px; padding: 4px; background: #EFEBE4; border: 1.5px solid {{m.bd}}; border-radius: 6px; cursor: pointer"><svg aria-hidden="true" width="21" height="21" viewBox="0 0 120 120" style="display: block"><path d="{{m.a}}" fill="#1D1D1B" fill-rule="evenodd"></path><path d="{{m.b}}" fill="#1D1D1B" fill-opacity="0.5" fill-rule="evenodd"></path><path d="{{m.st}}" fill="none" stroke="#1D1D1B" stroke-width="16"></path></svg></button></sc-for></div>
+<div style="display: flex; align-items: center; gap: 8px"><span style="width: 62px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: #6B665E">COLOUR</span>
+<sc-for list="{{bColors}}" as="k" hint-placeholder-count="7"><button type="button" onClick="{{k.pick}}" aria-label="{{k.c}}" aria-pressed="{{k.on}}" style="width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 1px solid rgba(29,29,27,0.3); background: {{k.c}}; box-shadow: {{k.ring}}; cursor: pointer"></button></sc-for></div>
+<div style="display: flex; align-items: center; gap: 8px"><span style="width: 62px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: #6B665E">GROUND</span>
+<sc-for list="{{bGrounds}}" as="k" hint-placeholder-count="7"><button type="button" onClick="{{k.pick}}" aria-label="{{k.c}}" aria-pressed="{{k.on}}" style="width: 22px; height: 22px; padding: 0; border-radius: 4px; border: 1px solid rgba(29,29,27,0.3); background: {{k.c}}; box-shadow: {{k.ring}}; cursor: pointer"></button></sc-for></div>
+<input type="text" aria-label="Your name" placeholder="Your name (optional)" maxlength="40" ref="{{nameRef}}" onInput="{{setName}}" onChange="{{setName}}" style="height: 34px; padding: 0; border: 0; border-bottom: 1px solid rgba(29,29,27,0.35); background: transparent; font-family: 'Familjen Grotesk', sans-serif; font-size: 16px; color: #1D1D1B; outline: none">
+<textarea aria-label="Your note" placeholder="Leave a note…" maxlength="140" rows="2" ref="{{noteRef}}" onInput="{{setNote}}" onChange="{{setNote}}" style="padding: 6px 0; border: 0; border-bottom: 1px solid rgba(29,29,27,0.35); background: transparent; font-family: 'Familjen Grotesk', sans-serif; font-size: 16px; line-height: 1.3; color: #1D1D1B; resize: none; outline: none"></textarea>
+<div style="display: flex; align-items: center; gap: 14px">
+<button type="button" class="tt-btn" onClick="{{submitMark}}" style="min-height: 40px; padding: 0 18px; background: #1D1D1B; color: #EFEBE4; border: 1.5px solid #1D1D1B; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; cursor: pointer">SUBMIT MARK</button>
+<button type="button" onClick="{{cancelMark}}" style="min-height: 40px; padding: 0; background: transparent; border: 0; font-family: 'Familjen Grotesk', sans-serif; font-size: 15px; font-weight: 600; color: #6B665E; cursor: pointer">Cancel</button>
+<span ref="{{leftRef}}" style="margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: {{leftColor}}">{{noteLeft}}</span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{showNav}}" hint-placeholder-val="{{ true }}">
+<nav aria-label="Pages" style="margin-top: auto; align-self: flex-end; width: 390px; flex-shrink: 0; padding-top: 12px; border-top: 1px solid rgba(29,29,27,0.25); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px 14px">
+<sc-for list="{{pages}}" as="p" hint-placeholder-count="8"><button type="button" class="tt-nav" onClick="{{p.go}}" aria-current="{{p.cur}}" style="display: flex; align-items: baseline; gap: 8px; min-height: 30px; padding: 0; background: transparent; border: 0; text-align: left; font-family: 'Familjen Grotesk', sans-serif; font-size: 17px; font-weight: {{p.fw}}; letter-spacing: -0.01em; color: {{p.fg}}; cursor: pointer; white-space: nowrap"><span style="border-bottom: 1.5px solid {{p.ul}}; padding-bottom: 1px">{{p.label}}</span></button></sc-for>
+</nav>
+</sc-if>
+</div>
+<div aria-live="polite" style="position: absolute; left: 0; top: 810px; width: 270px; height: 90px; box-sizing: border-box; padding: 0 30px; background: #EFEBE4; display: flex; align-items: center; gap: 16px"><div aria-hidden="true" style="display: flex; flex-direction: column; gap: 4px"><sc-for list="{{ticks}}" as="k" hint-placeholder-count="3"><span class="tt-tick" style="display: block; width: 4px; height: {{k.h}}px; border-radius: 2px; background: {{k.c}}"></span></sc-for></div><div style="display: flex; flex-direction: column; gap: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em"><span style="color: #1D1D1B; text-transform: uppercase">{{patName}}</span><span style="color: #8A857C">{{scrollHint}}</span></div></div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dryftBlue":{"editor":"color","default":"#1F3DFF","options":["#1F3DFF","#0A2BD8","#2B59FF","#0B1F6B"]},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  setup() {
+    if (this._ready) return;
+    this._ready = true;
+    var C = function (cx, cy, r) { return 'M' + (cx - r) + ' ' + cy + 'a' + r + ' ' + r + ' 0 1 0 ' + (2 * r) + ' 0a' + r + ' ' + r + ' 0 1 0 ' + (-2 * r) + ' 0Z'; };
+    var ann = function (R, r) { return 'M' + R + ' 0A' + R + ' ' + R + ' 0 0 1 0 ' + R + 'L0 ' + r + 'A' + r + ' ' + r + ' 0 0 0 ' + r + ' 0Z'; };
+    var semi = function (R) { return 'M' + (60 - R) + ' 120A' + R + ' ' + R + ' 0 0 1 ' + (60 + R) + ' 120Z'; };
+    var band = function (a, b) {
+      var poly = [[0, 0], [120, 0], [120, 120], [0, 120]];
+      var clip = function (P, f) { var out = []; for (var i = 0; i < P.length; i++) { var p = P[i], q = P[(i + 1) % P.length], fp = f(p), fq = f(q); if (fp >= 0) out.push(p); if ((fp >= 0) !== (fq >= 0)) { var t = fp / (fp - fq); out.push([p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t]); } } return out; };
+      poly = clip(poly, function (p) { return p[0] + p[1] - a; });
+      poly = clip(poly, function (p) { return b - p[0] - p[1]; });
+      if (poly.length < 3) return '';
+      return 'M' + poly.map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('L') + 'Z';
+    };
+    this.M = {
+      arc: { st: 'M60 0A60 60 0 0 1 0 60M120 60A60 60 0 0 0 60 120' },
+      qdisc: { a: 'M0 0H120A120 120 0 0 1 0 120Z' },
+      leaf: { a: 'M0 120A120 120 0 0 1 120 0A120 120 0 0 1 0 120Z' },
+      half: { a: 'M0 0H120A60 60 0 0 1 0 0Z' },
+      halves: { a: 'M0 0H120A60 60 0 0 1 0 0Z', b: 'M0 120H120A60 60 0 0 0 0 120Z' },
+      tri: { a: 'M0 0L120 0L0 120Z' },
+      stripes: { a: band(0, 30) + band(60, 90) + band(120, 150) + band(180, 210) },
+      chev: { a: 'M0 0H40L100 60L40 120H0L60 60Z' },
+      lines: { a: 'M16 22h88v10h-88zM16 46h88v10h-88zM16 70h88v10h-88zM16 94h56v10h-56z' },
+      qring: { a: 'M100 0A100 100 0 0 1 0 100L0 62A62 62 0 0 0 62 0Z' },
+      ring: { a: C(60, 60, 50) + C(60, 60, 32), b: C(60, 60, 14) },
+      dot: { a: C(60, 60, 46) },
+      squares: { a: 'M14 14h92v92h-92z', b: 'M38 38h44v44h-44z' },
+      maze: { st: 'M0 0L120 120', b: C(0, 0, 13) + C(120, 0, 13) + C(0, 120, 13) + C(120, 120, 13) },
+      cross: { a: 'M48 16h24v32h32v24h-32v32h-24v-32h-32v-24h32z' },
+      bars: { a: '' },
+      none: {},
+      scale: { a: semi(60) + semi(45) + semi(30) + semi(15), b: semi(45) + semi(30) + semi(15) },
+      split: { a: 'M60 12A48 48 0 0 0 60 108Z', b: 'M60 12A48 48 0 0 1 60 108Z' },
+      arch: { a: 'M18 120V62A42 42 0 0 1 102 62V120Z', b: 'M40 120V66A20 20 0 0 1 80 66V120Z' },
+      weave: { a: 'M16 0h22v120h-22zM49 0h22v120h-22zM82 0h22v120h-22z' },
+      target: { a: C(60, 60, 52) + C(60, 60, 39) + C(60, 60, 26) + C(60, 60, 13) },
+      offdot: { a: C(34, 34, 25) },
+      arc2: { st: 'M40 0A40 40 0 0 1 0 40M80 0A80 80 0 0 1 0 80M120 40A80 80 0 0 0 40 120M120 80A40 40 0 0 0 80 120' },
+      rainbow: { a: ann(120, 90) + ann(60, 30), b: ann(90, 60) + 'M0 0H30A30 30 0 0 1 0 30Z' },
+      hourglass: { a: 'M0 0H120L60 60ZM0 120H120L60 60Z' },
+      diamond: { a: 'M60 8L112 60L60 112L8 60Z', b: 'M60 36L84 60L60 84L36 60Z' },
+      dots4: { a: C(30, 30, 17) + C(90, 30, 17) + C(30, 90, 17) + C(90, 90, 17) },
+      node: { st: 'M60 0V120M0 60H120', b: C(60, 60, 17) },
+      lshape: { a: 'M0 0H44V76H120V120H0Z' },
+      arrow: { a: 'M14 46H64V20L108 60L64 100V74H14Z' },
+      outline: { st: 'M20 20H100V100H20Z', b: C(20, 20, 9) + C(100, 20, 9) + C(20, 100, 9) + C(100, 100, 9) },
+      wedge: { a: 'M0 0H120A120 120 0 0 1 0 120Z', b: 'M0 0H60A60 60 0 0 1 0 60Z' },
+      eye: { a: 'M0 60Q60 -4 120 60Q60 124 0 60Z', b: C(60, 60, 18) },
+      keys: { a: 'M30 0h20v74h-20zM70 0h20v74h-20zM0 0h10v74h-10zM110 0h10v74h-10z', b: 'M39 0h2v120h-2zM79 0h2v120h-2zM0 0h2v120h-2z' },
+      zig: { st: 'M0 90L30 30L60 90L90 30L120 90' },
+      staff: { a: 'M0 28h120v4h-120zM0 48h120v4h-120zM0 68h120v4h-120zM0 88h120v4h-120z' },
+      note: { a: C(46, 86, 18) + 'M56 20h8v66h-8zM64 20q34 12 30 44q-6-20-30-24z', b: 'M0 28h120v4h-120zM0 48h120v4h-120zM0 68h120v4h-120zM0 88h120v4h-120z' },
+      envelope: { a: 'M14 32H106V88H14Z', b: 'M14 32L60 64L106 32H96L60 57L24 32Z' },
+      square: { st: 'M0 90H30V30H90V90H120' },
+      vinyl: { a: C(60, 60, 50) + C(60, 60, 5), b: C(60, 60, 19) + C(60, 60, 5) + 'M58 41h4v8h-4z', st: '' },
+      pin: { a: 'M0 0H60L60 60ZM120 0V60L60 60ZM120 120H60L60 60ZM0 120V60L60 60Z' },
+      frame: { a: 'M0 0H120V24H24V120H0ZM48 48H120V72H72V120H48ZM96 96H120V120H96Z' },
+      moon: { a: 'M75 10A50 50 0 1 0 75 110A72.5 72.5 0 0 1 75 10Z' },
+      sine: { st: 'M0 60C20 22 40 22 60 60S100 98 120 60' }
+    };
+    var self = this;
+    var pick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
+    var r4 = function () { return Math.floor(Math.random() * 4) * 90; };
+    var I = { ink: '#1D1D1B', off: '#EFEBE4', red: '#E2573B', blue: '#2F4FD8', yel: '#F2C14E', sage: '#9DB39A', pink: '#E9B8A6' };
+    var TH = { blue: '#F2C14E', navy: '#1D1D1B', off: '#EFEBE4', yel: '#E2573B', sky: '#F6DC97' };
+    var W = { sage: '#8FA98A', forest: '#33503A', off: '#EFEBE4', ink: '#1D1D1B', clay: '#D9A08B' };
+    var MU = { ink: '#1D1D1B', off: '#EFEBE4', tang: '#FF6A13', peach: '#F7C7A6', rust: '#9C3A12' };
+    var CT = { terra: '#E2573B', blush: '#E9B8A6', off: '#EFEBE4', ink: '#1D1D1B', yel: '#F2C14E' };
+    var D = function () { return self.dp(); };
+    this.T = [
+      { id: 'index', label: 'Index', title: 'Max von Storch', kicker: 'FOUNDING ENGINEER · SAN FRANCISCO', bg: function () { return '#1D1D1B'; }, fgc: '#EFEBE4', dot: function () { return '#1D1D1B'; },
+        body: 'Currently founding engineer at Dryft, building AI for manufacturing.', href: '', link: '',
+        comps: [
+          { name: 'Bauhaus', f: function (r, c) { var L = [I.red, I.blue, I.yel, I.sage, I.ink, I.off, I.pink], bg = pick(L), fg; do { fg = pick(L); } while (fg === bg); return { k: pick(['qdisc', 'qdisc', 'half', 'half', 'dot', 'tri', 'qring', 'qring', 'halves']), rot: r4(), bg: bg, fg: fg }; } },
+          { name: 'Rings', f: function (r, c, S) { var L = [I.red, I.blue, I.yel, I.sage, I.pink, I.ink], key = (r >> 1) + ',' + (c >> 1); if (!S[key]) { var bg = pick([I.off, I.off, I.ink, I.pink]), fg; do { fg = pick(L); } while (fg === bg); S[key] = { bg: bg, fg: fg, pin: Math.random() < 0.3 ? 90 : 0 }; } var m = { '0,0': 180, '0,1': 270, '1,0': 90, '1,1': 0 }[(r & 1) + ',' + (c & 1)]; return { k: 'qdisc', rot: m + S[key].pin, bg: S[key].bg, fg: S[key].fg }; } },
+          { name: 'Petals', f: function (r, c) { var L = [I.blue, I.red, I.yel, I.sage]; return { k: 'leaf', rot: ((r + c) % 2) * 90, bg: (r % 2) ? I.off : I.pink, fg: L[((r >> 1) + (c >> 1)) % 4] }; } }
+        ] },
+      { id: 'education', label: 'Education', title: 'Education', kicker: 'Computer Science & Philosophy', bg: function () { return TH.blue; }, fgc: '#1D1D1B', dot: function () { return TH.blue; },
+        body: 'Computer science at TU Munich, CSEE and UC Berkeley. Philosophy at HFPH.', href: '#', link: '[READ THE ABSTRACT] ↗', linkShort: '[Abstract] ↗',
+        comps: [
+          { name: 'Routes', auto: 'rotate', f: function () { return { k: 'arc', rot: Math.random() < 0.5 ? 0 : 90, bg: TH.off, fg: TH.navy }; } },
+          { name: 'Waves', f: function (r, c) { var R = [TH.off, TH.sky, TH.blue, '#C9962A', TH.blue, TH.sky]; var col = function (i) { return R[((i % 6) + 6) % 6]; }; var up = c % 2; return { k: 'half', rot: up ? 180 : 0, bg: col(r), fg: up ? col(r + 1) : col(r - 1) }; } },
+          { name: 'Steps', f: function (r, c) { return { k: 'lshape', rot: ((r + c) % 4) * 90, bg: (r % 2) ? TH.sky : TH.off, fg: TH.navy }; } }
+        ] },
+      { id: 'projects', label: 'Projects', title: 'Projects', kicker: 'DRYFT & SIDE PROJECTS', bg: function () { return D().blue; }, fgc: '#FFFFFF', dot: function () { return D().blue; },
+        body: 'Founding engineer at Dryft, building AI for manufacturing. [Side project] · [Side project].', href: 'https://dryft.ai', link: 'DRYFT.AI ↗', linkShort: 'dryft.ai ↗',
+        comps: [
+          { name: 'Wedges', f: function () { var p = D(), bg = pick([p.off, p.tint, p.deep]), fg = bg === p.deep ? p.blue : pick([p.blue, p.deep]); return { k: 'wedge', rot: r4(), bg: bg, fg: fg, fg2: bg === p.off ? p.tint : p.off }; } },
+          { name: 'Stripes', f: function (r, c) { var p = D(), flip = (r >> 1) % 2; return { k: 'stripes', rot: ((r + c) % 2) * 90, bg: flip ? p.deep : p.blue, fg: flip ? p.blue : p.off }; } },
+          { name: 'Machine', f: function (r, c) { var p = D(); if ((r + c) % 2 === 0) return { k: 'ring', rot: 0, bg: p.tint, fg: p.deep, fg2: p.blue }; var k = pick(['cross', 'squares', 'squares']); return { k: k, rot: 0, bg: p.off, fg: k === 'cross' ? p.blue : p.deep, fg2: p.tint }; } }
+        ] },
+      { id: 'writing', label: 'Writing', title: 'Writing', kicker: 'NOTES & ESSAYS', bg: function () { return W.forest; }, fgc: '#EFEBE4', dot: function () { return W.sage; },
+        body: '[Post title] · [Post title] · [Post title]', href: '#', link: '[ALL POSTS] ↗', linkShort: '[All posts] ↗',
+        comps: [
+          { name: 'Squares', f: function (r, c) { var L = [W.off, W.sage, W.forest, W.ink, W.clay]; return { k: 'squares', rot: 0, bg: L[(c + r) % 5], fg: L[(c + r + 1) % 5], fg2: L[(c + r + 2) % 5] }; } },
+          { name: 'Arcs', f: function () { var bg = Math.random() < 0.35 ? W.sage : W.off; return { k: 'qring', rot: r4(), bg: bg, fg: bg === W.sage ? W.forest : pick([W.forest, W.ink, W.ink]) }; } },
+          { name: 'Triangles', f: function () { var L = [W.off, W.sage, W.forest, W.clay], bg = pick(L), fg; do { fg = pick(L); } while (fg === bg); return { k: 'tri', rot: r4(), bg: bg, fg: fg }; } }
+        ] },
+      { id: 'music', label: 'Music', title: 'Music', kicker: '[WHAT YOU PLAY / MAKE]', bg: function () { return MU.tang; }, fgc: '#1D1D1B', dot: function () { return MU.tang; },
+        body: 'My top 3 tracks this week: [Track] · [Track] · [Track].', href: '#', link: '[LISTEN] ↗', linkShort: '[Listen] ↗',
+        comps: [
+          { name: 'Records', f: function () { var bg = pick([MU.off, MU.off, MU.peach]); return { k: 'split', rot: r4(), bg: bg, fg: MU.tang, fg2: pick([MU.ink, MU.rust]) }; } },
+          { name: 'Dots', f: function () { return { k: 'offdot', rot: r4(), bg: pick([MU.off, MU.off, MU.peach]), fg: pick([MU.tang, MU.tang, MU.ink, MU.rust]) }; } },
+          { name: 'Chevrons', f: function (r, c) { var odd = r % 2, L = odd ? [MU.tang, MU.rust, MU.peach] : [MU.ink, MU.tang, MU.peach]; return { k: 'chev', rot: odd ? 180 : 0, bg: odd ? MU.ink : MU.off, fg: L[(c + r) % 3] }; } }
+        ] },
+      { id: 'cv', label: 'CV', title: 'CV', kicker: 'Résumé · one page', bg: function () { return '#C7F03A'; }, fgc: '#111111', dot: function () { return '#C7F03A'; },
+        body: 'Experience, education and skills on one page.', href: '', link: '', linkShort: '',
+        cta: { href: '#', label: 'DOWNLOAD CV · PDF ↓', note: 'UPDATED [MONTH YYYY]' },
+        comps: [
+          { name: 'Pinwheel', f: function (r, c, S) { var key = (r >> 1) + ',' + (c >> 1); if (!S[key]) { var x = Math.random(); S[key] = x < 0.3 ? ['#C7F03A', '#111111'] : x < 0.5 ? ['#111111', '#C7F03A'] : x < 0.75 ? ['#F6EFE3', '#111111'] : ['#FFFFFF', '#111111']; } return { k: 'pin', rot: 0, bg: S[key][0], fg: S[key][1] }; } },
+          { name: 'Frames', f: function (r, c, S) { var key = (r >> 1) + ',' + (c >> 1); if (S[key] == null) { var x = Math.random(); S[key] = x < 0.35 ? ['#F6EFE3', '#111111'] : x < 0.7 ? ['#C7F03A', '#111111'] : ['#111111', '#C7F03A']; } return { k: 'frame', rot: Math.floor(Math.random() * 4) * 90, bg: S[key][0], fg: S[key][1] }; } },
+          { name: 'Moons', f: function (r, c) { var dk = ((r >> 1) + (c >> 1)) % 2; return { k: 'moon', rot: ((r + c) % 4) * 90, bg: dk ? '#111111' : '#FFFFFF', fg: dk ? '#C7F03A' : '#111111' }; } }
+        ] },
+      { id: 'contact', label: 'Contact', title: 'Contact', kicker: 'Because it is and always will be about people', bg: function () { return CT.terra; }, fgc: '#1D1D1B', dot: function () { return CT.terra; },
+        body: '[your@email.com] · GitHub · LinkedIn · X', href: '#', link: '[EMAIL ME] ↗', linkShort: '[your@email.com]',
+        comps: [
+          { name: 'Pulse', auto: 'pulse', f: function (r, c) { return { k: 'dot', rot: 0, bg: (r + c) % 2 ? CT.off : CT.blush, fg: CT.terra, d: Math.hypot(c - 13.5, r - 8) }; } },
+          { name: 'Speech', f: function () { var bg = pick([CT.blush, CT.off, CT.off]); return { k: 'halves', rot: Math.random() < 0.5 ? 0 : 90, bg: bg, fg: bg === CT.blush ? CT.terra : pick([CT.terra, CT.ink]), fg2: bg === CT.blush ? CT.ink : CT.terra }; } },
+          { name: 'Confetti', f: function () { var L = [CT.terra, CT.blush, CT.ink, CT.yel], bg = pick([CT.off, CT.off, CT.blush]), fg; do { fg = pick(L); } while (fg === bg); return { k: pick(['dots4', 'diamond', 'half', 'dot']), rot: r4(), bg: bg, fg: fg, fg2: bg }; } }
+        ] },
+      { id: 'community', label: 'Community', title: 'Community', kicker: 'Leave your mark', bg: function () { return '#E9B8A6'; }, fgc: '#1D1D1B', dot: function () { return '#E9B8A6'; },
+        body: '', href: '', link: '', linkShort: '',
+        comps: [ { name: 'Community', f: function () { return { k: 'none', rot: 0, bg: '#EFEBE4', fg: '#1D1D1B' }; } } ] }
+    ];
+    this.CS = 90;
+    this.PANEL = { small: { c: 11, r: 6, w: 5, h: 4 }, big: { c: 10, r: 5, w: 6, h: 5 } };
+    this.LISTS = {
+      education: { label: 'STUDIES', rows: [
+        { lead: '01', title: 'TU Munich', sub: 'B.Sc. Informatik', meta: '[YYYY–YYYY]', href: '#' },
+        { lead: '02', title: 'CSEE', sub: '[Programme]', meta: '[YYYY]', href: '#' },
+        { lead: '03', title: 'UC Berkeley', sub: '[Programme]', meta: '[YYYY]', href: '#' },
+        { lead: '04', title: 'HFPH', sub: 'Philosophy', meta: '[YYYY]', href: '#' }
+      ] },
+      projects: { label: 'SELECTED PROJECTS', rows: [
+        { lead: '01', title: '[Project one]', sub: '[What it is]', meta: '[YYYY] ↗', href: '#' },
+        { lead: '02', title: '[Project two]', sub: '[What it is]', meta: '[YYYY] ↗', href: '#' },
+        { lead: '03', title: '[Project three]', sub: '[What it is]', meta: '[YYYY] ↗', href: '#' }
+      ] },
+      music: { label: 'TOP 3 THIS WEEK · VIA SPOTIFY', rows: [
+        { cover: '#FF6A13', cover2: '#1D1D1B', title: '[Track title]', sub: '[Artist]', meta: '01', href: '#' },
+        { cover: '#F7C7A6', cover2: '#9C3A12', title: '[Track title]', sub: '[Artist]', meta: '02', href: '#' },
+        { cover: '#1D1D1B', cover2: '#FF6A13', title: '[Track title]', sub: '[Artist]', meta: '03', href: '#' }
+      ] }
+    };
+    this.BR = { motifs: ['qdisc', 'half', 'tri', 'dot', 'qring', 'leaf', 'squares', 'arc'], colors: ['#E2573B', '#2F4FD8', '#F2C14E', '#9DB39A', '#1D1D1B', '#E9B8A6', '#EFEBE4'] };
+    this.brush = { k: 'qdisc', fg: '#E2573B', bg: '#EFEBE4' };
+    this.form = { name: '', note: '' };
+    this.editing = false; this.entryIdx = 0;
+    this.NR = 10; this.NC = 16;
+    this.cells = [];
+    for (var r = 0; r < 10; r++) for (var c = 0; c < 16; c++) { if (r < 3 && c < 8) continue; this.cells.push([r, c]); }
+    this.topic = 0; this.comp = 0; this.phase = 0; this.t0 = performance.now();
+    this.entries = this.loadEntries();
+    this.tiles = this.build(0, 0);
+    this.trans = null;
+    this._loop = this.loop.bind(this);
+  }
+  bars() { var d = ''; for (var i = 0; i < 4; i++) { var h = Math.round(14 + Math.random() * 86); d += 'M' + (12 + i * 26) + ' ' + (108 - h) + 'h18v' + h + 'h-18z'; } return d; }
+  wheel(dy) {
+    var now = performance.now();
+    if (this.trans || now < (this.lockUntil || 0)) { this.acc = 0; return; }
+    if (now - (this.lastWheel || 0) > 260) this.acc = 0;
+    this.lastWheel = now;
+    this.acc = (this.acc || 0) + dy;
+    if (Math.abs(this.acc) < 70) return;
+    var dir = this.acc > 0 ? 1 : -1, n = this.T[this.topic].comps.length;
+    this.acc = 0;
+    this.lockUntil = now + 1150;
+    if (this.isComm()) { if (this.editing) return; var m = this.entries.length; this.entryIdx = (this.entryIdx + dir + m) % m; this.go(this.topic, 0, dir > 0 ? [0, 0] : [9, 15]); return; }
+    this.go(this.topic, (this.comp + dir + n) % n, dir > 0 ? [0, 0] : [9, 15]);
+  }
+  panelRect() { return this.PANEL.small; }
+  mix(a, b, t) { var p = function (h) { var n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }; var x = p(a), y = p(b); return '#' + [0, 1, 2].map(function (i) { return Math.round(x[i] + (y[i] - x[i]) * t).toString(16).padStart(2, '0'); }).join(''); }
+  dp() { var b = this.props.dryftBlue ?? '#1F3DFF'; return { blue: b, deep: this.mix(b, '#0B0D1A', 0.62), tint: this.mix(b, '#EFEBE4', 0.72), off: '#EFEBE4' }; }
+  loadEntries() {
+    var saved = [];
+    try { var raw = window.localStorage.getItem('mvs-community-v1'); if (raw) saved = JSON.parse(raw) || []; } catch (e) { saved = []; }
+    var self = this, seeds = [0, 1, 2].map(function (ci) {
+      var f = self.T[0].comps[ci].f, S = {};
+      return { name: '[Sample visitor]', note: '[A short note a visitor left with their pattern.]', date: '[Date]', sample: true,
+        tiles: self.cells.map(function (rc) { var t = f(rc[0], rc[1], S); return { k: t.k, rot: t.rot, bg: t.bg, fg: t.fg, fg2: t.fg2 || t.fg }; }) };
+    });
+    return saved.concat(seeds);
+  }
+  saveEntries() { try { window.localStorage.setItem('mvs-community-v1', JSON.stringify(this.entries.filter(function (e) { return !e.sample; }))); } catch (e) {} }
+  isComm() { return this.T[this.topic].id === 'community'; }
+  buildCommunity() {
+    var M = this.M, src = this.editing ? this.canvas : (this.entries[this.entryIdx] || this.entries[0]).tiles, cells = this.cells;
+    return cells.map(function (rc, i) {
+      var t = src[i] || { k: 'none', rot: 0, bg: '#EFEBE4', fg: '#1D1D1B' }, m = M[t.k] || {};
+      return { r: rc[0], c: rc[1], k: t.k, rot: t.rot, bg: t.bg, fg: t.fg, fg2: t.fg2 || t.fg, a: m.a || '', b: m.b || '', st: m.st || '', sc: 1, s: 1 };
+    });
+  }
+  paint(i) {
+    if (!this.isComm() || !this.editing || this.trans) return;
+    var t = this.tiles[i], b = this.brush, m = this.M[b.k] || {}, cv = this.canvas[i];
+    if (cv.k === b.k && cv.fg === b.fg && cv.bg === b.bg) { cv.rot += 90; t.rot = cv.rot; }
+    else { cv.k = b.k; cv.fg = b.fg; cv.fg2 = b.fg; cv.bg = b.bg; t.k = b.k; t.fg = b.fg; t.fg2 = b.fg; t.bg = b.bg; t.a = m.a || ''; t.b = m.b || ''; t.st = m.st || ''; }
+    this.forceUpdate();
+  }
+  startMark() {
+    this.editing = true; this.form = { name: '', note: '' }; this.noteErr = false;
+    if (this.nameEl) this.nameEl.value = ''; if (this.noteEl) this.noteEl.value = '';
+    this.canvas = this.cells.map(function () { return { k: 'none', rot: 0, bg: '#EFEBE4', fg: '#1D1D1B', fg2: '#1D1D1B' }; });
+    this.go(this.topic, 0, [9, 15]);
+  }
+  cancelMark() { this.editing = false; this.go(this.topic, 0, [9, 15]); }
+  submitMark() {
+    var name = (this.nameEl ? this.nameEl.value : this.form.name) || '', note = ((this.noteEl ? this.noteEl.value : this.form.note) || '').trim();
+    this.form = { name: name, note: note };
+    if (!note) { this.noteErr = true; if (this.noteEl) this.noteEl.focus(); this.forceUpdate(); return; }
+    this.noteErr = false;
+    var d = new Date(), date = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    this.entries.unshift({ name: name.trim() || 'Anonymous', note: note, date: date, tiles: this.canvas.map(function (t) { return { k: t.k, rot: t.rot, bg: t.bg, fg: t.fg, fg2: t.fg2 }; }) });
+    this.saveEntries();
+    this.entryIdx = 0; this.editing = false;
+    this.go(this.topic, 0, [0, 0]);
+  }
+  build(ti, ci) {
+    if (this.T[ti].id === 'community') return this.buildCommunity();
+    var f = this.T[ti].comps[ci].f, S = {}, M = this.M;
+    return this.cells.map(function (rc) {
+      var t = f(rc[0], rc[1], S), m = M[t.k];
+      return { r: rc[0], c: rc[1], k: t.k, rot: t.rot, bg: t.bg, fg: t.fg, fg2: t.fg2 || t.fg, a: t.a || m.a || '', b: t.b || m.b || '', st: t.st || m.st || '', trav: t.trav, grow: t.grow, fix: t.fix, blink: t.blink, eq: t.eq, belt: t.belt, dir: t.dir, d: t.d, base: t.base, beat: t.beat, sc: t.sc || 1, s: 1 };
+    });
+  }
+  go(ti, ci, origin) {
+    var next = this.build(ti, ci), o = origin;
+    this.topic = ti; this.comp = ci; this.phase = 0;
+    if (this.reduce) { this.tiles = next; this.trans = null; this.forceUpdate(); return; }
+    this.trans = { t0: performance.now(), next: next, delay: this.cells.map(function (rc) { return Math.hypot(rc[0] - o[0], rc[1] - o[1]) * 45; }), state: this.cells.map(function () { return 0; }) };
+    this.forceUpdate();
+  }
+  componentDidMount() {
+    this.setup();
+    this.reduce = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: '2-digit', minute: '2-digit', hour12: false });
+    var me = this; this.clk = setInterval(function () { me.forceUpdate(); }, 15000);
+    this.lastAuto = performance.now(); this.autoGap = 600; this.pend = [];
+    this.SYM = { dot: 1, ring: 1, squares: 1, cross: 1, bars: 1, diamond: 1, dots4: 1, node: 1, outline: 1, target: 1, pin: 1 };
+    this.blue = this.props.dryftBlue ?? '#1F3DFF';
+    this.raf = requestAnimationFrame(this._loop);
+  }
+  componentDidUpdate() { var b = this.props.dryftBlue ?? '#1F3DFF'; if (b !== this.blue) { this.blue = b; if (this.topic === 2) { this.tiles = this.build(2, this.comp); this.forceUpdate(); } } }
+  componentWillUnmount() { clearInterval(this.clk); if (this.raf) cancelAnimationFrame(this.raf); }
+  loop() {
+    var now = performance.now(), dirty = false, tr = this.trans;
+    if (tr) {
+      var done = true;
+      for (var i = 0; i < this.tiles.length; i++) {
+        var el = now - tr.t0 - tr.delay[i];
+        if (tr.state[i] === 0 && el >= 0) { this.tiles[i].s = 0; tr.state[i] = 1; dirty = true; }
+        if (tr.state[i] === 1 && el >= 270) { var n = tr.next[i]; n.s = 1; this.tiles[i] = n; tr.state[i] = 2; dirty = true; }
+        if (tr.state[i] !== 2) done = false;
+      }
+      if (done) this.trans = null;
+    } else if (!this.reduce && !this.isComm()) {
+      var comp = this.T[this.topic].comps[this.comp];
+      if (comp.auto === 'belt' && now - (this.lastBelt || 0) > 420) {
+        this.phase++; this.lastBelt = now; var ph = this.phase;
+        this.tiles.forEach(function (t) { if (t.belt) t.fg = t.belt[(((t.c + ph * t.dir + t.r) % 3) + 3) % 3]; });
+        dirty = true;
+      }
+      if (comp.auto === 'eq' && now - (this.lastEq || 0) > 150) {
+        this.lastEq = now; var sf = this;
+        this.tiles.forEach(function (t) { if (t.eq) t.a = sf.bars(); });
+        dirty = true;
+      }
+      if (comp.auto === 'beat' && now - (this.lastBeat || 0) > 240) {
+        this.lastBeat = now; this.beatN = (this.beatN || 0) + 1; var bn = this.beatN % 12;
+        this.tiles.forEach(function (t) { if (t.beat) t.sc = ((t.c + 2 * t.r) % 12 === bn) ? 1 : t.base; });
+        dirty = true;
+      }
+      if (comp.auto === 'pulse' && now - (this.lastPulse || 0) > 110) {
+        this.lastPulse = now; var s = (now - this.t0) / 1000;
+        this.tiles.forEach(function (t) { t.sc = (0.18 + 0.82 * (0.5 + 0.5 * Math.sin(t.d * 1.1 - s * 2.6))).toFixed(3); });
+        dirty = true;
+      }
+      if (now - this.lastAuto > this.autoGap) {
+        this.lastAuto = now; this.autoGap = 450 + Math.random() * 500;
+        var tt = this.tiles[Math.floor(Math.random() * this.tiles.length)];
+        if (tt.fix) { }
+        else if (this.SYM[tt.k]) { tt.s = 0; this.pend.push({ t: tt, at: now + 270 }); if (tt.blink) this.pend.push({ t: tt, down: now + 2600, at: now + 2870 }); }
+        else tt.rot += Math.random() < 0.8 ? 90 : 180;
+        if (Math.random() < 0.25) this.markRot = (this.markRot || 0) + 90;
+        dirty = true;
+      }
+      if (this.pend.length) {
+        this.pend = this.pend.filter(function (p) {
+          if (p.down && !p.dn && now >= p.down) { p.t.s = 0; p.dn = 1; dirty = true; }
+          if (now < p.at) return true;
+          var t = p.t, bg = t.bg; t.bg = t.fg; t.fg = bg; if (t.fg2 === bg) t.fg2 = t.bg; t.s = 1; dirty = true; return false;
+        });
+      }
+    }
+    if (dirty) this.forceUpdate();
+    this.raf = requestAnimationFrame(this._loop);
+  }
+  renderVals() {
+    this.setup();
+    var self = this, T = this.T[this.topic];
+    var others = this.T.map(function (t, i) { return { t: t, i: i }; }).filter(function (x) { return x.i !== self.topic; });
+    return {
+      tiles: this.tiles.map(function (t, ti) {
+        return { col: String(t.c + 1), row: String(t.r + 1), bg: t.bg, fg: t.fg, fg2: t.fg2, a: t.a, b: t.b, st: t.st, rot: t.rot, s: t.s, sc: t.sc,
+          cur: self.isComm() && self.editing ? 'crosshair' : 'default',
+          paint: function () { self.paint(ti); },
+          hit: function () {
+            if (self.trans || self.isComm()) return;
+            t.rot += 90;
+            self.tiles.forEach(function (o) { if (Math.abs(o.r - t.r) + Math.abs(o.c - t.c) === 1 && Math.random() < 0.35) o.rot += 90; });
+            self.forceUpdate();
+          } };
+      }),
+      markA: this.tiles[0] ? this.tiles[0].a : '', markB: this.tiles[0] ? this.tiles[0].b : '', markSt: this.tiles[0] ? this.tiles[0].st : '', markRot: this.markRot || 0,
+      pageNo: String(this.topic).padStart(2, '0') + ' / ' + String(this.T.length - 1).padStart(2, '0'),
+      clock: this.fmt ? this.fmt.format(new Date()) : '',
+      px: (this.panelRect().c * this.CS), py: (this.panelRect().r * this.CS), pw: (this.panelRect().w * this.CS), ph: (this.panelRect().h * this.CS),
+      simple: !this.isComm(), hasList: false, listLabel: this.LISTS[T.id] ? this.LISTS[T.id].label : '',
+      rows: this.LISTS[T.id] ? this.LISTS[T.id].rows.map(function (x) { return { lead: x.lead || '', title: x.title, sub: x.sub, meta: x.meta, href: x.href, hasCover: !!x.cover, noCover: !x.cover, cols: x.cover ? '48px minmax(0, 1fr) auto' : 'minmax(0, 1fr) auto', cover: x.cover || '', cover2: x.cover2 || '' }; }) : [],
+      ticks: this.isComm() ? [] : T.comps.map(function (c, i) { var on = i === self.comp; return { h: on ? 22 : 8, c: on ? '#1D1D1B' : '#C9C4BA' }; }),
+      patName: this.isComm() ? (this.editing ? 'Your mark' : 'Mark ' + (this.entryIdx + 1) + ' of ' + this.entries.length) : T.comps[this.comp].name,
+      onWheel: function (e) { self.wheel(e.deltaY); },
+      browsing: this.isComm() && !this.editing, editing: this.isComm() && this.editing, showNav: !(this.isComm() && this.editing),
+      eCount: (function () { var n = self.entries.length; return 'MARK ' + (self.entryIdx + 1) + ' / ' + n; })(),
+      eDate: (this.entries[this.entryIdx] || {}).date || '', eNote: (this.entries[this.entryIdx] || {}).note || '', eName: (this.entries[this.entryIdx] || {}).name || '',
+      bMotifs: this.BR.motifs.map(function (k) { var m = self.M[k], on = k === self.brush.k; return { name: k, a: m.a || '', b: m.b || '', st: m.st || '', on: on ? 'true' : 'false', bd: on ? '#1D1D1B' : 'rgba(29,29,27,0.2)', pick: function () { self.brush.k = k; self.forceUpdate(); } }; }),
+      bColors: this.BR.colors.map(function (c) { var on = c === self.brush.fg; return { c: c, on: on ? 'true' : 'false', ring: on ? '0 0 0 2px #EFEBE4, 0 0 0 3.5px #1D1D1B' : 'none', pick: function () { self.brush.fg = c; self.forceUpdate(); } }; }),
+      bGrounds: this.BR.colors.map(function (c) { var on = c === self.brush.bg; return { c: c, on: on ? 'true' : 'false', ring: on ? '0 0 0 2px #EFEBE4, 0 0 0 3.5px #1D1D1B' : 'none', pick: function () { self.brush.bg = c; self.forceUpdate(); } }; }),
+      noteLeft: this.noteErr ? 'ADD A NOTE FIRST' : (140 - this.form.note.length) + '',
+      noSubmit: this.form.note.trim() ? 'false' : 'true', subBg: this.form.note.trim() ? '#1D1D1B' : '#A9A49A',
+      nameRef: function (el) { self.nameEl = el; }, noteRef: function (el) { self.noteEl = el; }, leftRef: function (el) { self.leftEl = el; },
+      leftColor: this.noteErr ? '#C0392B' : '#8A857C',
+      setName: function (e) { self.form.name = e.target.value; },
+      setNote: function (e) { self.form.note = e.target.value; if (self.leftEl) { self.leftEl.textContent = (140 - e.target.value.length) + ''; if (self.noteErr && e.target.value.trim()) { self.noteErr = false; self.leftEl.style.color = '#8A857C'; } } },
+      startMark: function () { self.startMark(); }, cancelMark: function () { self.cancelMark(); }, submitMark: function () { self.submitMark(); },
+      scrollHint: this.isComm() ? (this.editing ? 'CLICK TILES TO PAINT' : 'SCROLL TO BROWSE') : 'SCROLL TO CHANGE',
+      hasCta: !!T.cta, ctaHref: T.cta ? T.cta.href : '#', ctaLabel: T.cta ? T.cta.label : '', ctaNote: T.cta ? T.cta.note : '',
+      titleBg: T.bg(), titleFg: T.fgc, kicker: T.kicker, title: T.title,
+      isIndex: this.topic === 0, notIndex: this.topic !== 0,
+      body: T.body, hasLink: !!T.link, href: T.href, link: T.link, linkShort: T.linkShort || T.link,
+      pages: this.T.map(function (t, i) { var on = i === self.topic; return { n: String(i + 1).padStart(2, '0'), label: t.label, cur: on ? 'page' : 'false', fw: on ? 600 : 500, fg: on ? '#1D1D1B' : '#8A857C', nc: on ? '#1D1D1B' : '#A9A49A', ul: on ? '#1D1D1B' : 'transparent', go: function () { if (!on) { self.editing = false; self.go(i, 0, [0, 0]); } } }; }),
+      patternName: 'PATTERN ' + (this.comp + 1) + ' / ' + T.comps.length + ' — ' + T.comps[this.comp].name.toUpperCase(),
+      picks: T.comps.map(function (cp, i) { var on = i === self.comp; return { n: String(i + 1), name: cp.name, on: on ? 'true' : 'false', bg: on ? '#1D1D1B' : 'transparent', fg: on ? '#EFEBE4' : '#1D1D1B', go: function () { if (i !== self.comp) self.go(self.topic, i, [8, 13]); } }; }),
+      next: function () { self.go(self.topic, (self.comp + 1) % T.comps.length, [8, 13]); }
+    };
+  }
+}
+</script>
+</body>
+</html>
