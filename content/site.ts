@@ -104,6 +104,11 @@ export const projects = {
 export const writing = {
   // Phase 6 replaces this sample with the newest MDX posts.
   posts: [{ title: "Sample post", date: "2026-09-27" }],
+  archive: {
+    title: "All posts",
+    description: "All notes and essays by Max von Storch, newest first.",
+  },
+  feedTitle: "Writing | Max von Storch",
 };
 
 export const music = {
