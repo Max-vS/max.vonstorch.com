@@ -3,6 +3,7 @@ import Link from "next/link";
 import { type ReactNode, Suspense } from "react";
 import { MarkPreview } from "@/components/admin/mark-preview";
 import { SignOutButton } from "@/components/admin/sign-out-button";
+import { SpotifyConnection } from "@/components/admin/spotify-connection";
 import { SubmitButton } from "@/components/admin/submit-button";
 import { labelText } from "@/components/ui/label";
 import { requireOwner } from "@/lib/auth/session";
@@ -11,6 +12,7 @@ import {
   getApprovedMarksForAdmin,
   getPendingMarks,
 } from "@/lib/queries/marks";
+import { getSpotifyStatus } from "@/lib/queries/spotify";
 import type { MarkTile } from "@/lib/schemas/mark";
 import { approveMark, deleteMark } from "./actions";
 
@@ -41,12 +43,13 @@ async function Moderation({
   searchParams,
 }: Pick<PageProps<"/admin">, "searchParams">) {
   await requireOwner();
-  const { page: pageParam } = await searchParams;
+  const { page: pageParam, error } = await searchParams;
   // `?page=2` is the second page of approved marks; anything else is the first.
   const page = Math.max(1, Math.trunc(Number(pageParam)) || 1);
-  const [pending, approved] = await Promise.all([
+  const [pending, approved, spotify] = await Promise.all([
     getPendingMarks(),
     getApprovedMarksForAdmin({ page: page - 1 }),
+    getSpotifyStatus(),
   ]);
   const pages = Math.max(1, Math.ceil(approved.total / ADMIN_MARKS_PAGE_SIZE));
 
@@ -61,6 +64,11 @@ async function Moderation({
         </div>
         <SignOutButton />
       </header>
+
+      <SpotifyConnection
+        status={spotify}
+        linkError={typeof error === "string" ? error : undefined}
+      />
 
       <MarkList
         title={`Pending · ${pending.length}`}
