@@ -1,20 +1,10 @@
-import { execSync } from "child_process";
 import type { NextConfig } from "next";
 
-const getLastCommitDate = () => {
-  try {
-    const date = execSync("git log -1 --format=%cI").toString().trim();
-    return date;
-  } catch {
-    return new Date().toISOString();
-  }
-};
-
 const nextConfig: NextConfig = {
-  /* config options here */
-  env: {
-    NEXT_PUBLIC_BUILD_TIME: getLastCommitDate(),
-  },
+  reactCompiler: true,
+  typedRoutes: true,
+  // `use cache` + cacheLife/cacheTag replace the route segment configs.
+  cacheComponents: true,
 };
 
 export default nextConfig;
