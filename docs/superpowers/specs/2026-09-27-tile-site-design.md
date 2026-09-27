@@ -1,7 +1,7 @@
 # max.vonstorch.com v2 — Tile System: design spec
 
 - **Date:** 2026-09-27
-- **Status:** approved in chat (sections 1–8), waiting for review of this document
+- **Status:** implemented on `personal-website` (2026-09-27). §22 lists what changed during implementation; where it disagrees with an earlier section, §22 wins.
 - **Branch:** `personal-website`
 - **Design source:** Claude Design canvas "Personal Website" — https://claude.ai/artifact/WpPUEUFrEoAV1bd9JfJMnJ — round 5, item 23 ("Tile System")
 - **Research:** `docs/superpowers/research/2026-09-27-*.md` (exact commands, config snippets and sources for every decision below)
@@ -446,3 +446,27 @@ The implementation plan breaks these steps into tasks.
 | React Hook Form + React Compiler edge cases | Follow the rules in §9 |
 | `cn` 0.4.0 is new | Fallback: `clsx` + `tailwind-merge` |
 | Next.js 16.3.7 security release on 2026-09-30 | Upgrade the new site and the live site when it is out |
+
+## 22. Changes during implementation
+
+These decisions were made while building. They replace the matching parts of the sections above.
+
+| Topic | Built | Instead of | Why |
+|---|---|---|---|
+| Bun | 1.3.x as package manager (`bun.lock` v1) | 1.4.2 | Vercel's build image runs Bun 1.3.14 and cannot read a Bun 1.4 lockfile ("latest compatible" rule) |
+| Git hooks | `lefthook.yml` committed; run `bunx lefthook install` once after the merge | automatic install | The hooks folder is shared by all worktrees and the old site on `main` |
+| Owner login (§10) | GitHub OAuth only. The first sign-in creates the owner; `validateUserInfo` allows only a **verified** `OWNER_EMAIL`. Default Better Auth rate limit (database storage). OAuth errors land on `/admin/login` | email + password, seed script | Owner decision; no password to leak or guess |
+| GitHub apps | Two OAuth apps (production and local), one callback URL each | — | A GitHub OAuth app allows one callback URL |
+| Spotify (§11) | Linked to the owner with `authClient.linkSocial`; Spotify can never sign in or create a user (`disableImplicitLinking`, link-only exception in `validateUserInfo`); tokens encrypted; code in `lib/queries/spotify.ts`; `baseURL.fallback = BETTER_AUTH_URL` | `lib/spotify.ts` | Biome allows database access only in `lib/queries` / `lib/mutations`; Better Auth 1.7.6 needs the fallback to read a token without a request |
+| Local database | PGlite (`bun run db:local`, 127.0.0.1:5433) | own Neon `dev` branch | Works without any account |
+| Migrations | `DATABASE_URL_UNPOOLED` for drizzle-kit | pooled URL | Neon recommends the direct URL for DDL |
+| Code layout (§6) | `lib/auth/*`, `lib/db/*`, `lib/queries/*`, `lib/mutations/*`, `lib/schemas/*`, `drizzle/`; Server Actions next to their pages (`app/(tiles)/community/actions.ts`, `app/admin/actions.ts`) | `auth/`, `db/`, `actions/` | Matches the owner's open-eu project |
+| Grid (§5) | The title block and indicator round to the nearest tile boundary (+1 column/row when the cut is more than half a tile); the head script sets `--title-width`, `--title-height`, `--indicator-width` | fixed 8×3 minus the cut | Avoids a title block that loses almost a whole tile |
+| Titles | H1 size = `min(design size, 100cqi / 4.7)`; mobile page titles are 61.5 design px | 68 px | "Community" must fit the mobile title block |
+| Grey text | `#6B665E` | `#8A857C` | 4.5:1 contrast |
+| Community (§9) | The browser keeps only the visitor's last own mark; more marks load from `/api/marks/[page]`; pages drive the grid through `useTileScene`; on a small desktop window without a free 4×4 area the title block also slides away | — | Simpler state; one small typed channel between pages and the shell |
+| Unknown post slug | Reading-style "Post not found" (status 200, `noindex`) | tile-style 404 | Next renders it inside the reading layout |
+| Analytics | `@vercel/analytics` 2.x, plain `<Analytics />` | — | As in §17 |
+| Tests | None; checks are Biome, the type check, the build and manual browser checks | — | Owner decision |
+
+**Still open for the owner:** X handle, Music kicker confirmation, CV PDF and month, real posts; all launch steps are in `README.md`.
