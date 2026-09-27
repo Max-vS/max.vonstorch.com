@@ -1,8 +1,7 @@
-import { SHAPES, type Shape } from "@/lib/tiles/shapes";
 import type { TileView } from "./tile-engine";
+import { tilePaths } from "./tile-paths";
 
 export function Tile({ tile, index }: { tile: TileView; index: number }) {
-  const shape: Shape = SHAPES[tile.shape];
   return (
     <div
       data-tile={index}
@@ -28,24 +27,7 @@ export function Tile({ tile, index }: { tile: TileView; index: number }) {
               : { transform: `scale(${tile.scale})` }
           }
         >
-          {shape.fill && (
-            <path d={shape.fill} fill={tile.fg} fillRule="evenodd" />
-          )}
-          {shape.fill2 && (
-            <path
-              d={shape.fill2}
-              fill={tile.fg2 ?? tile.fg}
-              fillRule="evenodd"
-            />
-          )}
-          {shape.stroke && (
-            <path
-              d={shape.stroke}
-              fill="none"
-              stroke={tile.fg}
-              strokeWidth={16}
-            />
-          )}
+          {tilePaths(tile)}
         </g>
       </svg>
     </div>

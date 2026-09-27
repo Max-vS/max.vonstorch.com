@@ -1,28 +1,21 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
-import { Familjen_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "cn";
-import { SITE_URL } from "@/lib/metadata";
+import { SITE_NAME, SITE_URL } from "@/lib/metadata";
 import { measureGrid, setGridVariables } from "@/lib/tiles/grid";
-
-const familjenGrotesk = Familjen_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-familjen-grotesk",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-});
+import { fontVariables } from "./fonts";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Max von Storch",
-    template: "%s | Max von Storch",
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
     "Max von Storch — founding engineer at Dryft, building AI for manufacturing. Based in San Francisco.",
+  // Pages set no twitter object, so each page's og:image also becomes its large card image.
+  twitter: { card: "summary_large_image" },
 };
 
 // Sets the grid variables before the first paint, so the title block and panel never jump.
@@ -34,17 +27,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn(
-        "bg-ground text-ink antialiased",
-        familjenGrotesk.variable,
-        jetbrainsMono.variable,
-      )}
+      className={cn("bg-ground text-ink antialiased", fontVariables)}
     >
       <head>
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: the script is our own code, not user input */}
         <script dangerouslySetInnerHTML={{ __html: gridScript }} />
       </head>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

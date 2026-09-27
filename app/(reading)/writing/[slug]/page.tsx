@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { JsonLd } from "@/components/json-ld";
 import { getLocalPosts, getPost } from "@/content/writing";
-import { pageMetadata, SITE_URL } from "@/lib/metadata";
+import { pageMetadata, SITE_NAME, SITE_URL } from "@/lib/metadata";
 
 export function generateStaticParams() {
   return getLocalPosts().map(({ slug }) => ({ slug }));
@@ -18,6 +19,10 @@ export async function generateMetadata(
     description: post.summary,
     path: `/writing/${post.slug}`,
     feed: true,
+    article: {
+      publishedTime: post.date,
+      modifiedTime: post.updated ?? post.date,
+    },
   });
 }
 
@@ -42,7 +47,7 @@ function Post({ slug }: { slug: string }) {
     headline: post.title,
     datePublished: post.date,
     dateModified: post.updated ?? post.date,
-    author: { "@type": "Person", name: "Max von Storch", url: SITE_URL },
+    author: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
   };
 
   return (
@@ -58,13 +63,7 @@ function Post({ slug }: { slug: string }) {
       <div className="prose prose-site sm:prose-lg">
         <post.Body />
       </div>
-      <script
-        type="application/ld+json"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD must be inline; escaping "<" keeps a title from closing the script.
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-        }}
-      />
+      <JsonLd data={jsonLd} />
     </article>
   );
 }

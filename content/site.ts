@@ -187,3 +187,19 @@ export const community = {
   tooMany: "Too many marks right now. Try again later.",
   failed: "Your mark could not be sent. Try again later.",
 };
+
+export const errors = {
+  notFound: {
+    kicker: "Page not found",
+    title: "404",
+    body: "This page does not exist.",
+  },
+  failed: {
+    kicker: "Something went wrong",
+    title: "Error",
+    body: "This page could not load.",
+  },
+  postNotFound: "Post not found",
+  retry: "Try again",
+  home: "Go to the index →",
+};

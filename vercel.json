@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "bun run db:mig && bun run build",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "maxvonstorchcom\\.vercel\\.app" }],
+      "destination": "https://max.vonstorch.com/:path*",
+      "permanent": true
+    }
+  ]
+}

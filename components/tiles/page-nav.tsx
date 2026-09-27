@@ -3,7 +3,7 @@ import Link from "next/link";
 import { pages } from "@/content/site";
 import type { PageId } from "@/lib/tiles/types";
 
-export function PageNav({ current }: { current: PageId }) {
+export function PageNav({ current }: { current?: PageId }) {
   return (
     <nav
       aria-label="Pages"
