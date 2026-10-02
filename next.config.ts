@@ -7,6 +7,18 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   // `use cache` + cacheLife/cacheTag replace the route segment configs.
   cacheComponents: true,
+  // OAuth and Spotify accept only 127.0.0.1 locally, so a localhost tab would sign in against an unknown callback.
+  async redirects() {
+    if (process.env.NODE_ENV !== "development") return [];
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "localhost" }],
+        destination: "http://127.0.0.1:3000/:path*",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 // Turbopack takes plugins only as package names with JSON options, because functions cannot cross into Rust.

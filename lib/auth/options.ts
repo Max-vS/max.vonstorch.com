@@ -14,7 +14,6 @@ const allowedHosts = [
   process.env.VERCEL_PROJECT_PRODUCTION_URL,
   process.env.VERCEL_BRANCH_URL,
   process.env.VERCEL_URL,
-  "localhost:3000",
   "127.0.0.1:3000",
 ].filter((host): host is string => Boolean(host));
 
