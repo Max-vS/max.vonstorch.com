@@ -63,6 +63,7 @@ export function createTileEngine() {
   let nextIdleAt = 0;
   let lastStepAt = 0;
   let frame = 0;
+  let timer: ReturnType<typeof setTimeout> | undefined;
   const listeners = new Set<() => void>();
 
   function commit(next: readonly TileView[]) {
@@ -70,10 +71,24 @@ export function createTileEngine() {
     for (const listener of listeners) listener();
   }
 
+  // Between waves it sleeps until the next change is due, because every frame it asks for also makes Chrome update all running CSS animations on the main thread.
   function run() {
-    if (frame === 0 && (wave || flips.length > 0 || motion.idle)) {
+    clearTimeout(timer);
+    if (frame !== 0) return;
+    if (wave) {
       frame = requestAnimationFrame(tick);
+      return;
     }
+    const { animate, idle = true } = pattern;
+    const due = Math.min(
+      ...flips.map(({ at }) => at),
+      motion.idle && idle ? nextIdleAt : Infinity,
+      motion.idle && animate ? lastStepAt + ANIMATION_STEP_MS : Infinity,
+    );
+    if (due === Infinity) return;
+    timer = setTimeout(() => {
+      frame = requestAnimationFrame(tick);
+    }, due - performance.now());
   }
 
   function tick(now: number) {
@@ -195,6 +210,7 @@ export function createTileEngine() {
     },
     stop() {
       cancelAnimationFrame(frame);
+      clearTimeout(timer);
       frame = 0;
     },
   };

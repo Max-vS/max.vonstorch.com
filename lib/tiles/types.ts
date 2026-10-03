@@ -36,6 +36,8 @@ export type Tile = {
   fg: string;
   fg2?: string;
   scale?: number;
+  // Milliseconds, negative: where this tile starts in the ripple animation.
+  rippleDelay?: number;
 };
 
 export type PlacedTile = Tile & Cell;
@@ -51,11 +53,7 @@ export type Pattern = {
   name: string;
   tile: (input: PatternInput) => Tile;
   /** Runs at each animation step; it returns only the changed fields, or null when the tile stays the same. */
-  animate?: (
-    tile: PlacedTile,
-    seconds: number,
-    grid: Grid,
-  ) => Partial<Tile> | null;
+  animate?: (tile: PlacedTile, seconds: number) => Partial<Tile> | null;
   /** False where `animate` sets the colors, because idle flips would fight it. */
   idle?: boolean;
 };

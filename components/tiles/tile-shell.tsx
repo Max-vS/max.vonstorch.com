@@ -100,7 +100,7 @@ export function TileShell({
     const { animate, idle } = PATTERNS[view.page][view.pattern];
     show(buildPattern(view.page, view.pattern, grid, cells, randomSeed()), {
       origin,
-      animate: animate && ((tile, seconds) => animate(tile, seconds, grid)),
+      animate,
       idle,
     });
   }, [

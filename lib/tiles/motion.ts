@@ -5,6 +5,17 @@ import type { Cell, Tile } from "./types";
 export const SWAP_DELAY_MS = 270;
 export const ANIMATION_STEP_MS = 110;
 
+// The visible range of the earlier JavaScript pulse, whose transitions never reached its targets of 1 and 0.18.
+export const RIPPLE_KEYFRAMES: Keyframe[] = [{ scale: 0.83 }, { scale: 0.26 }];
+export const RIPPLE_TIMING = {
+  duration: 1200,
+  direction: "alternate",
+  easing: "ease-in-out",
+  iterations: Number.POSITIVE_INFINITY,
+} satisfies KeyframeAnimationOptions;
+// One shrink and one grow.
+export const RIPPLE_PERIOD_MS = 2 * RIPPLE_TIMING.duration;
+
 export function waveDelay(cell: Cell, origin: Cell): number {
   return 45 * Math.hypot(cell.row - origin.row, cell.col - origin.col);
 }
@@ -27,11 +38,6 @@ export function hoverTurns(
     const distance = Math.abs(cell.row - row) + Math.abs(cell.col - col);
     return distance === 0 || (distance === 1 && random() < 0.35) ? [i] : [];
   });
-}
-
-export function pulseScale(distance: number, seconds: number): number {
-  const wave = 0.5 + 0.5 * Math.sin(distance * 1.1 - seconds * 2.6);
-  return Math.round((0.18 + 0.82 * wave) * 1000) / 1000;
 }
 
 export function swapColors<T extends Tile>(tile: T): T {

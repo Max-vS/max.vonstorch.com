@@ -162,7 +162,7 @@ docs/              design/, superpowers/
 | `patterns.ts` | 21 pattern functions `(row, col, rng, state) → TileSpec`, ported 1:1 from the design |
 | `random.ts` | Seeded random number generator (so a pattern can be repeated) |
 | `grid.ts` | Tile size, cols, rows and cuts from the window size (§5) |
-| `motion.ts` | Wave delays, flip schedule, idle-turn picks, pulse values; a pattern's own `animate` step (Pulse, Interference) runs every 110 ms |
+| `motion.ts` | Wave delays, flip schedule, idle-turn picks, the Pulse ripple (Web Animations API, scale 0.83 to 0.26); Interference's own `animate` step runs every 110 ms |
 
 **Behavior (as in the design):**
 
@@ -465,6 +465,8 @@ These decisions were made while building. They replace the matching parts of the
 | Migrations | `DATABASE_URL_UNPOOLED` for drizzle-kit | pooled URL | Neon recommends the direct URL for DDL |
 | Code layout (§6) | `lib/auth/*`, `lib/db/*`, `lib/queries/*`, `lib/mutations/*`, `lib/schemas/*`, `drizzle/`; Server Actions next to their pages (`app/(tiles)/community/actions.ts`, `app/admin/actions.ts`) | `auth/`, `db/`, `actions/` | Matches the owner's open-eu project |
 | Grid (§5) | The title block and indicator round to the nearest tile boundary (+1 column/row when the cut is more than half a tile); the head script sets `--title-width`, `--title-height`, `--indicator-width` | fixed 8×3 minus the cut | Avoids a title block that loses almost a whole tile |
+| Pulse | A Web Animations API ripple per tile (scale 0.83 to 0.26, 1.2 s each way, 420 ms delay per cell from the panel) on an HTML wrapper of the SVG | JavaScript scale every 110 ms with CSS transitions | Smooth on the GPU; a CSS animation would run on the main thread, because React's `animationiteration` listener makes Chrome update CSS animations every frame |
+| Engine loop | Between waves the engine sleeps until the next idle change, flip or step is due | a frame request every frame | Every requested frame also costs a main-thread update of running animations |
 | Tile size | Rounded up to whole CSS pixels | the exact fluid size | Tiles at fractional positions blend their edges into 1-pixel lines; screens with a fractional pixel ratio (Windows 125 %) can still show faint lines |
 | Titles | H1 size = `min(design size, 100cqi / 4.7)`; mobile page titles are 61.5 design px | 68 px | "Community" must fit the mobile title block |
 | Grey text | `#6B665E` | `#8A857C` | 4.5:1 contrast |

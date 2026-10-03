@@ -1,5 +1,5 @@
 import { panelRect } from "./grid";
-import { pulseScale } from "./motion";
+import { RIPPLE_PERIOD_MS } from "./motion";
 import {
   contactColors as contact,
   cvColors as cv,
@@ -151,12 +151,14 @@ function interferenceColors(cell: Cell, seconds: number) {
   };
 }
 
-function panelDistance({ row, col }: Cell, grid: Grid) {
+// A tile one cell further from the panel is 420 ms behind, so the ripple travels outward from it.
+function rippleDelay({ row, col }: Cell, grid: Grid) {
   const panel = panelRect(grid);
-  return Math.hypot(
+  const distance = Math.hypot(
     col - (panel.col + panel.cols / 2),
     row - (panel.row + panel.rows / 2),
   );
+  return ((distance * 420) % RIPPLE_PERIOD_MS) - RIPPLE_PERIOD_MS;
 }
 
 const bauhaus: Pattern = {
@@ -416,15 +418,12 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
   contact: [
     {
       name: "Pulse",
-      tile: ({ row, col }) => ({
+      tile: ({ row, col, grid }) => ({
         shape: "dot",
         rot: 0,
         bg: (row + col) % 2 ? contact.ground : contact.blush,
         fg: contact.terracotta,
-      }),
-      // The wave starts at the panel, wherever the grid puts it.
-      animate: (tile, seconds, grid) => ({
-        scale: pulseScale(panelDistance(tile, grid), seconds),
+        rippleDelay: rippleDelay({ row, col }, grid),
       }),
     },
     {
