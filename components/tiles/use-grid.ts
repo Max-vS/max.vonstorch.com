@@ -4,15 +4,33 @@ import type { Grid } from "@/lib/tiles/types";
 
 let current: Grid | null = null;
 
+function measure() {
+  return measureGrid(
+    window.innerWidth,
+    window.innerHeight,
+    window.devicePixelRatio,
+  );
+}
+
 function subscribe(onChange: () => void) {
-  function resize() {
-    setGridVariables(measureGrid(window.innerWidth, window.innerHeight));
+  let pixelRatio: MediaQueryList | null = null;
+  function update() {
+    // A move to a screen with another pixel ratio fires no resize event, only this query.
+    pixelRatio?.removeEventListener("change", update);
+    pixelRatio = window.matchMedia(
+      `(resolution: ${window.devicePixelRatio}dppx)`,
+    );
+    pixelRatio.addEventListener("change", update);
+    setGridVariables(measure());
     onChange();
   }
   // The window may have changed since the pre-paint script ran.
-  resize();
-  window.addEventListener("resize", resize);
-  return () => window.removeEventListener("resize", resize);
+  update();
+  window.addEventListener("resize", update);
+  return () => {
+    window.removeEventListener("resize", update);
+    pixelRatio?.removeEventListener("change", update);
+  };
 }
 
 // A new object only when the cell layout changes, so a resize that only scales the tiles keeps the pattern.
@@ -25,7 +43,7 @@ function getGrid() {
     titleRows,
     firstFullRow,
     firstFullCol,
-  } = measureGrid(window.innerWidth, window.innerHeight);
+  } = measure();
   if (
     current?.mobile !== mobile ||
     current.cols !== cols ||

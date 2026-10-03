@@ -11,11 +11,21 @@ export type GridMetrics = Grid & {
 type Rect = Cell & { rows: number; cols: number };
 
 // measureGrid and setGridVariables use no outside names: the root layout inlines their source as the pre-paint script.
-export function measureGrid(width: number, height: number): GridMetrics {
+export function measureGrid(
+  width: number,
+  height: number,
+  pixelRatio: number,
+): GridMetrics {
   const mobile = width < 640;
-  const tile = mobile
+  const fluid = mobile
     ? width / 6
     : Math.min(120, Math.max(64, Math.min(width / 16, height / 10)));
+  // Chrome places a tile's box at device pixels but its SVG at whole CSS pixels, so only a size whole in both leaves no hairlines (the closest within 10 px, else whole CSS pixels).
+  const whole = Math.ceil(fluid - 1e-9);
+  const tile =
+    Array.from({ length: 10 }, (_, step) => whole + step).find((size) =>
+      Number.isInteger(Math.round(size * pixelRatio * 1000) / 1000),
+    ) ?? whole;
   // The epsilon stops float error from adding a track when the tile divides the length exactly.
   const cols = mobile ? 6 : Math.ceil(width / tile - 1e-9);
   const rows = Math.ceil(height / tile - 1e-9);

@@ -3,10 +3,9 @@ import { tilePaths } from "./tile-paths";
 
 export function Tile({ tile, index }: { tile: TileView; index: number }) {
   return (
-    // Tiles overlap by half a pixel, as in the design, because a fractional tile size leaves anti-aliased seams between them.
     <div
       data-tile={index}
-      className="-m-[0.5px] overflow-hidden transition-transform duration-260 ease-flip motion-reduce:transition-none"
+      className="overflow-hidden transition-transform duration-260 ease-flip motion-reduce:transition-none"
       style={{
         gridRow: tile.row + 1,
         gridColumn: tile.col + 1,
