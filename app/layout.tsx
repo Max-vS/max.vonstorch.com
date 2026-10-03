@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Max von Storch — founding engineer at Dryft, building AI for manufacturing. Based in San Francisco.",
+    "Max von Storch — full-stack engineer, designer and founder. Founding engineer at Dryft in San Francisco, building AI for manufacturing.",
   // Pages set no twitter object, so each page's og:image also becomes its large card image.
   twitter: { card: "summary_large_image" },
 };
