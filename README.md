@@ -19,14 +19,13 @@ Needs Node 24 and Bun 1.3.
 ```bash
 bun install
 cp .env.example .env.development.local   # then fill in the values
-bun run db:local                          # local Postgres (PGlite) on 127.0.0.1:5433; keep it running
-bun run db:mig                            # in a second terminal
+bun run db:mig                            # migrate the Neon dev branch
 bun run dev
 ```
 
 The dev server listens on http://127.0.0.1:3000, not `localhost`: Spotify accepts only HTTPS or `127.0.0.1` redirect URIs, and the auth cookies must live on the same host as the OAuth callbacks.
 
-For PGlite, both database URLs are `postgres://postgres:postgres@127.0.0.1:5433/postgres?sslmode=disable`. A production build needs the same env: `bun --env-file=.env.development.local run build`.
+Locally, the database is the Neon `dev` branch of `personal-db` (pooled and direct URL from the Neon console or the Neon MCP). It is a copy of production at the time it was made; reset it from `main` in Neon when you want fresh data. A production build needs the same env: `bun --env-file=.env.development.local run build`.
 
 ## Scripts
 
@@ -38,7 +37,6 @@ For PGlite, both database URLs are `postgres://postgres:postgres@127.0.0.1:5433/
 | `bun run typecheck` | Route types, then `tsc` |
 | `bun run db:gen` | New SQL migration in `drizzle/` from `lib/db/schema.ts` (commit it) |
 | `bun run db:mig` | Apply migrations (Vercel runs it before every build) |
-| `bun run db:local` | Local PGlite database |
 | `bun run auth:gen` | Regenerate the Better Auth tables in `lib/db/schema/auth.ts` |
 
 ## Editing content
@@ -63,7 +61,7 @@ Accounts and settings for the owner, in order.
 
    | Variable | Production | Preview | Development |
    |---|---|---|---|
-   | `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | Neon integration | Neon integration (own branch per preview) | PGlite or your own Neon branch |
+   | `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | Neon integration | Neon integration (own branch per preview) | Neon `dev` branch |
    | `BETTER_AUTH_SECRET` | `openssl rand -base64 32` | a different value | a different value |
    | `BETTER_AUTH_URL` | `https://max.vonstorch.com` | not set (taken from the request) | `http://127.0.0.1:3000` |
    | `OWNER_EMAIL` | your verified GitHub email | same | same |

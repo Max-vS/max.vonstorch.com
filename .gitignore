@@ -44,5 +44,3 @@ next-env.d.ts
 # browser-automation scratch output
 .playwright-mcp/
 
-# local PGlite data (bun run db:local)
-/.pglite/
