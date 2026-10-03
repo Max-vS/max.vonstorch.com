@@ -73,6 +73,7 @@ export const titleColors: Record<SceneId, { bg: string; fg: string }> = {
   music: { bg: musicColors.tangerine, fg: musicColors.ink },
   cv: { bg: cvColors.chartreuse, fg: cvColors.black },
   contact: { bg: contactColors.terracotta, fg: contactColors.ink },
-  community: { bg: indexColors.pink, fg: indexColors.ink },
+  // Neutral like Index, so the visitors' marks carry the color.
+  community: { bg: indexColors.ink, fg: indexColors.ground },
   notFound: { bg: notFoundColors.red, fg: notFoundColors.ground },
 };

@@ -69,7 +69,7 @@ Key values from the files:
 | Music | `#FF6A13` | Records · Dots · Interference |
 | CV | `#C7F03A` | Pinwheel · Blocks · Bars |
 | Contact | `#E2573B` | Pulse · Speech · Pairs |
-| Community | `#E9B8A6` | visitor marks |
+| Community | `#1D1D1B` (as Index) | visitor marks |
 | 404 | `#D9432B` | Missing |
 
 ## 4. Decisions
