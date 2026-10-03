@@ -10,7 +10,11 @@ import {
 import { isSymmetric } from "@/lib/tiles/shapes";
 import type { Cell, PlacedTile, Tile } from "@/lib/tiles/types";
 
-export type TileView = PlacedTile & { folded?: boolean };
+export type TileView = PlacedTile & {
+  folded?: boolean;
+  /** Rotation and scale change without a transition, while the tile is edge-on. */
+  instant?: boolean;
+};
 
 export type Motion = { waves: boolean; turns: boolean; idle: boolean };
 
@@ -24,7 +28,9 @@ export type ShowOptions = {
 
 const WAITING = 0;
 const FOLDED = 1;
-const DONE = 2;
+// The new content is in but still edge-on, so its rotation and scale apply without turning.
+const SWAPPED = 2;
+const DONE = 3;
 
 type Wave = {
   start: number;
@@ -83,9 +89,13 @@ export function createTileEngine() {
           changes.set(i, { ...get(i), folded: true });
           wave.stages[i] = FOLDED;
         }
-        if (wave.stages[i] === FOLDED && elapsed >= SWAP_DELAY_MS) {
+        if (wave.stages[i] === SWAPPED) {
           changes.set(i, wave.next[i]);
           wave.stages[i] = DONE;
+        }
+        if (wave.stages[i] === FOLDED && elapsed >= SWAP_DELAY_MS) {
+          changes.set(i, { ...wave.next[i], folded: true, instant: true });
+          wave.stages[i] = SWAPPED;
         }
         if (wave.stages[i] !== DONE) done = false;
       }

@@ -465,7 +465,7 @@ These decisions were made while building. They replace the matching parts of the
 | Migrations | `DATABASE_URL_UNPOOLED` for drizzle-kit | pooled URL | Neon recommends the direct URL for DDL |
 | Code layout (§6) | `lib/auth/*`, `lib/db/*`, `lib/queries/*`, `lib/mutations/*`, `lib/schemas/*`, `drizzle/`; Server Actions next to their pages (`app/(tiles)/community/actions.ts`, `app/admin/actions.ts`) | `auth/`, `db/`, `actions/` | Matches the owner's open-eu project |
 | Grid (§5) | The title block and indicator round to the nearest tile boundary (+1 column/row when the cut is more than half a tile); the head script sets `--title-width`, `--title-height`, `--indicator-width` | fixed 8×3 minus the cut | Avoids a title block that loses almost a whole tile |
-| Tile size | Rounded up to a size that is whole in CSS and in device pixels (within 10 px) | the exact fluid size | Chrome places a tile's box at device pixels but its SVG at whole CSS pixels; any other size shows 1-pixel lines of the tile color between tiles |
+| Tile size | Rounded up to whole CSS pixels | the exact fluid size | Tiles at fractional positions blend their edges into 1-pixel lines; screens with a fractional pixel ratio (Windows 125 %) can still show faint lines |
 | Titles | H1 size = `min(design size, 100cqi / 4.7)`; mobile page titles are 61.5 design px | 68 px | "Community" must fit the mobile title block |
 | Grey text | `#6B665E` | `#8A857C` | 4.5:1 contrast |
 | Community (§9) | The browser keeps only the visitor's last own mark; more marks load from `/api/marks/[page]`; pages drive the grid through `useTileScene`; on a small desktop window without a free 4×4 area the title block also slides away | — | Simpler state; one small typed channel between pages and the shell |

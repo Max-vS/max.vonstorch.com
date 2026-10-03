@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 // Sets the grid variables before the first paint, so the title block and panel never jump.
-const gridScript = `(${setGridVariables})((${measureGrid})(innerWidth, innerHeight, devicePixelRatio))`;
+const gridScript = `(${setGridVariables})((${measureGrid})(innerWidth, innerHeight))`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
