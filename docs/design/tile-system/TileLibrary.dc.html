@@ -14,7 +14,7 @@
 body{margin:0;background:#EFEBE4;color:#1D1D1B;font-family:'Familjen Grotesk',sans-serif}
 </style>
 </helmet>
-<div style="width: 1440px; height: 2080px; box-sizing: border-box; padding: 56px 60px; background: #EFEBE4; color: #1D1D1B; font-family: 'Familjen Grotesk', sans-serif; display: flex; flex-direction: column; gap: 40px">
+<div style="width: 1440px; height: 2200px; box-sizing: border-box; padding: 56px 60px; background: #EFEBE4; color: #1D1D1B; font-family: 'Familjen Grotesk', sans-serif; display: flex; flex-direction: column; gap: 40px">
 <div style="display: flex; justify-content: space-between; align-items: baseline">
 <h1 style="margin: 0; font-size: 56px; line-height: 1; font-weight: 700; letter-spacing: -0.04em">Tile pattern library</h1>
 <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em">7 PAGES × 3 PATTERNS</span>
@@ -27,8 +27,8 @@ body{margin:0;background:#EFEBE4;color:#1D1D1B;font-family:'Familjen Grotesk',sa
 <figure style="margin: 0; display: flex; flex-direction: column; gap: 8px">
 <div style="width: 400px; height: 200px; display: grid; grid-template-columns: repeat(10, 40px); grid-template-rows: repeat(5, 40px); overflow: hidden">
 <sc-for list="{{c.tiles}}" as="x" hint-placeholder-count="50">
-<div style="grid-column: {{x.col}}; grid-row: {{x.row}}; width: 40px; height: 40px; background: {{x.bg}}">
-<svg aria-hidden="true" width="40" height="40" viewBox="0 0 120 120" style="display: block; transform: rotate({{x.rot}}deg)">
+<div style="grid-column: {{x.col}}; grid-row: {{x.row}}; width: 40px; height: 40px">
+<svg aria-hidden="true" width="40" height="40" viewBox="0 0 120 120" style="display: block; transform: rotate({{x.rot}}deg) scale(1.035)"><rect width="120" height="120" fill="{{x.bg}}"></rect>
 <g style="transform: scale({{x.sc}}); transform-origin: 60px 60px">
 <path d="{{x.a}}" fill="{{x.fg}}" fill-rule="evenodd"></path>
 <path d="{{x.b}}" fill="{{x.fg2}}" fill-rule="evenodd"></path>
@@ -46,10 +46,11 @@ body{margin:0;background:#EFEBE4;color:#1D1D1B;font-family:'Familjen Grotesk',sa
 </sc-for>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"dryftBlue":{"editor":"color","default":"#1F3DFF"},"$preview":{"width":1440,"height":2080}}'>
+<script type="text/x-dc" data-dc-script data-props='{"dryftBlue":{"editor":"color","default":"#1F3DFF"},"$preview":{"width":1440,"height":2200}}'>
 class Component extends DCLogic {
   bars() { var d = ''; for (var i = 0; i < 4; i++) { var h = Math.round(14 + Math.random() * 86); d += 'M' + (12 + i * 26) + ' ' + (108 - h) + 'h18v' + h + 'h-18z'; } return d; }
   wheel(dy) {
+    if (this.wOpen()) return;
     var now = performance.now();
     if (this.trans || now < (this.lockUntil || 0)) { this.acc = 0; return; }
     if (now - (this.lastWheel || 0) > 260) this.acc = 0;
@@ -62,14 +63,15 @@ class Component extends DCLogic {
     if (this.isComm()) { if (this.editing) return; var m = this.entries.length; this.entryIdx = (this.entryIdx + dir + m) % m; this.go(this.topic, 0, dir > 0 ? [0, 0] : [9, 15]); return; }
     this.go(this.topic, (this.comp + dir + n) % n, dir > 0 ? [0, 0] : [9, 15]);
   }
-  panelRect() { return this.PANEL.small; }
+  panelRect() { if (this.isComm() && this.editing) return this.PANEL.edit; if (this.T[this.topic].id === 'writing') { if (this.wview === 'list') return this.PANEL.wlist; if (this.wview === 'post') return this.PANEL.wpost; } return this.PANEL.small; }
+  wOpen() { return this.T[this.topic].id === 'writing' && this.wview !== 'card'; }
   mix(a, b, t) { var p = function (h) { var n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }; var x = p(a), y = p(b); return '#' + [0, 1, 2].map(function (i) { return Math.round(x[i] + (y[i] - x[i]) * t).toString(16).padStart(2, '0'); }).join(''); }
   dp() { var b = this.props.dryftBlue ?? '#1F3DFF'; return { blue: b, deep: this.mix(b, '#0B0D1A', 0.62), tint: this.mix(b, '#EFEBE4', 0.72), off: '#EFEBE4' }; }
   loadEntries() {
     var saved = [];
     try { var raw = window.localStorage.getItem('mvs-community-v1'); if (raw) saved = JSON.parse(raw) || []; } catch (e) { saved = []; }
     var self = this, seeds = [0, 1, 2].map(function (ci) {
-      var f = self.T[0].comps[ci].f, S = {};
+      var f = self.T[0].comps[0].f, S = {};
       return { name: '[Sample visitor]', note: '[A short note a visitor left with their pattern.]', date: '[Date]', sample: true,
         tiles: self.cells.map(function (rc) { var t = f(rc[0], rc[1], S); return { k: t.k, rot: t.rot, bg: t.bg, fg: t.fg, fg2: t.fg2 || t.fg }; }) };
     });
@@ -84,10 +86,10 @@ class Component extends DCLogic {
       return { r: rc[0], c: rc[1], k: t.k, rot: t.rot, bg: t.bg, fg: t.fg, fg2: t.fg2 || t.fg, a: m.a || '', b: m.b || '', st: m.st || '', sc: 1, s: 1 };
     });
   }
-  paint(i) {
+  paint(i, drag) {
     if (!this.isComm() || !this.editing || this.trans) return;
     var t = this.tiles[i], b = this.brush, m = this.M[b.k] || {}, cv = this.canvas[i];
-    if (cv.k === b.k && cv.fg === b.fg && cv.bg === b.bg) { cv.rot += 90; t.rot = cv.rot; }
+    if (cv.k === b.k && cv.fg === b.fg && cv.bg === b.bg) { if (drag) return; cv.rot += 90; t.rot = cv.rot; }
     else { cv.k = b.k; cv.fg = b.fg; cv.fg2 = b.fg; cv.bg = b.bg; t.k = b.k; t.fg = b.fg; t.fg2 = b.fg; t.bg = b.bg; t.a = m.a || ''; t.b = m.b || ''; t.st = m.st || ''; }
     this.forceUpdate();
   }
@@ -168,11 +170,38 @@ class Component extends DCLogic {
       pin: { a: 'M0 0H60L60 60ZM120 0V60L60 60ZM120 120H60L60 60ZM0 120V60L60 60Z' },
       frame: { a: 'M0 0H120V24H24V120H0ZM48 48H120V72H72V120H48ZM96 96H120V120H96Z' },
       moon: { a: 'M75 10A50 50 0 1 0 75 110A72.5 72.5 0 0 1 75 10Z' },
+      halfsq: { a: 'M0 0H60V120H0Z', b: C(60, 60, 28) },
+      pair: { a: C(42, 60, 30), b: C(78, 60, 30) },
       sine: { st: 'M0 60C20 22 40 22 60 60S100 98 120 60' }
     };
     var self = this;
     var pick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
     var r4 = function () { return Math.floor(Math.random() * 4) * 90; };
+    var bigShape = function (s, B, r, c) {
+      var N = B * 120, dx = (c % B) * 120, dy = (r % B) * 120, h = N / 2;
+      var P = function (x, y) { var X = x, Y = y; for (var i = 0; i < s.k; i++) { var t = X; X = N - Y; Y = t; } return (X - dx).toFixed(1) + ' ' + (Y - dy).toFixed(1); };
+      var a = '';
+      if (s.kind === 'qdisc') a = 'M' + P(0, 0) + 'L' + P(N, 0) + 'A' + N + ' ' + N + ' 0 0 1 ' + P(0, N) + 'Z';
+      else if (s.kind === 'half') a = 'M' + P(N, 0) + 'A' + h + ' ' + h + ' 0 0 1 ' + P(0, 0) + 'Z';
+      else if (s.kind === 'halves') a = 'M' + P(N, 0) + 'A' + h + ' ' + h + ' 0 0 1 ' + P(0, 0) + 'Z' + 'M' + P(0, N) + 'A' + h + ' ' + h + ' 0 0 1 ' + P(N, N) + 'Z';
+      else if (s.kind === 'tri') a = 'M' + P(0, 0) + 'L' + P(N, 0) + 'L' + P(0, N) + 'Z';
+      else if (s.kind === 'qring') a = 'M' + P(N, 0) + 'A' + N + ' ' + N + ' 0 0 1 ' + P(0, N) + 'L' + P(0, h) + 'A' + h + ' ' + h + ' 0 0 0 ' + P(h, 0) + 'Z';
+      else { var rr = N * 0.42; a = 'M' + (h - rr - dx).toFixed(1) + ' ' + (h - dy).toFixed(1) + 'a' + rr + ' ' + rr + ' 0 1 0 ' + (2 * rr) + ' 0a' + rr + ' ' + rr + ' 0 1 0 ' + (-2 * rr) + ' 0Z'; }
+      var b = '';
+      if (s.accent) { var q = N * 0.36; b = (s.kind === 'circle') ? ('M' + (h - q / 2 - dx).toFixed(1) + ' ' + (h - dy).toFixed(1) + 'a' + (q / 2) + ' ' + (q / 2) + ' 0 1 0 ' + q + ' 0a' + (q / 2) + ' ' + (q / 2) + ' 0 1 0 ' + (-q) + ' 0Z') : ('M' + P(N, N) + 'L' + P(N - q, N) + 'A' + q + ' ' + q + ' 0 0 1 ' + P(N, N - q) + 'Z'); }
+      return { a: a, b: b };
+    };
+    this.bigShape = bigShape;
+    var bigTile = function (r, c, S, B) {
+      var IL = ['#E2573B', '#2F4FD8', '#F2C14E', '#9DB39A', '#1D1D1B', '#EFEBE4', '#E9B8A6'];
+      var key = Math.floor(r / B) + ',' + Math.floor(c / B);
+      if (!S[key]) {
+        var bg = pick(IL), fg, fg2; do { fg = pick(IL); } while (fg === bg); do { fg2 = pick(IL); } while (fg2 === bg || fg2 === fg);
+        S[key] = { kind: pick(['qdisc', 'qdisc', 'half', 'circle', 'tri', 'qring', 'halves']), k: Math.floor(Math.random() * 4), bg: bg, fg: fg, fg2: fg2, accent: Math.random() < 0.45 };
+      }
+      var s = S[key], sh = bigShape(s, B, r, c);
+      return { k: 'none', rot: 0, a: sh.a, b: sh.b, bg: s.bg, fg: s.fg, fg2: s.fg2, blk: B + ':' + key, bs: s, bb: B };
+    };
     var I = { ink: '#1D1D1B', off: '#EFEBE4', red: '#E2573B', blue: '#2F4FD8', yel: '#F2C14E', sage: '#9DB39A', pink: '#E9B8A6' };
     var TH = { blue: '#F2C14E', navy: '#1D1D1B', off: '#EFEBE4', yel: '#E2573B', sky: '#F6DC97' };
     var W = { sage: '#8FA98A', forest: '#33503A', off: '#EFEBE4', ink: '#1D1D1B', clay: '#D9A08B' };
@@ -184,58 +213,60 @@ class Component extends DCLogic {
         body: 'Currently founding engineer at Dryft, building AI for manufacturing.', href: '', link: '',
         comps: [
           { name: 'Bauhaus', f: function (r, c) { var L = [I.red, I.blue, I.yel, I.sage, I.ink, I.off, I.pink], bg = pick(L), fg; do { fg = pick(L); } while (fg === bg); return { k: pick(['qdisc', 'qdisc', 'half', 'half', 'dot', 'tri', 'qring', 'qring', 'halves']), rot: r4(), bg: bg, fg: fg }; } },
-          { name: 'Rings', f: function (r, c, S) { var L = [I.red, I.blue, I.yel, I.sage, I.pink, I.ink], key = (r >> 1) + ',' + (c >> 1); if (!S[key]) { var bg = pick([I.off, I.off, I.ink, I.pink]), fg; do { fg = pick(L); } while (fg === bg); S[key] = { bg: bg, fg: fg, pin: Math.random() < 0.3 ? 90 : 0 }; } var m = { '0,0': 180, '0,1': 270, '1,0': 90, '1,1': 0 }[(r & 1) + ',' + (c & 1)]; return { k: 'qdisc', rot: m + S[key].pin, bg: S[key].bg, fg: S[key].fg }; } },
-          { name: 'Petals', f: function (r, c) { var L = [I.blue, I.red, I.yel, I.sage]; return { k: 'leaf', rot: ((r + c) % 2) * 90, bg: (r % 2) ? I.off : I.pink, fg: L[((r >> 1) + (c >> 1)) % 4] }; } }
+          { name: 'Mosaic', f: function () { var L = [I.red, I.blue, I.yel, I.sage, I.ink, I.off, I.pink], bg = pick(L), fg, fg2; do { fg = pick(L); } while (fg === bg); do { fg2 = pick(L); } while (fg2 === bg || fg2 === fg); var cell = function (x, y, k) { var P = function (px, py) { var X = px, Y = py; for (var i = 0; i < k; i++) { var t = X; X = 60 - Y; Y = t; } return (X + x) + ' ' + (Y + y); }; return 'M' + P(0, 0) + 'L' + P(60, 0) + 'A60 60 0 0 1 ' + P(0, 60) + 'Z'; }; var a = '', b = ''; [[0, 0], [60, 0], [0, 60], [60, 60]].forEach(function (o) { var p = cell(o[0], o[1], Math.floor(Math.random() * 4)); if (Math.random() < 0.5) a += p; else b += p; }); return { k: 'none', rot: 0, a: a, b: b, bg: bg, fg: fg, fg2: fg2 }; } },
+          { name: 'Halves', f: function () { var L = [I.red, I.blue, I.yel, I.sage, I.ink, I.off, I.pink], bg = pick(L), fg, fg2; do { fg = pick(L); } while (fg === bg); do { fg2 = pick(L); } while (fg2 === bg || fg2 === fg); return { k: 'halfsq', rot: r4(), bg: bg, fg: fg, fg2: fg2 }; } }
         ] },
       { id: 'education', label: 'Education', title: 'Education', kicker: 'Computer Science & Philosophy', bg: function () { return TH.blue; }, fgc: '#1D1D1B', dot: function () { return TH.blue; },
         body: 'Computer science at TU Munich, CSEE and UC Berkeley. Philosophy at HFPH.', href: '#', link: '[READ THE ABSTRACT] ↗', linkShort: '[Abstract] ↗',
         comps: [
-          { name: 'Routes', auto: 'rotate', f: function () { return { k: 'arc', rot: Math.random() < 0.5 ? 0 : 90, bg: TH.off, fg: TH.navy }; } },
           { name: 'Waves', f: function (r, c) { var R = [TH.off, TH.sky, TH.blue, '#C9962A', TH.blue, TH.sky]; var col = function (i) { return R[((i % 6) + 6) % 6]; }; var up = c % 2; return { k: 'half', rot: up ? 180 : 0, bg: col(r), fg: up ? col(r + 1) : col(r - 1) }; } },
-          { name: 'Steps', f: function (r, c) { return { k: 'lshape', rot: ((r + c) % 4) * 90, bg: (r % 2) ? TH.sky : TH.off, fg: TH.navy }; } }
+          { name: 'Routes', auto: 'rotate', f: function () { return { k: 'arc', rot: Math.random() < 0.5 ? 0 : 90, bg: TH.off, fg: TH.navy }; } },
+          { name: 'Ascent', f: function (r, c) { var R = [TH.off, TH.sky, TH.blue, '#C9962A', TH.blue, TH.sky], col = function (i) { return R[((i % 6) + 6) % 6]; }, n = r + c; return { k: 'tri', rot: 0, bg: col(n + 1), fg: col(n) }; } }
         ] },
       { id: 'projects', label: 'Projects', title: 'Projects', kicker: 'DRYFT & SIDE PROJECTS', bg: function () { return D().blue; }, fgc: '#FFFFFF', dot: function () { return D().blue; },
         body: 'Founding engineer at Dryft, building AI for manufacturing. [Side project] · [Side project].', href: 'https://dryft.ai', link: 'DRYFT.AI ↗', linkShort: 'dryft.ai ↗',
         comps: [
           { name: 'Wedges', f: function () { var p = D(), bg = pick([p.off, p.tint, p.deep]), fg = bg === p.deep ? p.blue : pick([p.blue, p.deep]); return { k: 'wedge', rot: r4(), bg: bg, fg: fg, fg2: bg === p.off ? p.tint : p.off }; } },
-          { name: 'Stripes', f: function (r, c) { var p = D(), flip = (r >> 1) % 2; return { k: 'stripes', rot: ((r + c) % 2) * 90, bg: flip ? p.deep : p.blue, fg: flip ? p.blue : p.off }; } },
+          { name: 'Matrix', f: function () { var p = D(), x = Math.random(); return x < 0.12 ? { k: 'dots4', rot: 0, bg: p.blue, fg: p.off } : { k: 'dots4', rot: 0, bg: p.deep, fg: x < 0.3 ? p.blue : p.tint }; } },
           { name: 'Machine', f: function (r, c) { var p = D(); if ((r + c) % 2 === 0) return { k: 'ring', rot: 0, bg: p.tint, fg: p.deep, fg2: p.blue }; var k = pick(['cross', 'squares', 'squares']); return { k: k, rot: 0, bg: p.off, fg: k === 'cross' ? p.blue : p.deep, fg2: p.tint }; } }
         ] },
       { id: 'writing', label: 'Writing', title: 'Writing', kicker: 'NOTES & ESSAYS', bg: function () { return W.forest; }, fgc: '#EFEBE4', dot: function () { return W.sage; },
-        body: '[Post title] · [Post title] · [Post title]', href: '#', link: '[ALL POSTS] ↗', linkShort: '[All posts] ↗',
+        body: '', href: '', link: '', linkShort: '',
         comps: [
+          { name: 'Triangles', f: function () { var L = [W.off, W.sage, W.forest, W.clay], bg = pick(L), fg; do { fg = pick(L); } while (fg === bg); return { k: 'tri', rot: r4(), bg: bg, fg: fg }; } },
           { name: 'Squares', f: function (r, c) { var L = [W.off, W.sage, W.forest, W.ink, W.clay]; return { k: 'squares', rot: 0, bg: L[(c + r) % 5], fg: L[(c + r + 1) % 5], fg2: L[(c + r + 2) % 5] }; } },
-          { name: 'Arcs', f: function () { var bg = Math.random() < 0.35 ? W.sage : W.off; return { k: 'qring', rot: r4(), bg: bg, fg: bg === W.sage ? W.forest : pick([W.forest, W.ink, W.ink]) }; } },
-          { name: 'Triangles', f: function () { var L = [W.off, W.sage, W.forest, W.clay], bg = pick(L), fg; do { fg = pick(L); } while (fg === bg); return { k: 'tri', rot: r4(), bg: bg, fg: fg }; } }
+          { name: 'Hills', f: function (r, c) { var R = [W.off, W.sage, W.forest, W.ink, W.forest, W.sage], col = function (i) { return R[((i % 6) + 6) % 6]; }, left = (c + r) % 2 === 0; return { k: 'qdisc', rot: left ? 180 : 270, bg: col(r), fg: col(r + 1) }; } }
         ] },
       { id: 'music', label: 'Music', title: 'Music', kicker: '[WHAT YOU PLAY / MAKE]', bg: function () { return MU.tang; }, fgc: '#1D1D1B', dot: function () { return MU.tang; },
         body: 'My top 3 tracks this week: [Track] · [Track] · [Track].', href: '#', link: '[LISTEN] ↗', linkShort: '[Listen] ↗',
         comps: [
           { name: 'Records', f: function () { var bg = pick([MU.off, MU.off, MU.peach]); return { k: 'split', rot: r4(), bg: bg, fg: MU.tang, fg2: pick([MU.ink, MU.rust]) }; } },
           { name: 'Dots', f: function () { return { k: 'offdot', rot: r4(), bg: pick([MU.off, MU.off, MU.peach]), fg: pick([MU.tang, MU.tang, MU.ink, MU.rust]) }; } },
-          { name: 'Chevrons', f: function (r, c) { var odd = r % 2, L = odd ? [MU.tang, MU.rust, MU.peach] : [MU.ink, MU.tang, MU.peach]; return { k: 'chev', rot: odd ? 180 : 0, bg: odd ? MU.ink : MU.off, fg: L[(c + r) % 3] }; } }
+          { name: 'Interference', auto: 'interf', f: function (r, c) { var P = [MU.off, MU.peach, MU.tang, MU.rust, MU.ink], v = Math.sin(c * 0.55) + Math.sin(r * 0.7) + Math.sin((c + r) * 0.35), b = Math.max(0, Math.min(4, Math.floor((v + 3) / 6 * 5))); return { k: 'dot', rot: 0, bg: P[b], fg: P[(b + 1) % 5], sc: 0.45, itf: P, fix: 1 }; } }
         ] },
       { id: 'cv', label: 'CV', title: 'CV', kicker: 'Résumé · one page', bg: function () { return '#C7F03A'; }, fgc: '#111111', dot: function () { return '#C7F03A'; },
         body: 'Experience, education and skills on one page.', href: '', link: '', linkShort: '',
         cta: { href: '#', label: 'DOWNLOAD CV · PDF ↓', note: 'UPDATED [MONTH YYYY]' },
         comps: [
           { name: 'Pinwheel', f: function (r, c, S) { var key = (r >> 1) + ',' + (c >> 1); if (!S[key]) { var x = Math.random(); S[key] = x < 0.3 ? ['#C7F03A', '#111111'] : x < 0.5 ? ['#111111', '#C7F03A'] : x < 0.75 ? ['#F6EFE3', '#111111'] : ['#FFFFFF', '#111111']; } return { k: 'pin', rot: 0, bg: S[key][0], fg: S[key][1] }; } },
-          { name: 'Frames', f: function (r, c, S) { var key = (r >> 1) + ',' + (c >> 1); if (S[key] == null) { var x = Math.random(); S[key] = x < 0.35 ? ['#F6EFE3', '#111111'] : x < 0.7 ? ['#C7F03A', '#111111'] : ['#111111', '#C7F03A']; } return { k: 'frame', rot: Math.floor(Math.random() * 4) * 90, bg: S[key][0], fg: S[key][1] }; } },
-          { name: 'Moons', f: function (r, c) { var dk = ((r >> 1) + (c >> 1)) % 2; return { k: 'moon', rot: ((r + c) % 4) * 90, bg: dk ? '#111111' : '#FFFFFF', fg: dk ? '#C7F03A' : '#111111' }; } }
+          { name: 'Blocks', f: function (r, c, S) { var key = (r >> 1) + ',' + (c >> 1); if (!S[key]) { var x = Math.random(); S[key] = x < 0.4 ? ['#FFFFFF', '#111111'] : x < 0.7 ? ['#C7F03A', '#111111'] : ['#111111', '#C7F03A']; } return { k: 'lshape', rot: [[0, 90], [270, 180]][r % 2][c % 2], bg: S[key][0], fg: S[key][1] }; } },
+          { name: 'Bars', f: function () { var a = '', x = 0; while (x < 120) { var w = 12 * (1 + Math.floor(Math.random() * 3)), g = 12 * (1 + Math.floor(Math.random() * 2)); if (x + w > 120) w = 120 - x; a += 'M' + x + ' 0H' + (x + w) + 'V120H' + x + 'Z'; x += w + g; } return { k: 'none', rot: 0, a: a, bg: Math.random() < 0.5 ? '#FFFFFF' : '#F6EFE3', fg: Math.random() < 0.15 ? '#C7F03A' : '#111111' }; } }
         ] },
       { id: 'contact', label: 'Contact', title: 'Contact', kicker: 'Because it is and always will be about people', bg: function () { return CT.terra; }, fgc: '#1D1D1B', dot: function () { return CT.terra; },
         body: '[your@email.com] · GitHub · LinkedIn · X', href: '#', link: '[EMAIL ME] ↗', linkShort: '[your@email.com]',
         comps: [
           { name: 'Pulse', auto: 'pulse', f: function (r, c) { return { k: 'dot', rot: 0, bg: (r + c) % 2 ? CT.off : CT.blush, fg: CT.terra, d: Math.hypot(c - 13.5, r - 8) }; } },
           { name: 'Speech', f: function () { var bg = pick([CT.blush, CT.off, CT.off]); return { k: 'halves', rot: Math.random() < 0.5 ? 0 : 90, bg: bg, fg: bg === CT.blush ? CT.terra : pick([CT.terra, CT.ink]), fg2: bg === CT.blush ? CT.ink : CT.terra }; } },
-          { name: 'Confetti', f: function () { var L = [CT.terra, CT.blush, CT.ink, CT.yel], bg = pick([CT.off, CT.off, CT.blush]), fg; do { fg = pick(L); } while (fg === bg); return { k: pick(['dots4', 'diamond', 'half', 'dot']), rot: r4(), bg: bg, fg: fg, fg2: bg }; } }
+          { name: 'Pairs', f: function () { var bg = pick([CT.off, CT.off, CT.blush]); return { k: 'pair', rot: Math.random() < 0.5 ? 0 : 90, bg: bg, fg: CT.terra, fg2: bg === CT.blush ? CT.ink : pick([CT.ink, CT.yel]) }; } }
         ] },
       { id: 'community', label: 'Community', title: 'Community', kicker: 'Leave your mark', bg: function () { return '#E9B8A6'; }, fgc: '#1D1D1B', dot: function () { return '#E9B8A6'; },
         body: '', href: '', link: '', linkShort: '',
         comps: [ { name: 'Community', f: function () { return { k: 'none', rot: 0, bg: '#EFEBE4', fg: '#1D1D1B' }; } } ] }
     ];
     this.CS = 90;
-    this.PANEL = { small: { c: 11, r: 6, w: 5, h: 4 }, big: { c: 10, r: 5, w: 6, h: 5 } };
+    this.PANEL = { small: { c: 11, r: 6, w: 5, h: 4 }, big: { c: 10, r: 5, w: 6, h: 5 }, edit: { c: 11, r: 0, w: 5, h: 10 }, wlist: { c: 11, r: 0, w: 5, h: 10 }, wpost: { c: 8, r: 0, w: 8, h: 10 } };
+    this.WPOSTS = [{"type": "NOTE", "date": "26 SEP 2026", "read": "2 MIN", "title": "Notes on a grid of tiles", "lede": "Why this site is built from one rule, and how a pattern works.", "blocks": [{"t": "p", "x": "This site is built from one rule: everything sits on a grid of square tiles. Each page picks its own palette and three patterns, and scrolling swaps one pattern for the next."}, {"t": "h", "x": "Why tiles"}, {"t": "p", "x": "A tile is small enough to animate cheaply and big enough to carry a shape. Repeat it and you get texture; rotate one and you get motion. The whole visual language comes from about forty shapes drawn in a 120-unit box."}, {"t": "h", "x": "How a pattern works"}, {"t": "p", "x": "A pattern is just a function from a grid position to a tile:"}, {"t": "code", "x": "type Tile = { shape: string; rotation: number; bg: string; fg: string }\n\nconst arcs = (row: number, col: number): Tile =>\n  ({ shape: 'qring', rotation: pick([0, 90, 180, 270]), bg: SAGE, fg: FOREST })"}, {"t": "li", "x": "The grid size is computed from the screen."}, {"t": "li", "x": "The title box and card are placed in whole tiles."}, {"t": "li", "x": "Patterns never know which page they are on."}, {"t": "q", "x": "Constraints are the fastest way to make something feel designed."}, {"t": "p", "x": "Everything you read here is a plain Markdown file. Adding a post means adding a file."}]}, {"type": "ESSAY", "date": "[DATE]", "read": "[N] MIN", "title": "[Essay title]", "lede": "[One-line summary from the front matter]", "blocks": [{"t": "p", "x": "[Essay body, rendered from the Markdown file.]"}]}, {"type": "BLOG", "date": "[DATE]", "read": "[N] MIN", "title": "[Blog post title]", "lede": "[One-line summary]", "blocks": [{"t": "p", "x": "[Post body, rendered from the Markdown file.]"}]}, {"type": "NOTE", "date": "[DATE]", "read": "[N] MIN", "title": "[Note title]", "lede": "[One-line summary]", "blocks": [{"t": "p", "x": "[Note body, rendered from the Markdown file.]"}]}, {"type": "ESSAY", "date": "[DATE]", "read": "[N] MIN", "title": "[Essay title]", "lede": "[One-line summary]", "blocks": [{"t": "p", "x": "[Essay body, rendered from the Markdown file.]"}]}, {"type": "NOTE", "date": "[DATE]", "read": "[N] MIN", "title": "[Note title]", "lede": "[One-line summary]", "blocks": [{"t": "p", "x": "[Note body, rendered from the Markdown file.]"}]}];
+    this.wview = 'card'; this.wpost = 0; this.wfilter = 'ALL';
     this.LISTS = {
       education: { label: 'STUDIES', rows: [
         { lead: '01', title: 'TU Munich', sub: 'B.Sc. Informatik', meta: '[YYYY–YYYY]', href: '#' },
@@ -254,7 +285,7 @@ class Component extends DCLogic {
         { cover: '#1D1D1B', cover2: '#FF6A13', title: '[Track title]', sub: '[Artist]', meta: '03', href: '#' }
       ] }
     };
-    this.BR = { motifs: ['qdisc', 'half', 'tri', 'dot', 'qring', 'leaf', 'squares', 'arc'], colors: ['#E2573B', '#2F4FD8', '#F2C14E', '#9DB39A', '#1D1D1B', '#E9B8A6', '#EFEBE4'] };
+    this.BR = { motifs: ['none'].concat(Object.keys(this.M).filter(function (k) { var m = self.M[k]; return k !== 'none' && ((m.a || '') + (m.b || '') + (m.st || '')).length > 0; })), colors: ['#1D1D1B', '#EFEBE4', '#FFFFFF', '#E2573B', '#FF6A13', '#9C3A12', '#D9A08B', '#F7C7A6', '#E9B8A6', '#F2C14E', '#F6DC97', '#C7F03A', '#9DB39A', '#8FA98A', '#33503A', '#2F4FD8', '#1F3DFF'] };
     this.brush = { k: 'qdisc', fg: '#E2573B', bg: '#EFEBE4' };
     this.form = { name: '', note: '' };
     this.editing = false; this.entryIdx = 0;
@@ -271,6 +302,7 @@ class Component extends DCLogic {
   }
   bars() { var d = ''; for (var i = 0; i < 4; i++) { var h = Math.round(14 + Math.random() * 86); d += 'M' + (12 + i * 26) + ' ' + (108 - h) + 'h18v' + h + 'h-18z'; } return d; }
   wheel(dy) {
+    if (this.wOpen()) return;
     var now = performance.now();
     if (this.trans || now < (this.lockUntil || 0)) { this.acc = 0; return; }
     if (now - (this.lastWheel || 0) > 260) this.acc = 0;
@@ -283,14 +315,15 @@ class Component extends DCLogic {
     if (this.isComm()) { if (this.editing) return; var m = this.entries.length; this.entryIdx = (this.entryIdx + dir + m) % m; this.go(this.topic, 0, dir > 0 ? [0, 0] : [9, 15]); return; }
     this.go(this.topic, (this.comp + dir + n) % n, dir > 0 ? [0, 0] : [9, 15]);
   }
-  panelRect() { return this.PANEL.small; }
+  panelRect() { if (this.isComm() && this.editing) return this.PANEL.edit; if (this.T[this.topic].id === 'writing') { if (this.wview === 'list') return this.PANEL.wlist; if (this.wview === 'post') return this.PANEL.wpost; } return this.PANEL.small; }
+  wOpen() { return this.T[this.topic].id === 'writing' && this.wview !== 'card'; }
   mix(a, b, t) { var p = function (h) { var n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }; var x = p(a), y = p(b); return '#' + [0, 1, 2].map(function (i) { return Math.round(x[i] + (y[i] - x[i]) * t).toString(16).padStart(2, '0'); }).join(''); }
   dp() { var b = this.props.dryftBlue ?? '#1F3DFF'; return { blue: b, deep: this.mix(b, '#0B0D1A', 0.62), tint: this.mix(b, '#EFEBE4', 0.72), off: '#EFEBE4' }; }
   loadEntries() {
     var saved = [];
     try { var raw = window.localStorage.getItem('mvs-community-v1'); if (raw) saved = JSON.parse(raw) || []; } catch (e) { saved = []; }
     var self = this, seeds = [0, 1, 2].map(function (ci) {
-      var f = self.T[0].comps[ci].f, S = {};
+      var f = self.T[0].comps[0].f, S = {};
       return { name: '[Sample visitor]', note: '[A short note a visitor left with their pattern.]', date: '[Date]', sample: true,
         tiles: self.cells.map(function (rc) { var t = f(rc[0], rc[1], S); return { k: t.k, rot: t.rot, bg: t.bg, fg: t.fg, fg2: t.fg2 || t.fg }; }) };
     });
@@ -305,10 +338,10 @@ class Component extends DCLogic {
       return { r: rc[0], c: rc[1], k: t.k, rot: t.rot, bg: t.bg, fg: t.fg, fg2: t.fg2 || t.fg, a: m.a || '', b: m.b || '', st: m.st || '', sc: 1, s: 1 };
     });
   }
-  paint(i) {
+  paint(i, drag) {
     if (!this.isComm() || !this.editing || this.trans) return;
     var t = this.tiles[i], b = this.brush, m = this.M[b.k] || {}, cv = this.canvas[i];
-    if (cv.k === b.k && cv.fg === b.fg && cv.bg === b.bg) { cv.rot += 90; t.rot = cv.rot; }
+    if (cv.k === b.k && cv.fg === b.fg && cv.bg === b.bg) { if (drag) return; cv.rot += 90; t.rot = cv.rot; }
     else { cv.k = b.k; cv.fg = b.fg; cv.fg2 = b.fg; cv.bg = b.bg; t.k = b.k; t.fg = b.fg; t.fg2 = b.fg; t.bg = b.bg; t.a = m.a || ''; t.b = m.b || ''; t.st = m.st || ''; }
     this.forceUpdate();
   }

@@ -190,9 +190,9 @@ export const community = {
 
 export const errors = {
   notFound: {
-    kicker: "Page not found",
-    title: "404",
-    body: "This page does not exist.",
+    kicker: "Error 404",
+    title: "Not found",
+    body: "This page does not exist, or it moved.",
   },
   failed: {
     kicker: "Something went wrong",
@@ -201,5 +201,5 @@ export const errors = {
   },
   postNotFound: "Post not found",
   retry: "Try again",
-  home: "Go to the index →",
+  home: "Back to the index →",
 };

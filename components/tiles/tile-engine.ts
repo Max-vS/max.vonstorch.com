@@ -1,19 +1,26 @@
 import {
+  ANIMATION_STEP_MS,
   hoverTurns,
   idleGap,
   idleTurn,
-  PULSE_INTERVAL_MS,
-  pulseScale,
   SWAP_DELAY_MS,
   swapColors,
   waveDelay,
 } from "@/lib/tiles/motion";
-import { SYMMETRIC_SHAPES } from "@/lib/tiles/shapes";
-import type { Cell, PlacedTile } from "@/lib/tiles/types";
+import { isSymmetric } from "@/lib/tiles/shapes";
+import type { Cell, PlacedTile, Tile } from "@/lib/tiles/types";
 
 export type TileView = PlacedTile & { folded?: boolean };
 
 export type Motion = { waves: boolean; turns: boolean; idle: boolean };
+
+export type ShowOptions = {
+  /** The tiles flip over in a wave from here; without it they change in place. */
+  origin?: Cell;
+  animate?: (tile: PlacedTile, seconds: number) => Partial<Tile> | null;
+  /** False turns off the random idle flips and turns. */
+  idle?: boolean;
+};
 
 const WAITING = 0;
 const FOLDED = 1;
@@ -45,8 +52,10 @@ export function createTileEngine() {
   let wave: Wave | null = null;
   let flips: { index: number; at: number }[] = [];
   let motion: Motion = { waves: false, turns: false, idle: false };
+  let pattern: Omit<ShowOptions, "origin"> = {};
+  let shownAt = 0;
   let nextIdleAt = 0;
-  let lastPulseAt = 0;
+  let lastStepAt = 0;
   let frame = 0;
   const listeners = new Set<() => void>();
 
@@ -82,21 +91,20 @@ export function createTileEngine() {
       }
       if (done) wave = null;
     } else {
-      if (motion.idle && now - lastPulseAt >= PULSE_INTERVAL_MS) {
-        lastPulseAt = now;
+      const { animate, idle = true } = pattern;
+      if (motion.idle && animate && now - lastStepAt >= ANIMATION_STEP_MS) {
+        lastStepAt = now;
+        const seconds = (now - shownAt) / 1000;
         tiles.forEach((tile, i) => {
-          if (tile.pulseDistance === undefined) return;
-          changes.set(i, {
-            ...tile,
-            scale: pulseScale(tile.pulseDistance, now / 1000),
-          });
+          const change = animate(tile, seconds);
+          if (change) changes.set(i, { ...tile, ...change });
         });
       }
-      if (motion.idle && now >= nextIdleAt) {
+      if (motion.idle && idle && now >= nextIdleAt) {
         nextIdleAt = now + idleGap(Math.random);
         const index = Math.floor(Math.random() * tiles.length);
         const tile = get(index);
-        if (SYMMETRIC_SHAPES.has(tile.shape)) {
+        if (isSymmetric(tile.shape)) {
           changes.set(index, { ...tile, folded: true });
           flips.push({ index, at: now + SWAP_DELAY_MS });
         } else {
@@ -121,9 +129,13 @@ export function createTileEngine() {
     run();
   }
 
-  /** With an origin the tiles flip over in a wave from it; without one they change in place. */
-  function show(next: readonly PlacedTile[], origin?: Cell) {
+  function show(
+    next: readonly PlacedTile[],
+    { origin, ...options }: ShowOptions = {},
+  ) {
     flips = [];
+    pattern = options;
+    shownAt = performance.now();
     const shown = new Map(tiles.map((tile) => [cellKey(tile), tile]));
     if (!origin || !motion.waves) {
       wave = null;

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { textLinkVariants } from "@/components/ui/text-link";
 import { errors } from "@/content/site";
 import { PageNav } from "./page-nav";
 import { Panel } from "./panel";
@@ -26,10 +27,7 @@ export function ErrorShell({
       <Panel>
         <main className="flex flex-col items-start gap-10 sm:gap-14">
           {children}
-          <Link
-            href="/"
-            className="font-mono text-[length:--spacing(11)] tracking-[0.02em] underline underline-offset-4 hover:opacity-60 sm:text-[length:--spacing(13)]"
-          >
+          <Link href="/" className={textLinkVariants({ variant: "action" })}>
             {errors.home}
           </Link>
         </main>

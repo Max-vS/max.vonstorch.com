@@ -50,6 +50,7 @@ The design files are in `docs/design/tile-system/`. They are the source of truth
 | `MobileTiles.dc.html` | Mobile tile system (390×910, 6×14 tiles of 65 px) |
 | `TileLibrary.dc.html` | Final pattern set: 7 pages × 3 patterns |
 | `CVPalettes.dc.html` | CV palette options; option B (chartreuse `#C7F03A` + `#111111`) is the one in use |
+| `NotFound.dc.html`, `NotFoundMobile.dc.html` | The 404 page: the tile shell with one pattern ("Missing") and no pattern indicator |
 
 Key values from the files:
 
@@ -61,14 +62,15 @@ Key values from the files:
 
 | Page | Title color | Patterns (1 · 2 · 3) |
 |---|---|---|
-| Index | `#1D1D1B` | Bauhaus · Rings · Petals |
-| Education | `#F2C14E` | Routes · Waves · Steps |
-| Projects | `#1F3DFF` | Wedges · Stripes · Machine |
-| Writing | `#33503A` | Squares · Arcs · Triangles |
-| Music | `#FF6A13` | Records · Dots · Chevrons |
-| CV | `#C7F03A` | Pinwheel · Frames · Moons |
-| Contact | `#E2573B` | Pulse · Speech · Confetti |
+| Index | `#1D1D1B` | Bauhaus · Mosaic · Halves |
+| Education | `#F2C14E` | Waves · Routes · Ascent |
+| Projects | `#1F3DFF` | Wedges · Matrix · Machine |
+| Writing | `#33503A` | Triangles · Squares · Hills |
+| Music | `#FF6A13` | Records · Dots · Interference |
+| CV | `#C7F03A` | Pinwheel · Blocks · Bars |
+| Contact | `#E2573B` | Pulse · Speech · Pairs |
 | Community | `#E9B8A6` | visitor marks |
+| 404 | `#D9432B` | Missing |
 
 ## 4. Decisions
 
@@ -160,7 +162,7 @@ docs/              design/, superpowers/
 | `patterns.ts` | 21 pattern functions `(row, col, rng, state) → TileSpec`, ported 1:1 from the design |
 | `random.ts` | Seeded random number generator (so a pattern can be repeated) |
 | `grid.ts` | Tile size, cols, rows and cuts from the window size (§5) |
-| `motion.ts` | Wave delays, flip schedule, idle-turn picks, pulse values |
+| `motion.ts` | Wave delays, flip schedule, idle-turn picks, pulse values; a pattern's own `animate` step (Pulse, Interference) runs every 110 ms |
 
 **Behavior (as in the design):**
 
@@ -321,7 +323,7 @@ Off-site steps (owner):
 | Database fails | Community: "Marks cannot load right now." Submit shows a form error |
 | Rate limit / pending cap | Form error: "Too many marks right now. Try again later." |
 | Bot detected | Form error without details |
-| Unknown page | `not-found.tsx` in tile style ("404" in the title block) |
+| Unknown page | `not-found.tsx` with the tile shell: "Not found" in a red title block, the "Missing" pattern, the nav with no current page |
 | Other errors | `error.tsx` / `global-error.tsx` in tile style |
 | Unknown post slug | Cache Components serves the not-found UI with `noindex` (status 200); acceptable in v1 |
 

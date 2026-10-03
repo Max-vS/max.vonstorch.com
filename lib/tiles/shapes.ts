@@ -18,9 +18,6 @@ export const SHAPES = {
     fill: "M0 0H120A120 120 0 0 1 0 120Z",
     fill2: "M0 0H60A60 60 0 0 1 0 60Z",
   },
-  stripes: {
-    fill: "M0 0L30 0L0 30ZM60 0L90 0L0 90L0 60ZM120 0L120 30L30 120L0 120ZM120 60L120 90L90 120L60 120Z",
-  },
   ring: {
     fill: "M10 60a50 50 0 1 0 100 0a50 50 0 1 0 -100 0ZM28 60a32 32 0 1 0 64 0a32 32 0 1 0 -64 0Z",
     fill2: "M46 60a14 14 0 1 0 28 0a14 14 0 1 0 -28 0Z",
@@ -32,33 +29,41 @@ export const SHAPES = {
     fill2: "M60 12A48 48 0 0 1 60 108Z",
   },
   offdot: { fill: "M9 34a25 25 0 1 0 50 0a25 25 0 1 0 -50 0Z" },
-  chev: { fill: "M0 0H40L100 60L40 120H0L60 60Z" },
   pin: {
     fill: "M0 0H60L60 60ZM120 0V60L60 60ZM120 120H60L60 60ZM0 120V60L60 60Z",
   },
-  frame: {
-    fill: "M0 0H120V24H24V120H0ZM48 48H120V72H72V120H48ZM96 96H120V120H96Z",
-  },
-  moon: { fill: "M75 10A50 50 0 1 0 75 110A72.5 72.5 0 0 1 75 10Z" },
   dots4: {
     fill: "M13 30a17 17 0 1 0 34 0a17 17 0 1 0 -34 0ZM73 30a17 17 0 1 0 34 0a17 17 0 1 0 -34 0ZM13 90a17 17 0 1 0 34 0a17 17 0 1 0 -34 0ZM73 90a17 17 0 1 0 34 0a17 17 0 1 0 -34 0Z",
   },
-  diamond: {
-    fill: "M60 8L112 60L60 112L8 60Z",
-    fill2: "M60 36L84 60L60 84L36 60Z",
+  halfsq: {
+    fill: "M0 0H60V120H0Z",
+    fill2: "M32 60a28 28 0 1 0 56 0a28 28 0 1 0 -56 0Z",
   },
+  pair: {
+    fill: "M12 60a30 30 0 1 0 60 0a30 30 0 1 0 -60 0Z",
+    fill2: "M48 60a30 30 0 1 0 60 0a30 30 0 1 0 -60 0Z",
+  },
+  hole: { fill: "M10 10H110V110H10ZM14 14V106H106V14Z" },
+  xmark: { stroke: "M30 30L90 90M90 30L30 90" },
   none: {},
 } satisfies Record<string, Shape>;
 
 export type ShapeKey = keyof typeof SHAPES;
 
+export function shapePaths(shape: ShapeKey | Shape): Shape {
+  return typeof shape === "string" ? SHAPES[shape] : shape;
+}
+
 // A quarter turn would not show on these, so idle flips their colors instead.
-export const SYMMETRIC_SHAPES: ReadonlySet<ShapeKey> = new Set([
+const SYMMETRIC_SHAPES: ReadonlySet<ShapeKey | Shape> = new Set<ShapeKey>([
   "dot",
   "ring",
   "squares",
   "cross",
-  "diamond",
   "dots4",
   "pin",
 ]);
+
+export function isSymmetric(shape: ShapeKey | Shape): boolean {
+  return SYMMETRIC_SHAPES.has(shape);
+}

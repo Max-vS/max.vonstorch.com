@@ -7,19 +7,19 @@ import { masterBlock, tileCells } from "@/lib/tiles/grid";
 import { buildMotif, motifIndex } from "@/lib/tiles/motif";
 import { buildPattern, PATTERNS } from "@/lib/tiles/patterns";
 import { randomSeed } from "@/lib/tiles/random";
-import type { Cell, Grid, PageId, Tile } from "@/lib/tiles/types";
+import type { Cell, Grid, SceneId, Tile } from "@/lib/tiles/types";
 import { MasterBlock } from "./master-block";
 import { PageNav } from "./page-nav";
 import { Panel } from "./panel";
 import { PatternIndicator } from "./pattern-indicator";
 import { TileGrid } from "./tile-grid";
 import { type TileScene, TileSceneContext } from "./tile-scene";
-import { TitleBlock } from "./title-block";
+import { TitleBlock, type TitlePage } from "./title-block";
 import { useGrid } from "./use-grid";
 import { type Direction, usePatternInput } from "./use-pattern-input";
 import { type Corner, useTileEngine } from "./use-tile-engine";
 
-type View = { page: PageId; pattern: number; from: Corner };
+type View = { page: SceneId; pattern: number; from: Corner };
 
 function cornerCell(corner: Corner, grid: Grid): Cell {
   return corner === "top-left"
@@ -32,11 +32,20 @@ function motifOrigin(grid: Grid, master: Cell | null): Cell {
   return master ?? { row: grid.firstFullRow, col: grid.firstFullCol };
 }
 
-export function TileShell({ children }: { children: ReactNode }) {
+/** Without `page` the shell shows the page of the current path. */
+export function TileShell({
+  page: fixedPage,
+  children,
+}: {
+  page?: TitlePage;
+  children: ReactNode;
+}) {
   const pathname = usePathname();
   // Every route of the (tiles) group is in `pages`; the fallback only satisfies the type.
-  const page =
-    Object.values(pages).find(({ path }) => path === pathname) ?? pages.index;
+  const page: TitlePage =
+    fixedPage ??
+    Object.values(pages).find(({ path }) => path === pathname) ??
+    pages.index;
   const [view, setView] = useState<View>({
     page: page.id,
     pattern: 0,
@@ -76,17 +85,24 @@ export function TileShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!grid || waiting) return;
     const cells = tileCells(grid, behindTitle);
-    const next = motif
-      ? buildMotif(
-          motif,
-          cells,
-          motifOrigin(grid, painting ? masterBlock(grid, titleAway) : null),
-        )
-      : buildPattern(view.page, view.pattern, grid, cells, randomSeed());
     // A new key flips the tiles over in a wave; the same key (after a resize or a paint stroke) changes them in place.
-    const wave = contentKey !== shownKey.current;
+    const origin =
+      contentKey !== shownKey.current ? cornerCell(from, grid) : undefined;
     shownKey.current = contentKey;
-    show(next, wave ? cornerCell(from, grid) : undefined);
+    if (motif) {
+      const start = motifOrigin(
+        grid,
+        painting ? masterBlock(grid, titleAway) : null,
+      );
+      show(buildMotif(motif, cells, start), { origin });
+      return;
+    }
+    const { animate, idle } = PATTERNS[view.page][view.pattern];
+    show(buildPattern(view.page, view.pattern, grid, cells, randomSeed()), {
+      origin,
+      animate: animate && ((tile, seconds) => animate(tile, seconds, grid)),
+      idle,
+    });
   }, [
     grid,
     waiting,
@@ -137,12 +153,15 @@ export function TileShell({ children }: { children: ReactNode }) {
     if (grid) paint(motifIndex(tiles[index], motifOrigin(grid, master)));
   }
 
+  const patterns = PATTERNS[view.page];
+  // Community and the 404 page have one pattern, so there is nothing to change.
+  const changeable = patterns.length > 1;
   const input = usePatternInput({
     step,
     isBusy,
     enabled: scene
       ? scene.mode === "browse" && scene.step !== null
-      : !community,
+      : changeable,
   });
 
   return (
@@ -164,13 +183,13 @@ export function TileShell({ children }: { children: ReactNode }) {
         <Panel>
           <main className="flex flex-col gap-10 sm:gap-14">{children}</main>
           <div className="mt-auto flex flex-col gap-10">
-            {!community ? (
+            {changeable ? (
               <PatternIndicator
-                label={PATTERNS[view.page][view.pattern].name}
+                label={patterns[view.pattern].name}
                 hint="change"
                 live
                 ticks={{
-                  names: PATTERNS[view.page].map(({ name }) => name),
+                  names: patterns.map(({ name }) => name),
                   current: view.pattern,
                   onSelect: select,
                 }}

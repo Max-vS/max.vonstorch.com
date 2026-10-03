@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { textLinkVariants } from "@/components/ui/text-link";
 import { PostLink } from "@/components/writing/post-link";
 import { pages, writing } from "@/content/site";
 import { getPosts } from "@/content/writing";
@@ -31,7 +32,7 @@ export default function WritingPage() {
       </ul>
       <Link
         href="/writing/archive"
-        className="self-start font-mono text-[length:--spacing(11)] tracking-[0.02em] underline underline-offset-4 hover:opacity-60 sm:text-[length:--spacing(13)]"
+        className={textLinkVariants({ variant: "action" })}
       >
         {writing.allPosts}
       </Link>

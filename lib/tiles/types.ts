@@ -1,5 +1,5 @@
 import type { Random } from "./random";
-import type { ShapeKey } from "./shapes";
+import type { Shape, ShapeKey } from "./shapes";
 
 export type PageId =
   | "index"
@@ -10,6 +10,9 @@ export type PageId =
   | "cv"
   | "contact"
   | "community";
+
+/** A page, or the 404 page, which has no nav entry. */
+export type SceneId = PageId | "notFound";
 
 export type Cell = { row: number; col: number };
 
@@ -25,14 +28,14 @@ export type Grid = {
 };
 
 export type Tile = {
-  shape: ShapeKey;
+  // A key into SHAPES, or paths drawn for this one tile.
+  shape: ShapeKey | Shape;
   // Degrees; it only ever grows, so every CSS turn goes forward.
   rot: number;
   bg: string;
   fg: string;
   fg2?: string;
   scale?: number;
-  pulseDistance?: number;
 };
 
 export type PlacedTile = Tile & Cell;
@@ -44,4 +47,15 @@ export type PatternInput = Cell & {
   grid: Grid;
 };
 
-export type Pattern = { name: string; tile: (input: PatternInput) => Tile };
+export type Pattern = {
+  name: string;
+  tile: (input: PatternInput) => Tile;
+  /** Runs at each animation step; it returns only the changed fields, or null when the tile stays the same. */
+  animate?: (
+    tile: PlacedTile,
+    seconds: number,
+    grid: Grid,
+  ) => Partial<Tile> | null;
+  /** False where `animate` sets the colors, because idle flips would fight it. */
+  idle?: boolean;
+};

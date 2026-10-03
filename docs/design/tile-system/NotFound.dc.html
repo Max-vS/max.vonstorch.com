@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>23 — Tile System v3</title>
+<title>404 · 23 — Tile System v3</title>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -108,9 +108,9 @@ a:hover{text-decoration:underline;text-underline-offset:4px}
 <sc-if value="{{hasList}}" hint-placeholder-val="{{ false }}">
 <div style="display: flex; flex-direction: column; border-top: 1.5px solid #1D1D1B">
 <sc-for list="{{rows}}" as="x" hint-placeholder-count="4">
-<a href="{{x.href}}" class="tt-row" style="display: grid; grid-template-columns: {{x.cols}}; column-gap: 14px; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(29,29,27,0.18); text-decoration: none">
-<sc-if value="{{x.hasCover}}" hint-placeholder-val="{{ false }}"><span style="width: 44px; height: 44px; background: {{x.cover}}; display: block; position: relative; overflow: hidden"><span style="position: absolute; left: 0; top: 0; width: 44px; height: 44px; border-radius: 0 0 100% 0; background: {{x.cover2}}"></span></span></sc-if>
-<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow: hidden"><span style="font-size: 18px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{x.title}}</span><span style="font-size: 14px; color: #6B665E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{x.sub}}</span></span>
+<a href="{{x.href}}" class="tt-row" style="display: grid; grid-template-columns: {{x.cols}}; column-gap: 14px; align-items: center; padding: 11px 0; border-bottom: 1px solid rgba(29,29,27,0.18); text-decoration: none">
+<sc-if value="{{x.hasCover}}" hint-placeholder-val="{{ false }}"><span style="width: 48px; height: 48px; background: {{x.cover}}; display: block; position: relative; overflow: hidden"><span style="position: absolute; left: 0; top: 0; width: 48px; height: 48px; border-radius: 0 0 100% 0; background: {{x.cover2}}"></span></span></sc-if>
+<span style="display: flex; align-items: baseline; gap: 10px; min-width: 0; white-space: nowrap; overflow: hidden"><span style="font-size: 18px; font-weight: 600">{{x.title}}</span><span style="font-size: 15px; color: #6B665E; overflow: hidden; text-overflow: ellipsis">{{x.sub}}</span></span>
 <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B665E; text-align: right; white-space: nowrap">{{x.meta}}</span>
 </a>
 </sc-for>
@@ -154,7 +154,7 @@ a:hover{text-decoration:underline;text-underline-offset:4px}
 </nav>
 </sc-if>
 </div>
-<div aria-live="polite" style="position: absolute; left: 0; top: 810px; width: 270px; height: 90px; box-sizing: border-box; padding: 0 30px; background: #EFEBE4; display: flex; align-items: center; gap: 16px"><div role="group" aria-label="Patterns" style="display: flex; flex-direction: column; gap: 4px"><sc-for list="{{ticks}}" as="k" hint-placeholder-count="3"><button type="button" onClick="{{k.go}}" aria-label="{{k.name}}" title="{{k.name}}" aria-pressed="{{k.on}}" style="display: block; padding: 2px 8px; margin: -2px -8px; background: transparent; border: 0; cursor: pointer"><span class="tt-tick" style="display: block; width: 4px; height: {{k.h}}px; border-radius: 2px; background: {{k.c}}"></span></button></sc-for></div><div style="display: flex; flex-direction: column; gap: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em"><span style="color: #1D1D1B; text-transform: uppercase">{{patName}}</span><span style="color: #8A857C">{{scrollHint}}</span></div></div>
+<sc-if value="{{showInd}}" hint-placeholder-val="{{ true }}"><div aria-live="polite" style="position: absolute; left: 0; top: 810px; width: 270px; height: 90px; box-sizing: border-box; padding: 0 30px; background: #EFEBE4; display: flex; align-items: center; gap: 16px"><div role="group" aria-label="Patterns" style="display: flex; flex-direction: column; gap: 4px"><sc-for list="{{ticks}}" as="k" hint-placeholder-count="3"><button type="button" onClick="{{k.go}}" aria-label="{{k.name}}" title="{{k.name}}" aria-pressed="{{k.on}}" style="display: block; padding: 2px 8px; margin: -2px -8px; background: transparent; border: 0; cursor: pointer"><span class="tt-tick" style="display: block; width: 4px; height: {{k.h}}px; border-radius: 2px; background: {{k.c}}"></span></button></sc-for></div><div style="display: flex; flex-direction: column; gap: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em"><span style="color: #1D1D1B; text-transform: uppercase">{{patName}}</span><span style="color: #8A857C">{{scrollHint}}</span></div></div></sc-if>
 
 </div>
 </x-dc>
@@ -221,6 +221,9 @@ class Component extends DCLogic {
       moon: { a: 'M75 10A50 50 0 1 0 75 110A72.5 72.5 0 0 1 75 10Z' },
       halfsq: { a: 'M0 0H60V120H0Z', b: C(60, 60, 28) },
       pair: { a: C(42, 60, 30), b: C(78, 60, 30) },
+      xmark: { st: 'M30 30L90 90M90 30L30 90' },
+      slash: { st: 'M0 0L120 120' },
+      hole: { a: 'M10 10H110V110H10ZM14 14V106H106V14Z' },
       sine: { st: 'M0 60C20 22 40 22 60 60S100 98 120 60' }
     };
     var self = this;
@@ -310,7 +313,12 @@ class Component extends DCLogic {
         ] },
       { id: 'community', label: 'Community', title: 'Community', kicker: 'Leave your mark', bg: function () { return '#E9B8A6'; }, fgc: '#1D1D1B', dot: function () { return '#E9B8A6'; },
         body: '', href: '', link: '', linkShort: '',
-        comps: [ { name: 'Community', f: function () { return { k: 'none', rot: 0, bg: '#EFEBE4', fg: '#1D1D1B' }; } } ] }
+        comps: [ { name: 'Community', f: function () { return { k: 'none', rot: 0, bg: '#EFEBE4', fg: '#1D1D1B' }; } } ] },
+      { id: 'notfound', label: '404', title: 'Not found', kicker: 'Error 404', bg: function () { return '#D9432B'; }, fgc: '#EFEBE4', dot: function () { return '#D9432B'; },
+        body: 'This page doesn\u2019t exist, or it moved.', href: '#', link: 'Back to the index \u2192', linkShort: 'Back to the index \u2192',
+        comps: [
+          { name: 'Missing', f: function () { var x = Math.random(); if (x < 0.22) return { k: 'hole', rot: 0, bg: '#EFEBE4', fg: '#CFCAC0' }; if (x < 0.31) return { k: 'xmark', rot: 0, bg: '#EFEBE4', fg: Math.random() < 0.5 ? '#D9432B' : '#1D1D1B' }; return { k: pick(['qdisc', 'qdisc', 'half', 'tri', 'dot', 'qring', 'halves']), rot: r4(), bg: '#EFEBE4', fg: x > 0.62 ? '#D9432B' : '#1D1D1B', fg2: '#1D1D1B' }; } }
+        ] }
     ];
     this.CS = 90;
     this.PANEL = { small: { c: 11, r: 6, w: 5, h: 4 }, big: { c: 10, r: 5, w: 6, h: 5 }, edit: { c: 11, r: 0, w: 5, h: 10 }, wlist: { c: 11, r: 0, w: 5, h: 10 }, wpost: { c: 8, r: 0, w: 8, h: 10 } };
@@ -329,9 +337,9 @@ class Component extends DCLogic {
         { lead: '03', title: '[Project three]', sub: '[What it is]', meta: '[YYYY] ↗', href: '#' }
       ] },
       music: { label: 'TOP 3 THIS WEEK · VIA SPOTIFY', rows: [
-        { cover: '#FF6A13', cover2: '#1D1D1B', title: 'Soft Machinery', sub: 'Lumen Parade', meta: '↗', href: '#' },
-        { cover: '#F7C7A6', cover2: '#9C3A12', title: 'Orange Hours', sub: 'The Quiet Atlas', meta: '↗', href: '#' },
-        { cover: '#1D1D1B', cover2: '#FF6A13', title: 'Interference Pattern', sub: 'Mira Kessler', meta: '↗', href: '#' }
+        { cover: '#FF6A13', cover2: '#1D1D1B', title: '[Track title]', sub: '[Artist]', meta: '01', href: '#' },
+        { cover: '#F7C7A6', cover2: '#9C3A12', title: '[Track title]', sub: '[Artist]', meta: '02', href: '#' },
+        { cover: '#1D1D1B', cover2: '#FF6A13', title: '[Track title]', sub: '[Artist]', meta: '03', href: '#' }
       ] }
     };
     this.BR = { motifs: ['none'].concat(Object.keys(this.M).filter(function (k) { var m = self.M[k]; return k !== 'none' && ((m.a || '') + (m.b || '') + (m.st || '')).length > 0; })), colors: ['#1D1D1B', '#EFEBE4', '#FFFFFF', '#E2573B', '#FF6A13', '#9C3A12', '#D9A08B', '#F7C7A6', '#E9B8A6', '#F2C14E', '#F6DC97', '#C7F03A', '#9DB39A', '#8FA98A', '#33503A', '#2F4FD8', '#1F3DFF'] };
@@ -341,14 +349,15 @@ class Component extends DCLogic {
     this.NR = 10; this.NC = 16;
     this.cells = [];
     for (var r = 0; r < 10; r++) for (var c = 0; c < 16; c++) { if (r < 3 && c < 8) continue; this.cells.push([r, c]); }
-    this.topic = 0; this.comp = 0; this.phase = 0; this.t0 = performance.now();
+    this.topic = this.T.length - 1; this.comp = 0; this.phase = 0; this.t0 = performance.now();
     this.entries = this.loadEntries();
-    this.tiles = this.build(0, 0);
+    this.tiles = this.build(this.T.length - 1, 0);
     this.trans = null;
     this._loop = this.loop.bind(this);
   }
   bars() { var d = ''; for (var i = 0; i < 4; i++) { var h = Math.round(14 + Math.random() * 86); d += 'M' + (12 + i * 26) + ' ' + (108 - h) + 'h18v' + h + 'h-18z'; } return d; }
   wheel(dy) {
+    if (this.T[this.topic].id === 'notfound') return;
     if (this.wOpen()) return;
     var now = performance.now();
     if (this.trans || now < (this.lockUntil || 0)) { this.acc = 0; return; }
@@ -545,9 +554,10 @@ class Component extends DCLogic {
       pageNo: String(this.topic).padStart(2, '0') + ' / ' + String(this.T.length - 1).padStart(2, '0'),
       clock: this.fmt ? this.fmt.format(new Date()) : '',
       px: (this.panelRect().c * this.CS), py: (this.panelRect().r * this.CS), pw: (this.panelRect().w * this.CS), ph: (this.panelRect().h * this.CS),
-      simple: !this.isComm() && T.id !== 'writing' && T.id !== 'music', hasList: T.id === 'music', isWriting: T.id === 'writing', wCard: T.id === 'writing' && this.wview === 'card', wList: T.id === 'writing' && this.wview === 'list', wPost: T.id === 'writing' && this.wview === 'post', wCount: String(this.WPOSTS.length), wlatest: this.wLatest(), wlist: this.wList(), wfilters: this.wFilters(), wp: this.wPostVals(), wExpand: function () { self.wview = 'list'; self.forceUpdate(); }, wCollapse: function () { self.wview = 'card'; self.forceUpdate(); }, wBack: function () { self.wview = 'list'; self.forceUpdate(); }, listLabel: this.LISTS[T.id] ? this.LISTS[T.id].label : '',
-      rows: this.LISTS[T.id] ? this.LISTS[T.id].rows.map(function (x) { return { lead: x.lead || '', title: x.title, sub: x.sub, meta: x.meta, href: x.href, hasCover: !!x.cover, noCover: !x.cover, cols: x.cover ? '44px minmax(0, 1fr) auto' : 'minmax(0, 1fr) auto', cover: x.cover || '', cover2: x.cover2 || '' }; }) : [],
+      simple: !this.isComm() && T.id !== 'writing', hasList: false, isWriting: T.id === 'writing', wCard: T.id === 'writing' && this.wview === 'card', wList: T.id === 'writing' && this.wview === 'list', wPost: T.id === 'writing' && this.wview === 'post', wCount: String(this.WPOSTS.length), wlatest: this.wLatest(), wlist: this.wList(), wfilters: this.wFilters(), wp: this.wPostVals(), wExpand: function () { self.wview = 'list'; self.forceUpdate(); }, wCollapse: function () { self.wview = 'card'; self.forceUpdate(); }, wBack: function () { self.wview = 'list'; self.forceUpdate(); }, listLabel: this.LISTS[T.id] ? this.LISTS[T.id].label : '',
+      rows: this.LISTS[T.id] ? this.LISTS[T.id].rows.map(function (x) { return { lead: x.lead || '', title: x.title, sub: x.sub, meta: x.meta, href: x.href, hasCover: !!x.cover, noCover: !x.cover, cols: x.cover ? '48px minmax(0, 1fr) auto' : 'minmax(0, 1fr) auto', cover: x.cover || '', cover2: x.cover2 || '' }; }) : [],
       hasOv: !!this.anim && !this.trans, ov: this.anim ? this.anim.ov : { x: 0, y: 0, size: 0, vb: '0 0 1 1', h: 0, rot: 0, bg: 'transparent', fg: 'transparent', fg2: 'transparent', a: '', b: '' },
+      showInd: this.T[this.topic].id !== 'notfound',
       ticks: this.isComm() ? [] : T.comps.map(function (c, i) { var on = i === self.comp; return { h: on ? 22 : 8, c: on ? '#1D1D1B' : '#C9C4BA', name: c.name, on: on ? 'true' : 'false', go: function () { if (i !== self.comp && !self.trans) self.go(self.topic, i, [0, 0]); } }; }),
       patName: this.isComm() ? (this.editing ? 'Your mark' : 'Mark ' + (this.entryIdx + 1) + ' of ' + this.entries.length) : T.comps[this.comp].name + ' · ' + (this.comp + 1) + '/' + T.comps.length,
       onWheel: function (e) { self.wheel(e.deltaY); },
@@ -570,7 +580,7 @@ class Component extends DCLogic {
       titleBg: T.bg(), titleFg: T.fgc, kicker: T.kicker, title: T.title,
       isIndex: this.topic === 0, notIndex: this.topic !== 0,
       body: T.body, hasLink: !!T.link, href: T.href, link: T.link, linkShort: T.linkShort || T.link,
-      pages: this.T.map(function (t, i) { var on = i === self.topic; return { n: String(i + 1).padStart(2, '0'), label: t.label, cur: on ? 'page' : 'false', fw: on ? 600 : 500, fg: on ? '#1D1D1B' : '#8A857C', nc: on ? '#1D1D1B' : '#A9A49A', ul: on ? '#1D1D1B' : 'transparent', go: function () { if (!on) { self.editing = false; self.go(i, 0, [0, 0]); } } }; }),
+      pages: this.T.map(function (t, i) { var on = i === self.topic; return { n: String(i + 1).padStart(2, '0'), label: t.label, cur: on ? 'page' : 'false', fw: on ? 600 : 500, fg: on ? '#1D1D1B' : '#8A857C', nc: on ? '#1D1D1B' : '#A9A49A', ul: on ? '#1D1D1B' : 'transparent', go: function () { if (!on) { self.editing = false; self.go(i, 0, [0, 0]); } } }; }).filter(function (p) { return p.label !== '404'; }),
       patternName: 'PATTERN ' + (this.comp + 1) + ' / ' + T.comps.length + ' — ' + T.comps[this.comp].name.toUpperCase(),
       picks: T.comps.map(function (cp, i) { var on = i === self.comp; return { n: String(i + 1), name: cp.name, on: on ? 'true' : 'false', bg: on ? '#1D1D1B' : 'transparent', fg: on ? '#EFEBE4' : '#1D1D1B', go: function () { if (i !== self.comp) self.go(self.topic, i, [8, 13]); } }; }),
       next: function () { self.go(self.topic, (self.comp + 1) % T.comps.length, [8, 13]); }

@@ -1,15 +1,12 @@
 import { cn } from "cn";
 import type { SitePage } from "@/content/site";
 import { titleColors } from "@/lib/tiles/palettes";
+import type { SceneId } from "@/lib/tiles/types";
+
+export type TitlePage = Pick<SitePage, "kicker" | "title"> & { id: SceneId };
 
 /** `away` slides the block up and out, to free the tiles behind it. */
-export function TitleBlock({
-  page,
-  away,
-}: {
-  page: Pick<SitePage, "id" | "kicker" | "title">;
-  away: boolean;
-}) {
+export function TitleBlock({ page, away }: { page: TitlePage; away: boolean }) {
   const colors = titleColors[page.id];
   return (
     <header

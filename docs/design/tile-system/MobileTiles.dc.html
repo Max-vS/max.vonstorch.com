@@ -31,15 +31,18 @@ a:hover{text-decoration:underline;text-underline-offset:4px}
 .tt-lnk:hover{opacity:.6}
 .tt-btn{transition:background .2s,color .2s}
 .tt-btn:hover{background:#1D1D1B;color:#EFEBE4}
-@media (prefers-reduced-motion: reduce){.tt-flip,.tt-rot,.tt-sc{transition:none}}
+@keyframes ttIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tt-art>*{flex-shrink:0}
+.tt-in{animation:ttIn .5s cubic-bezier(.2,.7,.2,1) .3s both}
+@media (prefers-reduced-motion: reduce){.tt-flip,.tt-rot,.tt-sc,.tt-panel{transition:none}.tt-in{animation:none}}
 </style>
 </helmet>
 <div onTouchStart="{{tStart}}" onTouchEnd="{{tEnd}}" onWheel="{{onWheel}}" style="width: 390px; height: 910px; position: relative; overflow: hidden; background: #EFEBE4; color: #1D1D1B; font-family: 'Familjen Grotesk', sans-serif; display: grid; grid-template-columns: repeat(6, 65px); grid-template-rows: repeat(14, 65px)">
 
 <sc-for list="{{tiles}}" as="t" hint-placeholder-count="53">
-<button type="button" aria-label="Turn tile" onClick="{{t.hit}}" style="grid-column: {{t.col}}; grid-row: {{t.row}}; width: 65px; height: 65px; overflow: hidden; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent">
-<div class="tt-flip" style="width: 65px; height: 65px; background: {{t.bg}}; transform: scale({{t.s}}, 1)">
-<svg aria-hidden="true" class="tt-rot" width="65" height="65" viewBox="0 0 120 120" style="display: block; transform: rotate({{t.rot}}deg)">
+<button type="button" aria-label="Turn tile" onClick="{{t.hit}}" style="grid-column: {{t.col}}; grid-row: {{t.row}}; width: 66px; height: 66px; overflow: hidden; margin: -0.5px; padding: 0; border: 0; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent">
+<div class="tt-flip" style="width: 66px; height: 66px; background: {{t.bg}}; transform: scale({{t.s}}, 1)">
+<svg aria-hidden="true" class="tt-rot" width="66" height="66" viewBox="0 0 120 120" style="display: block; transform: rotate({{t.rot}}deg)">
 <g class="tt-sc" style="transform: scale({{t.sc}}); transform-origin: 60px 60px">
 <path d="{{t.a}}" fill="{{t.fg}}" fill-rule="evenodd"></path>
 <path d="{{t.b}}" fill="{{t.fg2}}" fill-rule="evenodd"></path>
@@ -49,6 +52,7 @@ a:hover{text-decoration:underline;text-underline-offset:4px}
 </div>
 </button>
 </sc-for>
+<sc-if value="{{hasOv}}" hint-placeholder-val="{{ false }}"><div aria-hidden="true" style="position: absolute; left: {{ov.x}}px; top: {{ov.y}}px; width: {{ov.size}}px; height: {{ov.size}}px; overflow: hidden; pointer-events: none; background: {{ov.bg}}; box-shadow: 0 0 0 0.75px {{ov.bg}}; transition: background-color .9s cubic-bezier(.65,0,.25,1)"><svg width="{{ov.size}}" height="{{ov.size}}" viewBox="{{ov.vb}}" style="display: block"><g style="transform: rotate({{ov.rot}}deg); transform-origin: {{ov.h}}px {{ov.h}}px; transition: transform 1s cubic-bezier(.65,0,.25,1)"><path d="{{ov.a}}" fill="{{ov.fg}}" style="transition: fill .9s"></path><path d="{{ov.b}}" fill="{{ov.fg2}}" style="transition: fill .9s"></path></g></svg></div></sc-if>
 
 <div class="tt-blk" style="grid-column: 1 / span 5; grid-row: 1 / span 3; background: {{titleBg}}; color: {{titleFg}}; box-sizing: border-box; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between">
 <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.06em; opacity: 0.8; text-transform: uppercase">{{kicker}}</span>
@@ -60,12 +64,52 @@ a:hover{text-decoration:underline;text-underline-offset:4px}
 <sc-if value="{{simple}}" hint-placeholder-val="{{ true }}">
 <p style="margin: 0; font-size: 15px; line-height: 1.3; font-weight: 500">{{body}}</p>
 </sc-if>
+<sc-if value="{{isWriting}}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column">
+<sc-if value="{{wCard}}" hint-placeholder-val="{{ false }}">
+<div class="tt-in" style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-direction: column; border-top: 1.5px solid #1D1D1B">
+<sc-for list="{{wlatest}}" as="w" hint-placeholder-count="2"><button type="button" class="tt-row" onClick="{{w.open}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: 100%; padding: 0; background: transparent; border: 0; cursor: pointer; color: #1D1D1B; padding: 7px 0; border-bottom: 1px solid rgba(29,29,27,0.18); text-align: left; font-family: 'Familjen Grotesk', sans-serif"><span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.06em; color: #6B665E"><span style="color: #33503A">{{w.type}}</span> · {{w.date}}</span><span style="max-width: 100%; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{w.title}}</span></button></sc-for>
+</div>
+<button type="button" class="tt-ext" onClick="{{wExpand}}" aria-expanded="false" style="align-self: flex-start; min-height: 32px; padding: 0; background: transparent; border: 0; cursor: pointer; color: #1D1D1B; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; font-size: 12px; letter-spacing: 0.02em; text-decoration: underline; text-underline-offset: 4px">All writing ↑</button>
+</div>
+</sc-if>
+<sc-if value="{{wList}}" hint-placeholder-val="{{ false }}">
+<div class="tt-in" style="flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.06em; color: #6B665E">ALL WRITING · {{wCount}}</span><button type="button" class="tt-ext" onClick="{{wCollapse}}" aria-expanded="true" style="min-height: 32px; padding: 0; background: transparent; border: 0; cursor: pointer; color: #1D1D1B; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em">CLOSE ↓</button></div>
+<div role="group" aria-label="Filter by type" style="display: flex; gap: 18px">
+<sc-for list="{{wfilters}}" as="f" hint-placeholder-count="4"><button type="button" class="tt-nav" onClick="{{f.pick}}" aria-pressed="{{f.cur}}" style="display: flex; align-items: baseline; gap: 5px; min-height: 30px; padding: 0; background: transparent; border: 0; font-family: 'Familjen Grotesk', sans-serif; font-size: 15px; font-weight: {{f.fw}}; color: {{f.fg}}; cursor: pointer"><span style="border-bottom: 1.5px solid {{f.ul}}; padding-bottom: 1px">{{f.label}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #8A857C">{{f.n}}</span></button></sc-for>
+</div>
+<div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; border-top: 1.5px solid #1D1D1B">
+<sc-for list="{{wlist}}" as="w" hint-placeholder-count="6"><button type="button" class="tt-row" onClick="{{w.open}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: 100%; padding: 0; background: transparent; border: 0; cursor: pointer; color: #1D1D1B; padding: 7px 0; border-bottom: 1px solid rgba(29,29,27,0.18); text-align: left; font-family: 'Familjen Grotesk', sans-serif; padding: 10px 0"><span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.06em; color: #6B665E"><span style="color: #33503A">{{w.type}}</span> · {{w.date}} · {{w.read}}</span><span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">{{w.title}}</span><span style="font-size: 13px; line-height: 1.35; color: #6B665E">{{w.lede}}</span></button></sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{wPost}}" hint-placeholder-val="{{ false }}">
+<div class="tt-in" style="flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center"><button type="button" class="tt-ext" onClick="{{wBack}}" style="min-height: 32px; padding: 0; background: transparent; border: 0; cursor: pointer; color: #1D1D1B; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em">← ALL WRITING</button><button type="button" class="tt-ext" onClick="{{wCollapse}}" aria-expanded="true" style="min-height: 32px; padding: 0; background: transparent; border: 0; cursor: pointer; color: #1D1D1B; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em">CLOSE ↓</button></div>
+<article class="tt-art" style="flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 6px 6px 24px 0; border-top: 1.5px solid #1D1D1B">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.06em; color: #6B665E; color: #33503A; margin-top: 10px">{{wp.type}} · {{wp.date}} · {{wp.read}} READ</span>
+<h2 style="margin: 0; font-size: 32px; line-height: 0.98; font-weight: 700; letter-spacing: -0.035em">{{wp.title}}</h2>
+<p style="margin: 0 0 14px; font-size: 17px; line-height: 1.35; font-weight: 500; color: #5E5A53">{{wp.lede}}</p>
+<sc-for list="{{wp.blocks}}" as="b" hint-placeholder-count="8">
+<sc-if value="{{b.isP}}" hint-placeholder-val="{{ true }}"><p style="margin: 0; font-size: 16px; line-height: 1.6">{{b.x}}</p></sc-if>
+<sc-if value="{{b.isH}}" hint-placeholder-val="{{ false }}"><h3 style="margin: 14px 0 0; font-size: 20px; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em">{{b.x}}</h3></sc-if>
+<sc-if value="{{b.isCode}}" hint-placeholder-val="{{ false }}"><pre style="margin: 0; padding: 16px 18px; background: #DCE4D6; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.65; overflow-x: auto; white-space: pre">{{b.x}}</pre></sc-if>
+<sc-if value="{{b.isLi}}" hint-placeholder-val="{{ false }}"><div style="display: flex; gap: 12px; margin-top: -8px; font-size: 16px; line-height: 1.6"><span aria-hidden="true" style="color: #33503A">–</span><span>{{b.x}}</span></div></sc-if>
+<sc-if value="{{b.isQ}}" hint-placeholder-val="{{ false }}"><blockquote style="margin: 7px 0; padding-left: 24px; font-size: 20px; line-height: 1.25; font-weight: 600; letter-spacing: -0.015em; color: #33503A">{{b.x}}</blockquote></sc-if>
+</sc-for>
+</article>
+</div>
+</sc-if>
+</div>
+</sc-if>
 <sc-if value="{{hasList}}" hint-placeholder-val="{{ false }}">
 <div style="display: flex; flex-direction: column; border-top: 1.5px solid #1D1D1B">
 <sc-for list="{{rows}}" as="x" hint-placeholder-count="4">
 <a href="{{x.href}}" class="tt-row" style="display: grid; grid-template-columns: {{x.cols}}; column-gap: 14px; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(29,29,27,0.18); text-decoration: none">
-<sc-if value="{{x.hasCover}}" hint-placeholder-val="{{ false }}"><span style="width: 38px; height: 38px; background: {{x.cover}}; display: block; position: relative; overflow: hidden"><span style="position: absolute; left: 0; top: 0; width: 38px; height: 38px; border-radius: 0 0 100% 0; background: {{x.cover2}}"></span></span></sc-if>
-<span style="display: flex; align-items: baseline; gap: 10px; min-width: 0; white-space: nowrap; overflow: hidden"><span style="font-size: 15px; font-weight: 600">{{x.title}}</span><span style="font-size: 13px; color: #6B665E; overflow: hidden; text-overflow: ellipsis">{{x.sub}}</span></span>
+<sc-if value="{{x.hasCover}}" hint-placeholder-val="{{ false }}"><span style="width: 44px; height: 44px; background: {{x.cover}}; display: block; position: relative; overflow: hidden"><span style="position: absolute; left: 0; top: 0; width: 44px; height: 44px; border-radius: 0 0 100% 0; background: {{x.cover2}}"></span></span></sc-if>
+<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow: hidden"><span style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{x.title}}</span><span style="font-size: 12px; color: #6B665E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{x.sub}}</span></span>
 <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #6B665E; text-align: right; white-space: nowrap">{{x.meta}}</span>
 </a>
 </sc-for>
@@ -78,7 +122,7 @@ a:hover{text-decoration:underline;text-underline-offset:4px}
 </sc-if>
 <sc-if value="{{hasCta}}" hint-placeholder-val="{{ false }}"><div style="display: flex; align-items: center; gap: 14px"><a href="{{ctaHref}}" download="" class="tt-btn" style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 18px; background: #1D1D1B; color: #EFEBE4; border: 1.5px solid #1D1D1B; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-decoration: none">{{ctaLabel}}</a><span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.04em; color: #8A857C">{{ctaNote}}</span></div></sc-if>
 <sc-if value="{{hasLink}}" hint-placeholder-val="{{ false }}"><a href="{{href}}" class="tt-ext" style="align-self: flex-start; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.02em; color: #1D1D1B; text-decoration: underline; text-underline-offset: 4px">{{linkShort}}</a></sc-if>
-<div aria-live="polite" style="margin-top: auto; display: flex; align-items: center; gap: 10px"><div aria-hidden="true" style="display: flex; flex-direction: column; gap: 3px"><sc-for list="{{ticks}}" as="k" hint-placeholder-count="3"><span class="tt-tick" style="display: block; width: 3px; height: {{k.h}}px; border-radius: 2px; background: {{k.c}}"></span></sc-for></div><div style="display: flex; flex-direction: column; gap: 2px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em"><span style="color: #1D1D1B; text-transform: uppercase">{{patName}}</span><span style="color: #8A857C">{{scrollHint}}</span></div></div>
+<sc-if value="{{notWOpen}}" hint-placeholder-val="{{ true }}"><div aria-live="polite" style="margin-top: auto; display: flex; align-items: center; gap: 10px"><div role="group" aria-label="Patterns" style="display: flex; flex-direction: column; gap: 3px"><sc-for list="{{ticks}}" as="k" hint-placeholder-count="3"><button type="button" onClick="{{k.go}}" aria-label="{{k.name}}" title="{{k.name}}" aria-pressed="{{k.on}}" style="display: block; padding: 2px 8px; margin: -2px -8px; background: transparent; border: 0; cursor: pointer"><span class="tt-tick" style="display: block; width: 3px; height: {{k.h}}px; border-radius: 2px; background: {{k.c}}"></span></button></sc-for></div><div style="display: flex; flex-direction: column; gap: 2px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em"><span style="color: #1D1D1B; text-transform: uppercase">{{patName}}</span><span style="color: #8A857C">{{scrollHint}}</span></div></div></sc-if>
 <nav aria-label="Pages" style="align-self: flex-end; width: 289px; flex-shrink: 0; padding-top: 12px; border-top: 1px solid rgba(29,29,27,0.25); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px 12px">
 <sc-for list="{{pages}}" as="p" hint-placeholder-count="8"><button type="button" class="tt-nav" onClick="{{p.go}}" aria-current="{{p.cur}}" style="display: flex; align-items: baseline; gap: 8px; min-height: 30px; padding: 0; background: transparent; border: 0; text-align: left; font-family: 'Familjen Grotesk', sans-serif; font-size: 14px; font-weight: {{p.fw}}; letter-spacing: -0.01em; color: {{p.fg}}; cursor: pointer; white-space: nowrap"><span style="border-bottom: 1.5px solid {{p.ul}}; padding-bottom: 1px">{{p.label}}</span></button></sc-for>
 </nav>
@@ -147,11 +191,38 @@ class Component extends DCLogic {
       pin: { a: 'M0 0H60L60 60ZM120 0V60L60 60ZM120 120H60L60 60ZM0 120V60L60 60Z' },
       frame: { a: 'M0 0H120V24H24V120H0ZM48 48H120V72H72V120H48ZM96 96H120V120H96Z' },
       moon: { a: 'M75 10A50 50 0 1 0 75 110A72.5 72.5 0 0 1 75 10Z' },
+      halfsq: { a: 'M0 0H60V120H0Z', b: C(60, 60, 28) },
+      pair: { a: C(42, 60, 30), b: C(78, 60, 30) },
       sine: { st: 'M0 60C20 22 40 22 60 60S100 98 120 60' }
     };
     var self = this;
     var pick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
     var r4 = function () { return Math.floor(Math.random() * 4) * 90; };
+    var bigShape = function (s, B, r, c) {
+      var N = B * 120, dx = (c % B) * 120, dy = (r % B) * 120, h = N / 2;
+      var P = function (x, y) { var X = x, Y = y; for (var i = 0; i < s.k; i++) { var t = X; X = N - Y; Y = t; } return (X - dx).toFixed(1) + ' ' + (Y - dy).toFixed(1); };
+      var a = '';
+      if (s.kind === 'qdisc') a = 'M' + P(0, 0) + 'L' + P(N, 0) + 'A' + N + ' ' + N + ' 0 0 1 ' + P(0, N) + 'Z';
+      else if (s.kind === 'half') a = 'M' + P(N, 0) + 'A' + h + ' ' + h + ' 0 0 1 ' + P(0, 0) + 'Z';
+      else if (s.kind === 'halves') a = 'M' + P(N, 0) + 'A' + h + ' ' + h + ' 0 0 1 ' + P(0, 0) + 'Z' + 'M' + P(0, N) + 'A' + h + ' ' + h + ' 0 0 1 ' + P(N, N) + 'Z';
+      else if (s.kind === 'tri') a = 'M' + P(0, 0) + 'L' + P(N, 0) + 'L' + P(0, N) + 'Z';
+      else if (s.kind === 'qring') a = 'M' + P(N, 0) + 'A' + N + ' ' + N + ' 0 0 1 ' + P(0, N) + 'L' + P(0, h) + 'A' + h + ' ' + h + ' 0 0 0 ' + P(h, 0) + 'Z';
+      else { var rr = N * 0.42; a = 'M' + (h - rr - dx).toFixed(1) + ' ' + (h - dy).toFixed(1) + 'a' + rr + ' ' + rr + ' 0 1 0 ' + (2 * rr) + ' 0a' + rr + ' ' + rr + ' 0 1 0 ' + (-2 * rr) + ' 0Z'; }
+      var b = '';
+      if (s.accent) { var q = N * 0.36; b = (s.kind === 'circle') ? ('M' + (h - q / 2 - dx).toFixed(1) + ' ' + (h - dy).toFixed(1) + 'a' + (q / 2) + ' ' + (q / 2) + ' 0 1 0 ' + q + ' 0a' + (q / 2) + ' ' + (q / 2) + ' 0 1 0 ' + (-q) + ' 0Z') : ('M' + P(N, N) + 'L' + P(N - q, N) + 'A' + q + ' ' + q + ' 0 0 1 ' + P(N, N - q) + 'Z'); }
+      return { a: a, b: b };
+    };
+    this.bigShape = bigShape;
+    var bigTile = function (r, c, S, B) {
+      var IL = ['#E2573B', '#2F4FD8', '#F2C14E', '#9DB39A', '#1D1D1B', '#EFEBE4', '#E9B8A6'];
+      var key = Math.floor(r / B) + ',' + Math.floor(c / B);
+      if (!S[key]) {
+        var bg = pick(IL), fg, fg2; do { fg = pick(IL); } while (fg === bg); do { fg2 = pick(IL); } while (fg2 === bg || fg2 === fg);
+        S[key] = { kind: pick(['qdisc', 'qdisc', 'half', 'circle', 'tri', 'qring', 'halves']), k: Math.floor(Math.random() * 4), bg: bg, fg: fg, fg2: fg2, accent: Math.random() < 0.45 };
+      }
+      var s = S[key], sh = bigShape(s, B, r, c);
+      return { k: 'none', rot: 0, a: sh.a, b: sh.b, bg: s.bg, fg: s.fg, fg2: s.fg2, blk: B + ':' + key, bs: s, bb: B };
+    };
     var I = { ink: '#1D1D1B', off: '#EFEBE4', red: '#E2573B', blue: '#2F4FD8', yel: '#F2C14E', sage: '#9DB39A', pink: '#E9B8A6' };
     var TH = { blue: '#F2C14E', navy: '#1D1D1B', off: '#EFEBE4', yel: '#E2573B', sky: '#F6DC97' };
     var W = { sage: '#8FA98A', forest: '#33503A', off: '#EFEBE4', ink: '#1D1D1B', clay: '#D9A08B' };
@@ -163,58 +234,60 @@ class Component extends DCLogic {
         body: 'Currently founding engineer at Dryft, building AI for manufacturing.', href: '', link: '',
         comps: [
           { name: 'Bauhaus', f: function (r, c) { var L = [I.red, I.blue, I.yel, I.sage, I.ink, I.off, I.pink], bg = pick(L), fg; do { fg = pick(L); } while (fg === bg); return { k: pick(['qdisc', 'qdisc', 'half', 'half', 'dot', 'tri', 'qring', 'qring', 'halves']), rot: r4(), bg: bg, fg: fg }; } },
-          { name: 'Rings', f: function (r, c, S) { var L = [I.red, I.blue, I.yel, I.sage, I.pink, I.ink], key = (r >> 1) + ',' + (c >> 1); if (!S[key]) { var bg = pick([I.off, I.off, I.ink, I.pink]), fg; do { fg = pick(L); } while (fg === bg); S[key] = { bg: bg, fg: fg, pin: Math.random() < 0.3 ? 90 : 0 }; } var m = { '0,0': 180, '0,1': 270, '1,0': 90, '1,1': 0 }[(r & 1) + ',' + (c & 1)]; return { k: 'qdisc', rot: m + S[key].pin, bg: S[key].bg, fg: S[key].fg }; } },
-          { name: 'Petals', f: function (r, c) { var L = [I.blue, I.red, I.yel, I.sage]; return { k: 'leaf', rot: ((r + c) % 2) * 90, bg: (r % 2) ? I.off : I.pink, fg: L[((r >> 1) + (c >> 1)) % 4] }; } }
+          { name: 'Mosaic', f: function () { var L = [I.red, I.blue, I.yel, I.sage, I.ink, I.off, I.pink], bg = pick(L), fg, fg2; do { fg = pick(L); } while (fg === bg); do { fg2 = pick(L); } while (fg2 === bg || fg2 === fg); var cell = function (x, y, k) { var P = function (px, py) { var X = px, Y = py; for (var i = 0; i < k; i++) { var t = X; X = 60 - Y; Y = t; } return (X + x) + ' ' + (Y + y); }; return 'M' + P(0, 0) + 'L' + P(60, 0) + 'A60 60 0 0 1 ' + P(0, 60) + 'Z'; }; var a = '', b = ''; [[0, 0], [60, 0], [0, 60], [60, 60]].forEach(function (o) { var p = cell(o[0], o[1], Math.floor(Math.random() * 4)); if (Math.random() < 0.5) a += p; else b += p; }); return { k: 'none', rot: 0, a: a, b: b, bg: bg, fg: fg, fg2: fg2 }; } },
+          { name: 'Halves', f: function () { var L = [I.red, I.blue, I.yel, I.sage, I.ink, I.off, I.pink], bg = pick(L), fg, fg2; do { fg = pick(L); } while (fg === bg); do { fg2 = pick(L); } while (fg2 === bg || fg2 === fg); return { k: 'halfsq', rot: r4(), bg: bg, fg: fg, fg2: fg2 }; } }
         ] },
       { id: 'education', label: 'Education', title: 'Education', kicker: 'Computer Science & Philosophy', bg: function () { return TH.blue; }, fgc: '#1D1D1B', dot: function () { return TH.blue; },
         body: 'Computer science at TU Munich, CSEE and UC Berkeley. Philosophy at HFPH.', href: '#', link: '[READ THE ABSTRACT] ↗', linkShort: '[Abstract] ↗',
         comps: [
-          { name: 'Routes', auto: 'rotate', f: function () { return { k: 'arc', rot: Math.random() < 0.5 ? 0 : 90, bg: TH.off, fg: TH.navy }; } },
           { name: 'Waves', f: function (r, c) { var R = [TH.off, TH.sky, TH.blue, '#C9962A', TH.blue, TH.sky]; var col = function (i) { return R[((i % 6) + 6) % 6]; }; var up = c % 2; return { k: 'half', rot: up ? 180 : 0, bg: col(r), fg: up ? col(r + 1) : col(r - 1) }; } },
-          { name: 'Steps', f: function (r, c) { return { k: 'lshape', rot: ((r + c) % 4) * 90, bg: (r % 2) ? TH.sky : TH.off, fg: TH.navy }; } }
+          { name: 'Routes', auto: 'rotate', f: function () { return { k: 'arc', rot: Math.random() < 0.5 ? 0 : 90, bg: TH.off, fg: TH.navy }; } },
+          { name: 'Ascent', f: function (r, c) { var R = [TH.off, TH.sky, TH.blue, '#C9962A', TH.blue, TH.sky], col = function (i) { return R[((i % 6) + 6) % 6]; }, n = r + c; return { k: 'tri', rot: 0, bg: col(n + 1), fg: col(n) }; } }
         ] },
       { id: 'projects', label: 'Projects', title: 'Projects', kicker: 'DRYFT & SIDE PROJECTS', bg: function () { return D().blue; }, fgc: '#FFFFFF', dot: function () { return D().blue; },
         body: 'Founding engineer at Dryft, building AI for manufacturing. [Side project] · [Side project].', href: 'https://dryft.ai', link: 'DRYFT.AI ↗', linkShort: 'dryft.ai ↗',
         comps: [
           { name: 'Wedges', f: function () { var p = D(), bg = pick([p.off, p.tint, p.deep]), fg = bg === p.deep ? p.blue : pick([p.blue, p.deep]); return { k: 'wedge', rot: r4(), bg: bg, fg: fg, fg2: bg === p.off ? p.tint : p.off }; } },
-          { name: 'Stripes', f: function (r, c) { var p = D(), flip = (r >> 1) % 2; return { k: 'stripes', rot: ((r + c) % 2) * 90, bg: flip ? p.deep : p.blue, fg: flip ? p.blue : p.off }; } },
+          { name: 'Matrix', f: function () { var p = D(), x = Math.random(); return x < 0.12 ? { k: 'dots4', rot: 0, bg: p.blue, fg: p.off } : { k: 'dots4', rot: 0, bg: p.deep, fg: x < 0.3 ? p.blue : p.tint }; } },
           { name: 'Machine', f: function (r, c) { var p = D(); if ((r + c) % 2 === 0) return { k: 'ring', rot: 0, bg: p.tint, fg: p.deep, fg2: p.blue }; var k = pick(['cross', 'squares', 'squares']); return { k: k, rot: 0, bg: p.off, fg: k === 'cross' ? p.blue : p.deep, fg2: p.tint }; } }
         ] },
       { id: 'writing', label: 'Writing', title: 'Writing', kicker: 'NOTES & ESSAYS', bg: function () { return W.forest; }, fgc: '#EFEBE4', dot: function () { return W.sage; },
-        body: '[Post title] · [Post title] · [Post title]', href: '#', link: '[ALL POSTS] ↗', linkShort: '[All posts] ↗',
+        body: '', href: '', link: '', linkShort: '',
         comps: [
+          { name: 'Triangles', f: function () { var L = [W.off, W.sage, W.forest, W.clay], bg = pick(L), fg; do { fg = pick(L); } while (fg === bg); return { k: 'tri', rot: r4(), bg: bg, fg: fg }; } },
           { name: 'Squares', f: function (r, c) { var L = [W.off, W.sage, W.forest, W.ink, W.clay]; return { k: 'squares', rot: 0, bg: L[(c + r) % 5], fg: L[(c + r + 1) % 5], fg2: L[(c + r + 2) % 5] }; } },
-          { name: 'Arcs', f: function () { var bg = Math.random() < 0.35 ? W.sage : W.off; return { k: 'qring', rot: r4(), bg: bg, fg: bg === W.sage ? W.forest : pick([W.forest, W.ink, W.ink]) }; } },
-          { name: 'Triangles', f: function () { var L = [W.off, W.sage, W.forest, W.clay], bg = pick(L), fg; do { fg = pick(L); } while (fg === bg); return { k: 'tri', rot: r4(), bg: bg, fg: fg }; } }
+          { name: 'Hills', f: function (r, c) { var R = [W.off, W.sage, W.forest, W.ink, W.forest, W.sage], col = function (i) { return R[((i % 6) + 6) % 6]; }, left = (c + r) % 2 === 0; return { k: 'qdisc', rot: left ? 180 : 270, bg: col(r), fg: col(r + 1) }; } }
         ] },
       { id: 'music', label: 'Music', title: 'Music', kicker: '[WHAT YOU PLAY / MAKE]', bg: function () { return MU.tang; }, fgc: '#1D1D1B', dot: function () { return MU.tang; },
         body: 'My top 3 tracks this week: [Track] · [Track] · [Track].', href: '#', link: '[LISTEN] ↗', linkShort: '[Listen] ↗',
         comps: [
           { name: 'Records', f: function () { var bg = pick([MU.off, MU.off, MU.peach]); return { k: 'split', rot: r4(), bg: bg, fg: MU.tang, fg2: pick([MU.ink, MU.rust]) }; } },
           { name: 'Dots', f: function () { return { k: 'offdot', rot: r4(), bg: pick([MU.off, MU.off, MU.peach]), fg: pick([MU.tang, MU.tang, MU.ink, MU.rust]) }; } },
-          { name: 'Chevrons', f: function (r, c) { var odd = r % 2, L = odd ? [MU.tang, MU.rust, MU.peach] : [MU.ink, MU.tang, MU.peach]; return { k: 'chev', rot: odd ? 180 : 0, bg: odd ? MU.ink : MU.off, fg: L[(c + r) % 3] }; } }
+          { name: 'Interference', auto: 'interf', f: function (r, c) { var P = [MU.off, MU.peach, MU.tang, MU.rust, MU.ink], v = Math.sin(c * 0.55) + Math.sin(r * 0.7) + Math.sin((c + r) * 0.35), b = Math.max(0, Math.min(4, Math.floor((v + 3) / 6 * 5))); return { k: 'dot', rot: 0, bg: P[b], fg: P[(b + 1) % 5], sc: 0.45, itf: P, fix: 1 }; } }
         ] },
       { id: 'cv', label: 'CV', title: 'CV', kicker: 'Résumé · one page', bg: function () { return '#C7F03A'; }, fgc: '#111111', dot: function () { return '#C7F03A'; },
         body: 'Experience, education and skills on one page.', href: '', link: '', linkShort: '',
         cta: { href: '#', label: 'DOWNLOAD CV · PDF ↓', note: 'UPDATED [MONTH YYYY]' },
         comps: [
           { name: 'Pinwheel', f: function (r, c, S) { var key = (r >> 1) + ',' + (c >> 1); if (!S[key]) { var x = Math.random(); S[key] = x < 0.3 ? ['#C7F03A', '#111111'] : x < 0.5 ? ['#111111', '#C7F03A'] : x < 0.75 ? ['#F6EFE3', '#111111'] : ['#FFFFFF', '#111111']; } return { k: 'pin', rot: 0, bg: S[key][0], fg: S[key][1] }; } },
-          { name: 'Frames', f: function (r, c, S) { var key = (r >> 1) + ',' + (c >> 1); if (S[key] == null) { var x = Math.random(); S[key] = x < 0.35 ? ['#F6EFE3', '#111111'] : x < 0.7 ? ['#C7F03A', '#111111'] : ['#111111', '#C7F03A']; } return { k: 'frame', rot: Math.floor(Math.random() * 4) * 90, bg: S[key][0], fg: S[key][1] }; } },
-          { name: 'Moons', f: function (r, c) { var dk = ((r >> 1) + (c >> 1)) % 2; return { k: 'moon', rot: ((r + c) % 4) * 90, bg: dk ? '#111111' : '#FFFFFF', fg: dk ? '#C7F03A' : '#111111' }; } }
+          { name: 'Blocks', f: function (r, c, S) { var key = (r >> 1) + ',' + (c >> 1); if (!S[key]) { var x = Math.random(); S[key] = x < 0.4 ? ['#FFFFFF', '#111111'] : x < 0.7 ? ['#C7F03A', '#111111'] : ['#111111', '#C7F03A']; } return { k: 'lshape', rot: [[0, 90], [270, 180]][r % 2][c % 2], bg: S[key][0], fg: S[key][1] }; } },
+          { name: 'Bars', f: function () { var a = '', x = 0; while (x < 120) { var w = 12 * (1 + Math.floor(Math.random() * 3)), g = 12 * (1 + Math.floor(Math.random() * 2)); if (x + w > 120) w = 120 - x; a += 'M' + x + ' 0H' + (x + w) + 'V120H' + x + 'Z'; x += w + g; } return { k: 'none', rot: 0, a: a, bg: Math.random() < 0.5 ? '#FFFFFF' : '#F6EFE3', fg: Math.random() < 0.15 ? '#C7F03A' : '#111111' }; } }
         ] },
       { id: 'contact', label: 'Contact', title: 'Contact', kicker: 'Because it is and always will be about people', bg: function () { return CT.terra; }, fgc: '#1D1D1B', dot: function () { return CT.terra; },
         body: '[your@email.com] · GitHub · LinkedIn · X', href: '#', link: '[EMAIL ME] ↗', linkShort: '[your@email.com]',
         comps: [
           { name: 'Pulse', auto: 'pulse', f: function (r, c) { return { k: 'dot', rot: 0, bg: (r + c) % 2 ? CT.off : CT.blush, fg: CT.terra, d: Math.hypot(c - 3.5, r - 10.5) }; } },
           { name: 'Speech', f: function () { var bg = pick([CT.blush, CT.off, CT.off]); return { k: 'halves', rot: Math.random() < 0.5 ? 0 : 90, bg: bg, fg: bg === CT.blush ? CT.terra : pick([CT.terra, CT.ink]), fg2: bg === CT.blush ? CT.ink : CT.terra }; } },
-          { name: 'Confetti', f: function () { var L = [CT.terra, CT.blush, CT.ink, CT.yel], bg = pick([CT.off, CT.off, CT.blush]), fg; do { fg = pick(L); } while (fg === bg); return { k: pick(['dots4', 'diamond', 'half', 'dot']), rot: r4(), bg: bg, fg: fg, fg2: bg }; } }
+          { name: 'Pairs', f: function () { var bg = pick([CT.off, CT.off, CT.blush]); return { k: 'pair', rot: Math.random() < 0.5 ? 0 : 90, bg: bg, fg: CT.terra, fg2: bg === CT.blush ? CT.ink : pick([CT.ink, CT.yel]) }; } }
         ] },
       { id: 'community', label: 'Community', title: 'Community', kicker: 'Leave your mark', bg: function () { return '#E9B8A6'; }, fgc: '#1D1D1B', dot: function () { return '#E9B8A6'; },
         body: '', href: '', link: '', linkShort: '',
         comps: [ { name: 'Community', f: function () { return { k: 'none', rot: 0, bg: '#EFEBE4', fg: '#1D1D1B' }; } } ] }
     ];
     this.CS = 65;
-    this.PANEL = { small: { c: 1, r: 8, w: 5, h: 6 }, big: { c: 0, r: 6, w: 6, h: 7 } };
+    this.PANEL = { small: { c: 1, r: 8, w: 5, h: 6 }, big: { c: 0, r: 6, w: 6, h: 7 }, wlist: { c: 0, r: 3, w: 6, h: 11 }, wpost: { c: 0, r: 3, w: 6, h: 11 } };
+    this.WPOSTS = [{"type": "NOTE", "date": "26 SEP 2026", "read": "2 MIN", "title": "Notes on a grid of tiles", "lede": "Why this site is built from one rule, and how a pattern works.", "blocks": [{"t": "p", "x": "This site is built from one rule: everything sits on a grid of square tiles. Each page picks its own palette and three patterns, and scrolling swaps one pattern for the next."}, {"t": "h", "x": "Why tiles"}, {"t": "p", "x": "A tile is small enough to animate cheaply and big enough to carry a shape. Repeat it and you get texture; rotate one and you get motion. The whole visual language comes from about forty shapes drawn in a 120-unit box."}, {"t": "h", "x": "How a pattern works"}, {"t": "p", "x": "A pattern is just a function from a grid position to a tile:"}, {"t": "code", "x": "type Tile = { shape: string; rotation: number; bg: string; fg: string }\n\nconst arcs = (row: number, col: number): Tile =>\n  ({ shape: 'qring', rotation: pick([0, 90, 180, 270]), bg: SAGE, fg: FOREST })"}, {"t": "li", "x": "The grid size is computed from the screen."}, {"t": "li", "x": "The title box and card are placed in whole tiles."}, {"t": "li", "x": "Patterns never know which page they are on."}, {"t": "q", "x": "Constraints are the fastest way to make something feel designed."}, {"t": "p", "x": "Everything you read here is a plain Markdown file. Adding a post means adding a file."}]}, {"type": "ESSAY", "date": "[DATE]", "read": "[N] MIN", "title": "[Essay title]", "lede": "[One-line summary from the front matter]", "blocks": [{"t": "p", "x": "[Essay body, rendered from the Markdown file.]"}]}, {"type": "BLOG", "date": "[DATE]", "read": "[N] MIN", "title": "[Blog post title]", "lede": "[One-line summary]", "blocks": [{"t": "p", "x": "[Post body, rendered from the Markdown file.]"}]}, {"type": "NOTE", "date": "[DATE]", "read": "[N] MIN", "title": "[Note title]", "lede": "[One-line summary]", "blocks": [{"t": "p", "x": "[Note body, rendered from the Markdown file.]"}]}, {"type": "ESSAY", "date": "[DATE]", "read": "[N] MIN", "title": "[Essay title]", "lede": "[One-line summary]", "blocks": [{"t": "p", "x": "[Essay body, rendered from the Markdown file.]"}]}, {"type": "NOTE", "date": "[DATE]", "read": "[N] MIN", "title": "[Note title]", "lede": "[One-line summary]", "blocks": [{"t": "p", "x": "[Note body, rendered from the Markdown file.]"}]}];
+    this.wview = 'card'; this.wpost = 0; this.wfilter = 'ALL';
     this.LISTS = {
       education: { label: 'STUDIES', rows: [
         { lead: '01', title: 'TU Munich', sub: 'B.Sc. Informatik', meta: '[YYYY–YYYY]', href: '#' },
@@ -228,9 +301,9 @@ class Component extends DCLogic {
         { lead: '03', title: '[Project three]', sub: '[What it is]', meta: '[YYYY] ↗', href: '#' }
       ] },
       music: { label: 'TOP 3 THIS WEEK · VIA SPOTIFY', rows: [
-        { cover: '#FF6A13', cover2: '#1D1D1B', title: '[Track title]', sub: '[Artist]', meta: '01', href: '#' },
-        { cover: '#F7C7A6', cover2: '#9C3A12', title: '[Track title]', sub: '[Artist]', meta: '02', href: '#' },
-        { cover: '#1D1D1B', cover2: '#FF6A13', title: '[Track title]', sub: '[Artist]', meta: '03', href: '#' }
+        { cover: '#FF6A13', cover2: '#1D1D1B', title: 'Soft Machinery', sub: 'Lumen Parade', meta: '↗', href: '#' },
+        { cover: '#F7C7A6', cover2: '#9C3A12', title: 'Orange Hours', sub: 'The Quiet Atlas', meta: '↗', href: '#' },
+        { cover: '#1D1D1B', cover2: '#FF6A13', title: 'Interference Pattern', sub: 'Mira Kessler', meta: '↗', href: '#' }
       ] }
     };
     this.NR = 14; this.NC = 6;
@@ -243,7 +316,8 @@ class Component extends DCLogic {
     this._loop = this.loop.bind(this);
   }
   bars() { var d = ''; for (var i = 0; i < 4; i++) { var h = Math.round(14 + Math.random() * 86); d += 'M' + (12 + i * 26) + ' ' + (108 - h) + 'h18v' + h + 'h-18z'; } return d; }
-  panelRect() { return this.PANEL.small; }
+  panelRect() { if (this.T[this.topic].id === 'writing') { if (this.wview === 'list') return this.PANEL.wlist; if (this.wview === 'post') return this.PANEL.wpost; } return this.PANEL.small; }
+  wOpen() { return this.T[this.topic].id === 'writing' && this.wview !== 'card'; }
   mix(a, b, t) { var p = function (h) { var n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }; var x = p(a), y = p(b); return '#' + [0, 1, 2].map(function (i) { return Math.round(x[i] + (y[i] - x[i]) * t).toString(16).padStart(2, '0'); }).join(''); }
   dp() { var b = this.props.dryftBlue ?? '#1F3DFF'; return { blue: b, deep: this.mix(b, '#0B0D1A', 0.62), tint: this.mix(b, '#EFEBE4', 0.72), off: '#EFEBE4' }; }
   deskCells() { var d = []; for (var r = 0; r < 10; r++) for (var c = 0; c < 16; c++) { if (r < 3 && c < 8) continue; d.push([r, c]); } return d; }
@@ -251,13 +325,14 @@ class Component extends DCLogic {
     var saved = [], dc = this.deskCells();
     try { var raw = window.localStorage.getItem('mvs-community-v1'); if (raw) saved = JSON.parse(raw) || []; } catch (e) { saved = []; }
     var self = this, seeds = [0, 1, 2].map(function (ci) {
-      var f = self.T[0].comps[ci].f, S = {};
+      var f = self.T[0].comps[0].f, S = {};
       return { name: '[Sample visitor]', note: '[A short note a visitor left with their pattern.]', date: '[Date]', sample: true,
         tiles: dc.map(function (rc) { var t = f(rc[0], rc[1], S); return { k: t.k, rot: t.rot, bg: t.bg, fg: t.fg, fg2: t.fg2 || t.fg }; }) };
     });
     return saved.concat(seeds);
   }
   wheel(dy) {
+    if (this.wOpen()) return;
     var now = performance.now();
     if (this.trans || now < (this.lockUntil || 0)) { this.acc = 0; return; }
     if (now - (this.lastWheel || 0) > 260) this.acc = 0;
@@ -267,6 +342,7 @@ class Component extends DCLogic {
     this.step(dir);
   }
   step(dir) {
+    if (this.wOpen()) return;
     if (this.isComm()) { var m = this.entries.length; this.entryIdx = (this.entryIdx + dir + m) % m; }
     else { var n = this.T[this.topic].comps.length; this.comp = (this.comp + dir + n) % n; }
     this.go(this.topic, this.isComm() ? 0 : this.comp, dir > 0 ? [0, 0] : [13, 5]);
@@ -285,10 +361,28 @@ class Component extends DCLogic {
     var f = this.T[ti].comps[ci].f, S = {}, M = this.M;
     return this.cells.map(function (rc) {
       var t = f(rc[0], rc[1], S), m = M[t.k];
-      return { r: rc[0], c: rc[1], k: t.k, rot: t.rot, bg: t.bg, fg: t.fg, fg2: t.fg2 || t.fg, a: t.a || m.a || '', b: t.b || m.b || '', st: t.st || m.st || '', trav: t.trav, grow: t.grow, fix: t.fix, blink: t.blink, eq: t.eq, belt: t.belt, dir: t.dir, d: t.d, base: t.base, beat: t.beat, sc: t.sc || 1, s: 1 };
+      return { r: rc[0], c: rc[1], k: t.k, rot: t.rot, bg: t.bg, fg: t.fg, fg2: t.fg2 || t.fg, a: t.a || m.a || '', b: t.b || m.b || '', st: t.st || m.st || '', trav: t.trav, itf: t.itf, blk: t.blk, bs: t.bs, bb: t.bb, grow: t.grow, fix: t.fix, blink: t.blink, eq: t.eq, belt: t.belt, dir: t.dir, d: t.d, base: t.base, beat: t.beat, sc: t.sc || 1, s: 1 };
     });
   }
+  wOpenPost(i) { this.wpost = i; this.wview = 'post'; this.forceUpdate(); }
+  wLatest() { var self = this; return this.WPOSTS.slice(0, 2).map(function (p, i) { return { type: p.type, date: p.date, title: p.title, open: function () { self.wOpenPost(i); } }; }); }
+  wList() { var self = this, out = []; this.WPOSTS.forEach(function (p, i) { if (self.wfilter === 'ALL' || p.type === self.wfilter) out.push({ type: p.type, date: p.date, read: p.read, title: p.title, lede: p.lede, open: function () { self.wOpenPost(i); } }); }); return out; }
+  wFilters() { var self = this; return [['ALL', 'All'], ['ESSAY', 'Essays'], ['NOTE', 'Notes'], ['BLOG', 'Blog']].map(function (f) { var on = self.wfilter === f[0], n = self.WPOSTS.filter(function (p) { return f[0] === 'ALL' || p.type === f[0]; }).length; return { label: f[1], n: String(n), cur: on ? 'true' : 'false', fw: on ? 700 : 500, fg: on ? '#1D1D1B' : '#8A857C', ul: on ? '#1D1D1B' : 'transparent', pick: function () { self.wfilter = f[0]; self.forceUpdate(); } }; }); }
+  wPostVals() { var p = this.WPOSTS[this.wpost] || this.WPOSTS[0]; return { type: p.type, date: p.date, read: p.read, title: p.title, lede: p.lede, blocks: p.blocks.map(function (b) { return { x: b.x, isP: b.t === 'p', isH: b.t === 'h', isCode: b.t === 'code', isLi: b.t === 'li', isQ: b.t === 'q' }; }) }; }
+  startBlock(tt, now) {
+    if (this.anim) return;
+    var s = tt.bs, B = tt.bb, r0 = Math.floor(tt.r / B) * B, c0 = Math.floor(tt.c / B) * B, sh = this.bigShape(s, B, r0, c0), N = B * 120;
+    var spin = s.kind !== 'circle' && Math.random() < 0.7;
+    this.anim = { s: s, B: B, key: tt.blk, t0: now, phase: 0, spin: spin, ov: { x: c0 * this.CS, y: r0 * this.CS, size: B * this.CS, vb: '0 0 ' + N + ' ' + N, h: N / 2, rot: 0, bg: s.bg, fg: s.fg, fg2: s.fg2, a: sh.a, b: sh.b } };
+  }
+  commitBlock(an) {
+    var s = an.s, self = this;
+    if (an.spin) s.k = (s.k + 1) % 4; else { var t = s.bg; s.bg = s.fg; s.fg = t; if (s.fg2 === s.fg) s.fg2 = t; }
+    this.tiles.forEach(function (x) { if (x.blk === an.key && x.bs === s) { var sh = self.bigShape(s, an.B, x.r, x.c); x.a = sh.a; x.b = sh.b; x.bg = s.bg; x.fg = s.fg; x.fg2 = s.fg2; x.rot = 0; } });
+  }
   go(ti, ci, origin) {
+    this.anim = null;
+    if (ti !== this.topic) this.wview = 'card';
     var next = this.build(ti, ci), o = origin;
     this.topic = ti; this.comp = ci; this.phase = 0;
     if (this.reduce) { this.tiles = next; this.trans = null; this.forceUpdate(); return; }
@@ -335,15 +429,31 @@ class Component extends DCLogic {
         this.tiles.forEach(function (t) { if (t.beat) t.sc = ((t.c + 2 * t.r) % 12 === bn) ? 1 : t.base; });
         dirty = true;
       }
+      if (comp.auto === 'canon' && now - (this.lastCanon || 0) > 160) {
+        this.lastCanon = now; this.canonN = (this.canonN || 0) + 1; var cn = this.canonN % 14;
+        this.tiles.forEach(function (t) { if ((t.r + t.c) % 14 === cn) t.rot += 90; });
+        dirty = true;
+      }
+      if (comp.auto === 'interf' && now - (this.lastInt || 0) > 110) {
+        this.lastInt = now; var ts = (now - this.t0) / 1000;
+        this.tiles.forEach(function (t) { if (t.itf) { var v = Math.sin(t.c * 0.55 + ts * 0.9) + Math.sin(t.r * 0.7 - ts * 0.6) + Math.sin((t.c + t.r) * 0.35 + ts * 0.4), b = Math.max(0, Math.min(4, Math.floor((v + 3) / 6 * 5))); t.bg = t.itf[b]; t.fg = t.itf[(b + 1) % 5]; } });
+        dirty = true;
+      }
       if (comp.auto === 'pulse' && now - (this.lastPulse || 0) > 110) {
         this.lastPulse = now; var s = (now - this.t0) / 1000;
         this.tiles.forEach(function (t) { t.sc = (0.18 + 0.82 * (0.5 + 0.5 * Math.sin(t.d * 1.1 - s * 2.6))).toFixed(3); });
         dirty = true;
       }
+      if (this.anim) {
+        var an = this.anim;
+        if (an.phase === 0 && now - an.t0 > 40) { an.phase = 1; if (an.spin) an.ov.rot = 90; else { an.ov.bg = an.s.fg; an.ov.fg = an.s.bg; } dirty = true; }
+        if (an.phase === 1 && now - an.t0 > 1080) { this.commitBlock(an); this.anim = null; dirty = true; }
+      }
       if (now - this.lastAuto > this.autoGap) {
         this.lastAuto = now; this.autoGap = 450 + Math.random() * 500;
         var tt = this.tiles[Math.floor(Math.random() * this.tiles.length)];
         if (tt.fix) { }
+        else if (tt.blk) { this.startBlock(tt, now); }
         else if (this.SYM[tt.k]) { tt.s = 0; this.pend.push({ t: tt, at: now + 270 }); if (tt.blink) this.pend.push({ t: tt, down: now + 2600, at: now + 2870 }); }
         else tt.rot += Math.random() < 0.8 ? 90 : 180;
         if (Math.random() < 0.25) this.markRot = (this.markRot || 0) + 90;
@@ -378,15 +488,16 @@ class Component extends DCLogic {
       pageNo: String(this.topic).padStart(2, '0') + ' / ' + String(this.T.length - 1).padStart(2, '0'),
       clock: this.fmt ? this.fmt.format(new Date()) : '',
       px: (this.panelRect().c * this.CS), py: (this.panelRect().r * this.CS), pw: (this.panelRect().w * this.CS), ph: (this.panelRect().h * this.CS),
-      simple: !this.isComm(), hasList: false, listLabel: this.LISTS[T.id] ? this.LISTS[T.id].label : '',
-      rows: this.LISTS[T.id] ? this.LISTS[T.id].rows.map(function (x) { return { lead: x.lead || '', title: x.title, sub: x.sub, meta: x.meta, href: x.href, hasCover: !!x.cover, noCover: !x.cover, cols: x.cover ? '38px minmax(0, 1fr) auto' : 'minmax(0, 1fr) auto', cover: x.cover || '', cover2: x.cover2 || '' }; }) : [],
+      simple: !this.isComm() && T.id !== 'writing' && T.id !== 'music', hasList: T.id === 'music', notWOpen: !this.wOpen(), isWriting: T.id === 'writing', wCard: T.id === 'writing' && this.wview === 'card', wList: T.id === 'writing' && this.wview === 'list', wPost: T.id === 'writing' && this.wview === 'post', wCount: String(this.WPOSTS.length), wlatest: this.wLatest(), wlist: this.wList(), wfilters: this.wFilters(), wp: this.wPostVals(), wExpand: function () { self.wview = 'list'; self.forceUpdate(); }, wCollapse: function () { self.wview = 'card'; self.forceUpdate(); }, wBack: function () { self.wview = 'list'; self.forceUpdate(); }, listLabel: this.LISTS[T.id] ? this.LISTS[T.id].label : '',
+      rows: this.LISTS[T.id] ? this.LISTS[T.id].rows.map(function (x) { return { lead: x.lead || '', title: x.title, sub: x.sub, meta: x.meta, href: x.href, hasCover: !!x.cover, noCover: !x.cover, cols: x.cover ? '44px minmax(0, 1fr) auto' : 'minmax(0, 1fr) auto', cover: x.cover || '', cover2: x.cover2 || '' }; }) : [],
       tStart: function (e) { var t = e.touches && e.touches[0]; if (t) self.ty0 = t.clientY; },
       tEnd: function (e) { var t = e.changedTouches && e.changedTouches[0]; if (!t || self.ty0 == null) return; var dy = self.ty0 - t.clientY; self.ty0 = null; var now = performance.now(); if (Math.abs(dy) > 50 && !self.trans && now >= (self.lockUntil || 0)) { self.lockUntil = now + 1150; self.step(dy > 0 ? 1 : -1); } },
       browsing: this.isComm(),
       eCount: 'MARK ' + (this.entryIdx + 1) + ' / ' + this.entries.length,
       eDate: (this.entries[this.entryIdx] || {}).date || '', eNote: (this.entries[this.entryIdx] || {}).note || '', eName: (this.entries[this.entryIdx] || {}).name || '',
-      ticks: this.isComm() ? [] : T.comps.map(function (c, i) { var on = i === self.comp; return { h: on ? 16 : 6, c: on ? '#1D1D1B' : '#C9C4BA' }; }),
-      patName: this.isComm() ? 'Mark ' + (this.entryIdx + 1) + ' of ' + this.entries.length : T.comps[this.comp].name,
+      hasOv: !!this.anim && !this.trans, ov: this.anim ? this.anim.ov : { x: 0, y: 0, size: 0, vb: '0 0 1 1', h: 0, rot: 0, bg: 'transparent', fg: 'transparent', fg2: 'transparent', a: '', b: '' },
+      ticks: this.isComm() ? [] : T.comps.map(function (c, i) { var on = i === self.comp; return { h: on ? 16 : 6, c: on ? '#1D1D1B' : '#C9C4BA', name: c.name, on: on ? 'true' : 'false', go: function () { if (i !== self.comp && !self.trans) self.go(self.topic, i, [0, 0]); } }; }),
+      patName: this.isComm() ? 'Mark ' + (this.entryIdx + 1) + ' of ' + this.entries.length : T.comps[this.comp].name + ' · ' + (this.comp + 1) + '/' + T.comps.length,
       scrollHint: this.isComm() ? 'SWIPE TO BROWSE' : 'SWIPE TO CHANGE',
       onWheel: function (e) { self.wheel(e.deltaY); },
       hasCta: !!T.cta, ctaHref: T.cta ? T.cta.href : '#', ctaLabel: T.cta ? T.cta.label : '', ctaNote: T.cta ? T.cta.note : '',

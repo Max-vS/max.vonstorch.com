@@ -12,10 +12,7 @@ export default function ProjectsPage() {
       <PanelText>
         {projects.body} <PanelLinks links={projects.sideProjects} />.
       </PanelText>
-      <TextLink
-        href={projects.dryft.href}
-        className="self-start font-mono text-[length:--spacing(11)] tracking-[0.02em] sm:text-[length:--spacing(13)]"
-      >
+      <TextLink href={projects.dryft.href} variant="action">
         {projects.dryft.label}
       </TextLink>
     </>

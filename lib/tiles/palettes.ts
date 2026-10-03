@@ -1,4 +1,4 @@
-import type { PageId } from "./types";
+import type { SceneId } from "./types";
 
 export const indexColors = {
   ink: "#1D1D1B",
@@ -58,7 +58,14 @@ export const contactColors = {
   yellow: "#F2C14E",
 };
 
-export const titleColors: Record<PageId, { bg: string; fg: string }> = {
+export const notFoundColors = {
+  red: "#D9432B",
+  ground: "#EFEBE4",
+  ink: "#1D1D1B",
+  stone: "#CFCAC0",
+};
+
+export const titleColors: Record<SceneId, { bg: string; fg: string }> = {
   index: { bg: indexColors.ink, fg: indexColors.ground },
   education: { bg: educationColors.yellow, fg: educationColors.ink },
   projects: { bg: dryftColors.blue, fg: "#FFFFFF" },
@@ -67,4 +74,5 @@ export const titleColors: Record<PageId, { bg: string; fg: string }> = {
   cv: { bg: cvColors.chartreuse, fg: cvColors.black },
   contact: { bg: contactColors.terracotta, fg: contactColors.ink },
   community: { bg: indexColors.pink, fg: indexColors.ink },
+  notFound: { bg: notFoundColors.red, fg: notFoundColors.ground },
 };
