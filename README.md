@@ -50,7 +50,7 @@ Locally, the database is the Neon `dev` branch of `personal-db` (pooled and dire
 
 Accounts and settings for the owner, in order.
 
-1. **Neon:** add Neon from the Vercel Marketplace (Free plan, region `iad1` like the functions) for Production and Preview. Neon Auth off. In the integration, turn on Preview branching and "Resource must be active before deployment".
+1. **Neon:** add Neon from the Vercel Marketplace (Free plan, region `iad1` like the functions) for Production only (`vercel storage update personal-db -e production`). Neon Auth off, Preview branching off. Create a `dev` branch in Neon; Preview deployments and local development share it.
 2. **GitHub OAuth apps:** one app allows one callback URL, so create two:
    - production: `https://max.vonstorch.com/api/auth/callback/github`
    - local: `http://127.0.0.1:3000/api/auth/callback/github`
@@ -61,7 +61,7 @@ Accounts and settings for the owner, in order.
 
    | Variable | Production | Preview | Development |
    |---|---|---|---|
-   | `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | Neon integration | Neon integration (own branch per preview) | Neon `dev` branch |
+   | `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | Neon integration | Neon `dev` branch, set by hand (`vercel env add … preview --sensitive`) | Neon `dev` branch |
    | `BETTER_AUTH_SECRET` | `openssl rand -base64 32` | a different value | a different value |
    | `BETTER_AUTH_URL` | `https://max.vonstorch.com` | not set (taken from the request) | `http://127.0.0.1:3000` |
    | `OWNER_EMAIL` | your verified GitHub email | same | same |

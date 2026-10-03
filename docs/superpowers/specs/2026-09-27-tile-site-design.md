@@ -352,7 +352,7 @@ Better Auth tables (`user`, `session`, `account`, `verification`, `rateLimit`) c
 
 **Migrations:** `drizzle-kit generate` locally → commit the SQL in `db/drizzle/` → `drizzle-kit migrate` runs in the Vercel build before `next build`. Never `push` to a shared database. `drizzle.config.ts` loads env files with `@next/env` and sets `schemaFilter: ["public"]`. Changes follow expand/contract (build-time migrations cannot roll back).
 
-**Environments:** production uses the main Neon branch; each preview deployment gets its own Neon branch (Vercel integration "Preview branching"); local development uses the owner's own Neon `dev` branch in `.env.development.local`.
+**Environments:** production uses the main Neon branch; preview deployments and local development share the Neon `dev` branch (see §22).
 
 ## 17. Platform, env and deploy
 
@@ -442,7 +442,7 @@ The implementation plan breaks these steps into tasks.
 | Vercel's build image may still use Bun 1.3, which cannot read a Bun 1.4 lockfile | Check "bun install v1.4.x" in the first build log; fallback install command `npx -y bun@1.4.2 install --frozen-lockfile` |
 | Drizzle 1.0 is a release candidate | Exact pin; fallback 0.45.3 |
 | `import.meta.glob` is new and had a bug in 16.3.6 | Keep the glob inside `content/`; fallback: read files with `fs` |
-| Neon free plan limits | Cache all reads; delete merged preview branches |
+| Neon free plan limits | Cache all reads; only two branches (`main`, `dev`) |
 | Spotify token expires every 6 months | "Reconnect" on `/admin` |
 | No test suite | Manual checks before launch (§17) |
 | React Hook Form + React Compiler edge cases | Follow the rules in §9 |
@@ -461,6 +461,7 @@ These decisions were made while building. They replace the matching parts of the
 | GitHub apps | Two OAuth apps (production and local), one callback URL each | — | A GitHub OAuth app allows one callback URL |
 | Spotify (§11) | Linked to the owner with `authClient.linkSocial`; Spotify can never sign in or create a user (`disableImplicitLinking`, link-only exception in `validateUserInfo`); tokens encrypted; code in `lib/queries/spotify.ts`; `baseURL.fallback = BETTER_AUTH_URL` | `lib/spotify.ts` | Biome allows database access only in `lib/queries` / `lib/mutations`; Better Auth 1.7.6 needs the fallback to read a token without a request |
 | Local database | Neon `dev` branch of `personal-db` | PGlite | Same Postgres, TLS and driver as production; PGlite was only a stand-in before the Neon account existed |
+| Preview database | The Neon integration covers Production only; Preview `DATABASE_URL` and `DATABASE_URL_UNPOOLED` point to the `dev` branch | one Neon branch per preview | Two fixed branches instead of one per git branch; one developer, so shared preview and local data is fine |
 | Migrations | `DATABASE_URL_UNPOOLED` for drizzle-kit | pooled URL | Neon recommends the direct URL for DDL |
 | Code layout (§6) | `lib/auth/*`, `lib/db/*`, `lib/queries/*`, `lib/mutations/*`, `lib/schemas/*`, `drizzle/`; Server Actions next to their pages (`app/(tiles)/community/actions.ts`, `app/admin/actions.ts`) | `auth/`, `db/`, `actions/` | Matches the owner's open-eu project |
 | Grid (§5) | The title block and indicator round to the nearest tile boundary (+1 column/row when the cut is more than half a tile); the head script sets `--title-width`, `--title-height`, `--indicator-width` | fixed 8×3 minus the cut | Avoids a title block that loses almost a whole tile |
