@@ -17,7 +17,7 @@ export const pages: Record<PageId, SitePage> = {
     id: "index",
     path: "/",
     label: "Index",
-    kicker: "Hello, you found me",
+    kicker: "Yo",
     title: "Max von Storch",
     description:
       "Max von Storch is a full-stack engineer, designer and founder. Founding engineer at Dryft in San Francisco, building AI for manufacturing.",
