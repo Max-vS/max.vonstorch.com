@@ -11,14 +11,16 @@ export function TitleBlock({ page, away }: { page: TitlePage; away: boolean }) {
   return (
     <header
       className={cn(
-        "@container absolute top-0 left-0 flex h-(--title-height) w-(--title-width) flex-col justify-between px-18 py-16 [transition:background-color_600ms_var(--ease-turn),color_600ms] sm:px-30 sm:py-26 motion-safe:[transition:background-color_600ms_var(--ease-turn),color_600ms,translate_750ms_var(--ease-turn)]",
+        "@container absolute top-0 left-0 flex h-(--title-height) w-(--title-width) flex-col justify-end px-18 py-16 [transition:background-color_600ms_var(--ease-turn),color_600ms] sm:px-30 sm:py-26 motion-safe:[transition:background-color_600ms_var(--ease-turn),color_600ms,translate_750ms_var(--ease-turn)]",
         away && "-translate-y-full",
       )}
       style={{ backgroundColor: colors.bg, color: colors.fg }}
     >
-      <p className="font-mono text-[length:--spacing(9)] uppercase tracking-[0.06em] opacity-80 sm:text-[length:--spacing(12)]">
-        {page.kicker}
-      </p>
+      {page.kicker ? (
+        <p className="mb-auto font-mono text-[length:--spacing(9)] uppercase tracking-[0.06em] opacity-80 sm:text-[length:--spacing(12)]">
+          {page.kicker}
+        </p>
+      ) : null}
       <h1
         className={cn(
           "font-bold",

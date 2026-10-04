@@ -6,7 +6,7 @@ export type SitePage = {
   id: PageId;
   path: Route;
   label: string;
-  kicker: string;
+  kicker?: string;
   title: string;
   description: string;
 };
@@ -17,7 +17,6 @@ export const pages: Record<PageId, SitePage> = {
     id: "index",
     path: "/",
     label: "Index",
-    kicker: "I believe in honesty, authenticity and creativity",
     title: "Max von Storch",
     description:
       "Max von Storch is a full-stack engineer, designer and founder. Founding engineer at Dryft in San Francisco, building AI for manufacturing.",

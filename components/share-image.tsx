@@ -65,7 +65,7 @@ type ShareImagePage = Pick<SitePage, "id" | "kicker" | "title">;
 
 /** The image's words; the pattern behind them is decoration. */
 export function shareImageAlt({ kicker, title }: ShareImagePage) {
-  return `${title} — ${kicker}`;
+  return kicker ? `${title} — ${kicker}` : title;
 }
 
 /** A page's title block over its first pattern, as on the desktop site. */
@@ -106,23 +106,25 @@ export function shareImage({ id, kicker, title }: ShareImagePage) {
           height: BLOCK_HEIGHT,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
+          justifyContent: kicker ? "space-between" : "flex-end",
           padding: `${PADDING_Y}px ${PADDING_X}px`,
           overflow: "hidden",
           backgroundColor: colors.bg,
           color: colors.fg,
         }}
       >
-        <div
-          style={{
-            fontSize: KICKER_SIZE,
-            letterSpacing: "0.06em",
-            textTransform: "uppercase",
-            opacity: 0.8,
-          }}
-        >
-          {kicker}
-        </div>
+        {kicker ? (
+          <div
+            style={{
+              fontSize: KICKER_SIZE,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              opacity: 0.8,
+            }}
+          >
+            {kicker}
+          </div>
+        ) : null}
         <div
           style={{
             fontSize: titleSize(title, id === "index" ? 104 : 132),
