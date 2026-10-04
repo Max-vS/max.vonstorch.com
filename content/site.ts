@@ -117,7 +117,6 @@ export const writing = {
 };
 
 export const music = {
-  intro: "My top 3 tracks lately:",
   fallback: "Spotify is quiet right now.",
 };
 

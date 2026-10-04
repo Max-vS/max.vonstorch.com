@@ -20,6 +20,11 @@ const topTracksSchema = z.object({
       artists: z.array(z.object({ name: z.string() })).min(1),
       // The URL becomes a link on the page, so only https passes.
       external_urls: z.object({ spotify: z.url({ protocol: /^https$/ }) }),
+      // Spotify lists the covers largest first; next/image scales the largest down.
+      album: z.object({
+        name: z.string(),
+        images: z.array(z.object({ url: z.url({ protocol: /^https$/ }) })),
+      }),
     }),
   ),
 });
@@ -81,6 +86,8 @@ async function fetchTopTracks() {
     title: item.name,
     artist: item.artists[0].name,
     url: item.external_urls.spotify,
+    album: item.album.name,
+    cover: item.album.images[0]?.url ?? null,
   }));
 }
 

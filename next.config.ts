@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   // `use cache` + cacheLife/cacheTag replace the route segment configs.
   cacheComponents: true,
+  images: {
+    // Spotify's album covers on the Music page.
+    remotePatterns: [{ protocol: "https", hostname: "i.scdn.co" }],
+  },
   // OAuth and Spotify accept only 127.0.0.1 locally, so a localhost tab would sign in against an unknown callback.
   async redirects() {
     if (process.env.NODE_ENV !== "development") return [];
