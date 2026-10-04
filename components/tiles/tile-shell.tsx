@@ -197,7 +197,7 @@ export function TileShell({
             {children}
           </main>
           {/* As wide as the small panel's content, at its right edge, also when the panel grows. */}
-          <div className="flex w-(--spacing(289)) shrink-0 flex-col gap-10 self-end sm:w-(--spacing(390))">
+          <div className="flex w-[--spacing(289)] shrink-0 flex-col gap-10 self-end sm:w-[--spacing(390)]">
             {changeable ? (
               <PatternIndicator
                 // The design hides it on mobile while Writing is open; on desktop it sits outside the panel.
