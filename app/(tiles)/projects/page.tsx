@@ -8,7 +8,7 @@ export const metadata = pageMetadata(pages.projects);
 export default function ProjectsPage() {
   return (
     <PanelText>
-      {projects.intro} <PanelLinks links={projects.sideProjects} />.
+      <PanelLinks links={projects.sideProjects} />
     </PanelText>
   );
 }

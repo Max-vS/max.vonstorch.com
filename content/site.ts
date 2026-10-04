@@ -99,7 +99,6 @@ export const education = {
 };
 
 export const projects = {
-  intro: "Side projects:",
   sideProjects: [
     { label: "Rémi.fr", href: "https://www.xn--rmi-bma.fr/" },
     { label: "OpenEU", href: "https://openeu.csee.tech/" },
