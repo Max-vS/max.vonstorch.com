@@ -10,14 +10,14 @@ export default async function MusicPage() {
   const tracks = await getTopTracks();
   if (tracks.length === 0) return <PanelText>{music.fallback}</PanelText>;
   return (
-    <ul className="flex flex-col border-ink border-t-[1.5px]">
+    <ul className="flex flex-col divide-y divide-ink/18">
       {tracks.map((track) => (
         <li key={track.url}>
           <a
             href={track.url}
             target="_blank"
             rel="noopener"
-            className="grid grid-cols-[--spacing(44)_minmax(0,1fr)_auto] items-center gap-x-14 border-ink/18 border-b py-9 [transition:padding_300ms_cubic-bezier(0.19,0.8,0.12,1)] hover:pl-8 sm:py-7"
+            className="grid grid-cols-[--spacing(44)_minmax(0,1fr)_auto] items-center gap-x-14 py-9 [transition:padding_300ms_cubic-bezier(0.19,0.8,0.12,1)] hover:pl-8 sm:py-7"
           >
             {track.cover ? (
               <Image
