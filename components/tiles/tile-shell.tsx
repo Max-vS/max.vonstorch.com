@@ -181,7 +181,10 @@ export function TileShell({
         {master ? <MasterBlock at={master} onPaint={paint} /> : null}
         <TitleBlock page={page} away={titleAway} />
         <Panel>
-          <main className="flex flex-col gap-10 sm:gap-14">{children}</main>
+          {/* min-h-0 lets the content give way instead of pushing the nav below, so the nav stays at the same place on every page. */}
+          <main className="flex min-h-0 flex-col gap-10 overflow-hidden sm:gap-14">
+            {children}
+          </main>
           <div className="mt-auto flex flex-col gap-10">
             {changeable ? (
               <PatternIndicator
