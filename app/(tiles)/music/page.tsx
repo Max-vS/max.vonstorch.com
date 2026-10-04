@@ -17,7 +17,7 @@ export default async function MusicPage() {
             href={track.url}
             target="_blank"
             rel="noopener"
-            className="grid grid-cols-[--spacing(44)_minmax(0,1fr)_auto] items-center gap-x-14 py-9 [transition:padding_300ms_cubic-bezier(0.19,0.8,0.12,1)] hover:pl-8 sm:py-7"
+            className="grid grid-cols-[--spacing(44)_minmax(0,1fr)] items-center gap-x-14 py-9 [transition:padding_300ms_cubic-bezier(0.19,0.8,0.12,1)] hover:pl-8 sm:py-7"
           >
             {track.cover ? (
               <Image
@@ -31,19 +31,14 @@ export default async function MusicPage() {
             ) : (
               <span className="size-44 bg-ink" />
             )}
-            <span className="flex min-w-0 flex-col gap-2">
-              <span className="truncate font-semibold text-[length:--spacing(15)] sm:text-[length:--spacing(18)]">
+            {/* Trimmed to cap height and baseline, so centering leaves the same space above the title and below the artist; clipped only sideways, because the trim would cut off descenders. */}
+            <span className="flex min-w-0 flex-col gap-10 sm:gap-13 [&>*]:[text-box:trim-both_cap_alphabetic]">
+              <span className="overflow-x-clip text-ellipsis whitespace-nowrap font-semibold text-[length:--spacing(15)] sm:text-[length:--spacing(18)]">
                 {track.title}
               </span>
-              <span className="truncate text-[length:--spacing(12)] text-muted sm:text-[length:--spacing(14)]">
+              <span className="overflow-x-clip text-ellipsis whitespace-nowrap text-[length:--spacing(12)] text-muted sm:text-[length:--spacing(14)]">
                 {track.artist}
               </span>
-            </span>
-            <span
-              aria-hidden="true"
-              className="font-mono text-[length:--spacing(10)] text-muted sm:text-[length:--spacing(11)]"
-            >
-              ↗
             </span>
           </a>
         </li>
