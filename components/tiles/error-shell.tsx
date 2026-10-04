@@ -1,9 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import type { ReactNode } from "react";
-import { textLinkVariants } from "@/components/ui/text-link";
-import { errors } from "@/content/site";
 import { PageNav } from "./page-nav";
 import { Panel } from "./panel";
 import { TitleBlock } from "./title-block";
@@ -27,9 +24,6 @@ export function ErrorShell({
       <Panel>
         <main className="flex flex-col items-start gap-10 sm:gap-14">
           {children}
-          <Link href="/" className={textLinkVariants({ variant: "action" })}>
-            {errors.home}
-          </Link>
         </main>
         <div className="mt-auto">
           <PageNav />

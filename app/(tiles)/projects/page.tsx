@@ -8,13 +8,10 @@ export const metadata = pageMetadata(pages.projects);
 
 export default function ProjectsPage() {
   return (
-    <>
-      <PanelText>
-        {projects.body} <PanelLinks links={projects.sideProjects} />.
-      </PanelText>
-      <TextLink href={projects.dryft.href} variant="action">
-        {projects.dryft.label}
-      </TextLink>
-    </>
+    <PanelText>
+      {projects.role}{" "}
+      <TextLink href={projects.dryft.href}>{projects.dryft.label}</TextLink>,{" "}
+      {projects.work} <PanelLinks links={projects.sideProjects} />.
+    </PanelText>
   );
 }

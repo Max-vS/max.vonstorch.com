@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { textLinkVariants } from "@/components/ui/text-link";
+import { PanelText } from "@/components/tiles/panel-text";
+import { textLinkStyle } from "@/components/ui/text-link";
 import { PostLink } from "@/components/writing/post-link";
 import { pages, writing } from "@/content/site";
 import { getPosts } from "@/content/writing";
@@ -30,12 +31,11 @@ export default function WritingPage() {
             </li>
           ))}
       </ul>
-      <Link
-        href="/writing/archive"
-        className={textLinkVariants({ variant: "action" })}
-      >
-        {writing.allPosts}
-      </Link>
+      <PanelText>
+        <Link href="/writing/archive" className={textLinkStyle}>
+          {writing.allPosts}
+        </Link>
+      </PanelText>
     </>
   );
 }

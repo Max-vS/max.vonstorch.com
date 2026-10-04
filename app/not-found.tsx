@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PanelText } from "@/components/tiles/panel-text";
 import { TileShell } from "@/components/tiles/tile-shell";
-import { textLinkVariants } from "@/components/ui/text-link";
+import { textLinkStyle } from "@/components/ui/text-link";
 import { errors } from "@/content/site";
 
 export const metadata: Metadata = { title: errors.notFound.title };
@@ -11,10 +11,13 @@ export const metadata: Metadata = { title: errors.notFound.title };
 export default function NotFound() {
   return (
     <TileShell page={{ id: "notFound", ...errors.notFound }}>
-      <PanelText>{errors.notFound.body}</PanelText>
-      <Link href="/" className={textLinkVariants({ variant: "action" })}>
-        {errors.home}
-      </Link>
+      <PanelText>
+        {errors.notFound.body}{" "}
+        <Link href="/" className={textLinkStyle}>
+          {errors.home}
+        </Link>
+        .
+      </PanelText>
     </TileShell>
   );
 }

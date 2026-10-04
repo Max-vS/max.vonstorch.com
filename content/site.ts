@@ -97,13 +97,14 @@ export const education = {
 };
 
 export const projects = {
-  body: "Founding engineer at Dryft, building AI for manufacturing.",
+  role: "Founding engineer at",
+  dryft: { label: "Dryft", href: "https://dryft.ai" },
+  work: "building AI for manufacturing. Side projects:",
   sideProjects: [
     { label: "Rémi.fr", href: "https://www.xn--rmi-bma.fr/" },
     { label: "OpenEU", href: "https://openeu.csee.tech/" },
     { label: "curava", href: "https://www.curava.eu/" },
   ],
-  dryft: { label: "dryft.ai ↗", href: "https://dryft.ai" },
 };
 
 export const writing = {
@@ -205,5 +206,5 @@ export const errors = {
   },
   postNotFound: "Post not found",
   retry: "Try again",
-  home: "Back to the index →",
+  home: "Back to the index",
 };
