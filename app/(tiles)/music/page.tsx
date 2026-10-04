@@ -32,7 +32,7 @@ export default async function MusicPage() {
               <span className="size-44 bg-ink" />
             )}
             {/* Trimmed to cap height and baseline, so centering leaves the same space above the title and below the artist; clipped only sideways, because the trim would cut off descenders. */}
-            <span className="flex min-w-0 flex-col gap-10 sm:gap-13 [&>*]:[text-box:trim-both_cap_alphabetic]">
+            <span className="flex min-w-0 flex-col gap-7 sm:gap-9 [&>*]:[text-box:trim-both_cap_alphabetic]">
               <span className="overflow-x-clip text-ellipsis whitespace-nowrap font-semibold text-[length:--spacing(15)] sm:text-[length:--spacing(18)]">
                 {track.title}
               </span>
