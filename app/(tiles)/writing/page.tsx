@@ -1,5 +1,5 @@
+import { cn } from "cn";
 import Link from "next/link";
-import { PanelText } from "@/components/tiles/panel-text";
 import { textLinkStyle } from "@/components/ui/text-link";
 import { PostLink } from "@/components/writing/post-link";
 import { pages, writing } from "@/content/site";
@@ -31,11 +31,16 @@ export default function WritingPage() {
             </li>
           ))}
       </ul>
-      <PanelText>
-        <Link href="/writing/archive" className={textLinkStyle}>
-          {writing.allPosts}
-        </Link>
-      </PanelText>
+      {/* Small and mono like the design's controls, because it moves through the panel's own content rather than pointing elsewhere. */}
+      <Link
+        href="/writing/archive"
+        className={cn(
+          textLinkStyle,
+          "self-start font-mono text-[length:--spacing(11)] tracking-[0.02em] sm:text-[length:--spacing(13)]",
+        )}
+      >
+        {writing.allPosts}
+      </Link>
     </>
   );
 }
