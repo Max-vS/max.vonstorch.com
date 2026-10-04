@@ -472,7 +472,10 @@ These decisions were made while building. They replace the matching parts of the
 | Titles | H1 size = `min(design size, 100cqi / 4.7)`; mobile page titles are 61.5 design px | 68 px | "Community" must fit the mobile title block |
 | Grey text | `#6B665E` | `#8A857C` | 4.5:1 contrast |
 | Community (§9) | The browser keeps only the visitor's last own mark; more marks load from `/api/marks/[page]`; pages drive the grid through `useTileScene`; on a small desktop window without a free 4×4 area the title block also slides away | — | Simpler state; one small typed channel between pages and the shell |
-| Unknown post slug | Reading-style "Post not found" (status 200, `noindex`) | tile-style 404 | Next renders it inside the reading layout |
+| Unknown post slug | The tile 404 page | reading-style "Post not found" | The article now lives in the tile shell |
+| Writing (design update, Oct 2026) | `/writing` card (3 newest), `/writing/archive` list of all posts, `/writing/[slug]` article, all in the tile shell. The panel grows (list: full height; article: up to the title block; mobile: full width below the title block) with a 750 ms CSS transition; new content fades in after 300 ms. On an article the post title is the H1 | plain reading layout, "All posts" page | Owner's Claude Design; every view keeps its own URL for links, sharing and search |
+| Post data | One kind of post, no types or filters; read time from `remark-reading-time` | the design's Essay / Note / Blog types and filters | Owner decision; Turbopack's `?raw` import returns the compiled MDX, not the text |
+| Article styles | A `post-body` utility in `globals.css`; Shiki with `github-light` only and the design's sage code background (`colorReplacements`) | `@tailwindcss/typography`, light and dark Shiki themes | Matches the design; the site has no dark mode |
 | Analytics | `@vercel/analytics` 2.x, plain `<Analytics />` | — | As in §17 |
 | Tests | None; checks are Biome, the type check, the build and manual browser checks | — | Owner decision |
 

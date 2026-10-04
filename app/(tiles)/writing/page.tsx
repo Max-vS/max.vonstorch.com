@@ -1,7 +1,6 @@
-import { cn } from "cn";
 import Link from "next/link";
-import { textLinkStyle } from "@/components/ui/text-link";
 import { PostLink } from "@/components/writing/post-link";
+import { PostMeta } from "@/components/writing/post-meta";
 import { pages, writing } from "@/content/site";
 import { getPosts } from "@/content/writing";
 import { pageMetadata } from "@/lib/metadata";
@@ -10,7 +9,7 @@ export const metadata = pageMetadata({ ...pages.writing, feed: true });
 
 export default function WritingPage() {
   return (
-    <>
+    <div className="flex animate-panel-in flex-col gap-12 motion-reduce:animate-none">
       <ul className="flex flex-col border-ink border-t-[1.5px]">
         {getPosts()
           .slice(0, 3)
@@ -18,29 +17,24 @@ export default function WritingPage() {
             <li key={post.slug}>
               <PostLink
                 post={post}
-                className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-14 border-ink/18 border-b py-9 [transition:padding_300ms_cubic-bezier(0.19,0.8,0.12,1)] hover:pl-8 sm:py-11"
+                className="row-nudge flex flex-col items-start gap-3 border-ink/18 border-b py-7 sm:py-9"
               >
-                <span className="truncate font-semibold text-[length:--spacing(15)] sm:text-[length:--spacing(18)]">
+                <PostMeta post={post} />
+                <span className="max-w-full truncate font-semibold text-[length:--spacing(16)] tracking-[-0.01em] sm:text-[length:--spacing(18)]">
                   {post.title}
-                </span>
-                <span className="font-mono text-[length:--spacing(10)] text-muted sm:text-[length:--spacing(11)]">
-                  <time dateTime={post.date}>{post.date}</time>
                   {post.url ? " ↗" : null}
                 </span>
               </PostLink>
             </li>
           ))}
       </ul>
-      {/* Small and mono like the design's controls, because it moves through the panel's own content rather than pointing elsewhere. */}
+      {/* Small and mono like the design's controls, because it opens the panel rather than pointing elsewhere. */}
       <Link
         href="/writing/archive"
-        className={cn(
-          textLinkStyle,
-          "self-start font-mono text-[length:--spacing(11)] tracking-[0.02em] sm:text-[length:--spacing(13)]",
-        )}
+        className="inline-flex min-h-32 items-center self-start font-mono text-[length:--spacing(12)] tracking-[0.02em] underline underline-offset-4 hover:opacity-60 sm:text-[length:--spacing(13)]"
       >
-        {writing.allPosts}
+        {writing.allWriting}
       </Link>
-    </>
+    </div>
   );
 }

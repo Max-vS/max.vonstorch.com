@@ -19,11 +19,15 @@ const postSchema = z.strictObject({
   url: z.httpUrl().optional(),
 });
 
-export type Post = z.infer<typeof postSchema> & { Body: MDXContent };
+export type Post = z.infer<typeof postSchema> & {
+  Body: MDXContent;
+  minutes: number;
+};
 
 type PostModule = {
   default: MDXContent;
   frontmatter?: Record<string, unknown>;
+  readingTime: { minutes: number };
 };
 
 // The glob stays in content/, because Next.js 16.3.6 silently matches nothing for "../" patterns.
@@ -32,7 +36,7 @@ const modules = import.meta.glob("./writing/*.mdx", {
 }) as Record<string, PostModule>;
 
 const posts: Post[] = Object.entries(modules)
-  .map(([path, { default: Body, frontmatter }]) => {
+  .map(([path, { default: Body, frontmatter, readingTime }]) => {
     const slug = path.slice(path.lastIndexOf("/") + 1, -".mdx".length);
     const result = postSchema.safeParse({ ...frontmatter, slug });
     if (!result.success) {
@@ -40,7 +44,8 @@ const posts: Post[] = Object.entries(modules)
         `Invalid post content/writing/${slug}.mdx:\n${z.prettifyError(result.error)}`,
       );
     }
-    return { ...result.data, Body };
+    const minutes = Math.max(1, Math.round(readingTime.minutes));
+    return { ...result.data, Body, minutes };
   })
   .sort((a, b) => b.date.localeCompare(a.date));
 

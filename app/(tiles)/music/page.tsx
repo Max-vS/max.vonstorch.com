@@ -19,7 +19,7 @@ export default async function MusicPage() {
               href={track.url}
               target="_blank"
               rel="noopener"
-              className="grid grid-cols-[--spacing(44)_minmax(0,1fr)] items-center gap-x-14 py-4 [transition:padding_300ms_cubic-bezier(0.19,0.8,0.12,1)] hover:pl-8 sm:py-6"
+              className="row-nudge grid grid-cols-[--spacing(44)_minmax(0,1fr)] items-center gap-x-14 py-4 sm:py-6"
             >
               {track.cover ? (
                 <Image

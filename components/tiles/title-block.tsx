@@ -5,9 +5,18 @@ import type { SceneId } from "@/lib/tiles/types";
 
 export type TitlePage = Pick<SitePage, "kicker" | "title"> & { id: SceneId };
 
-/** `away` slides the block up and out, to free the tiles behind it. */
-export function TitleBlock({ page, away }: { page: TitlePage; away: boolean }) {
+/** `away` slides the block up and out, to free the tiles behind it; `heading` false leaves the page's H1 to its content. */
+export function TitleBlock({
+  page,
+  away,
+  heading = true,
+}: {
+  page: TitlePage;
+  away: boolean;
+  heading?: boolean;
+}) {
   const colors = titleColors[page.id];
+  const Title = heading ? "h1" : "p";
   return (
     <header
       className={cn(
@@ -21,7 +30,7 @@ export function TitleBlock({ page, away }: { page: TitlePage; away: boolean }) {
           {page.kicker}
         </p>
       ) : null}
-      <h1
+      <Title
         className={cn(
           "font-bold",
           // The cap is the block width ÷ 4.7, because "Community", the widest title, is 4.65 em.
@@ -31,7 +40,7 @@ export function TitleBlock({ page, away }: { page: TitlePage; away: boolean }) {
         )}
       >
         {page.title}
-      </h1>
+      </Title>
     </header>
   );
 }

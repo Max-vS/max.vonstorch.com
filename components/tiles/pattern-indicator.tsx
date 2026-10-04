@@ -12,7 +12,9 @@ export function PatternIndicator({
   hint,
   live,
   ticks,
+  className,
 }: {
+  className?: string;
   label: string;
   hint: keyof typeof HINTS;
   live: boolean;
@@ -24,7 +26,12 @@ export function PatternIndicator({
 }) {
   return (
     // Sits in the panel on mobile; on desktop it is pinned to the bottom-left cells, as in the design.
-    <div className="flex items-center gap-10 sm:fixed sm:bottom-0 sm:left-0 sm:h-(--tile) sm:w-(--indicator-width) sm:gap-16 sm:bg-ground sm:px-30">
+    <div
+      className={cn(
+        "flex items-center gap-10 sm:fixed sm:bottom-0 sm:left-0 sm:h-(--tile) sm:w-(--indicator-width) sm:gap-16 sm:bg-ground sm:px-30",
+        className,
+      )}
+    >
       {ticks ? (
         <div className="flex flex-col gap-3 sm:gap-4">
           {ticks.names.map((name, index) => (

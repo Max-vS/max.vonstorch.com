@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { JsonLd } from "@/components/json-ld";
+import { PanelControl } from "@/components/writing/panel-control";
+import { PostMeta } from "@/components/writing/post-meta";
+import { writing } from "@/content/site";
 import { getLocalPosts, getPost } from "@/content/writing";
 import { pageMetadata, SITE_NAME, SITE_URL } from "@/lib/metadata";
 
@@ -51,19 +54,24 @@ function Post({ slug }: { slug: string }) {
   };
 
   return (
-    <article>
-      <header className="mb-10 flex flex-col gap-3">
-        <h1 className="text-balance font-bold text-4xl leading-tight tracking-tight sm:text-5xl">
+    <div className="flex min-h-0 flex-1 animate-panel-in flex-col gap-12 motion-reduce:animate-none">
+      <div className="flex items-center justify-between">
+        <PanelControl href="/writing/archive">{writing.back}</PanelControl>
+        <PanelControl href="/writing">{writing.close}</PanelControl>
+      </div>
+      <article className="flex min-h-0 flex-1 flex-col gap-14 overflow-y-auto border-ink border-t-[1.5px] pt-6 pr-6 pb-24 sm:gap-16 sm:pr-14">
+        <PostMeta post={post} minutes="long" className="mt-10 text-forest" />
+        <h1 className="text-balance font-bold text-[length:--spacing(32)] leading-[0.98] tracking-[-0.035em] sm:text-[length:--spacing(44)]">
           {post.title}
         </h1>
-        <time dateTime={post.date} className="font-mono text-muted text-sm">
-          {post.date}
-        </time>
-      </header>
-      <div className="prose prose-site sm:prose-lg">
-        <post.Body />
-      </div>
+        <p className="mb-14 font-medium text-[length:--spacing(17)] text-lede leading-[1.35] sm:mb-16 sm:text-[length:--spacing(19)]">
+          {post.summary}
+        </p>
+        <div className="post-body contents">
+          <post.Body />
+        </div>
+      </article>
       <JsonLd data={jsonLd} />
-    </article>
+    </div>
   );
 }

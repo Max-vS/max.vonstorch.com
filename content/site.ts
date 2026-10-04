@@ -108,11 +108,16 @@ export const projects = {
 };
 
 export const writing = {
-  allPosts: "All posts →",
+  allWriting: "All writing ↑",
+  close: "Close ↓",
+  back: "← All writing",
   archive: {
-    title: "All posts",
-    description: "All notes and essays by Max von Storch, newest first.",
+    title: "All writing",
+    description: "All writing by Max von Storch, newest first.",
   },
+  count: (n: number) => `All writing · ${n}`,
+  minutes: (n: number) => `${n} min`,
+  readTime: (n: number) => `${n} min read`,
   feedTitle: "Writing | Max von Storch",
 };
 
@@ -204,7 +209,6 @@ export const errors = {
     title: "Error",
     body: "This page could not load.",
   },
-  postNotFound: "Post not found",
   retry: "Try again",
   home: "Back to the index",
 };

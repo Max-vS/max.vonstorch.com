@@ -1,6 +1,6 @@
 # max.vonstorch.com
 
-The personal site of Max von Storch: one screen of Bauhaus tiles with eight pages (Index, Education, Projects, Writing, Music, CV, Contact, Community), articles in a plain reading layout, a community wall of visitor marks that the owner approves, and the owner's top Spotify tracks.
+The personal site of Max von Storch: one screen of Bauhaus tiles with eight pages (Index, Education, Projects, Writing, Music, CV, Contact, Community), articles that open in the Writing panel, a community wall of visitor marks that the owner approves, and the owner's top Spotify tracks.
 
 Design spec: `docs/superpowers/specs/2026-09-27-tile-site-design.md`. Design files: `docs/design/tile-system/`.
 
@@ -42,7 +42,7 @@ Locally, the database is the Neon `dev` branch of `personal-db` (pooled and dire
 ## Editing content
 
 - **Texts and links:** `content/site.ts`. Every page text, kicker and link lives there.
-- **Posts:** one `content/writing/<slug>.mdx` per post, with frontmatter `title`, `date` (`YYYY-MM-DD`), `summary`, optional `updated`, and optional `url` for a post on another site (listed and linked, no page here). A wrong field fails the build. The slugs `archive` and `feed.xml` are taken. Keep at least one local post.
+- **Posts:** one `content/writing/<slug>.mdx` per post, with frontmatter `title`, `date` (`YYYY-MM-DD`), `summary` (the lede), optional `updated`, and optional `url` for a post on another site (listed and linked, no page here). A wrong field fails the build. The slugs `archive` and `feed.xml` are taken. Keep at least one local post.
 - **CV:** put the file at `public/cv.pdf` and set the month in `cv.download.updated` in `content/site.ts`. The download button shows only while the file exists.
 - **Favicons:** `bun scripts/make-icons.ts` writes `app/favicon.ico`, `app/icon.png` and `app/apple-icon.png`; commit them.
 

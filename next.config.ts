@@ -32,14 +32,18 @@ const withMDX = createMDX({
       "remark-gfm",
       "remark-frontmatter",
       "remark-mdx-frontmatter",
+      // Exports `readingTime` from each post; the second plugin must follow the first.
+      "remark-reading-time",
+      "remark-reading-time/mdx",
     ],
     rehypePlugins: [
       [
         "@shikijs/rehype",
         {
-          themes: { light: "github-light", dark: "github-dark" },
-          defaultColor: "light-dark()",
-          // Without a language a block would skip Shiki and get the prose colors instead of the theme.
+          theme: "github-light",
+          // The design's sage code background in place of the theme's white; the site has no dark mode.
+          colorReplacements: { "#fff": "#dce4d6" },
+          // Without a language a block would skip Shiki and get the page colors instead of the theme.
           defaultLanguage: "text",
         },
       ],

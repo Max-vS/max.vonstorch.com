@@ -10,7 +10,7 @@ import { randomSeed } from "@/lib/tiles/random";
 import type { Cell, Grid, SceneId, Tile } from "@/lib/tiles/types";
 import { MasterBlock } from "./master-block";
 import { PageNav } from "./page-nav";
-import { Panel } from "./panel";
+import { Panel, type PanelSize } from "./panel";
 import { PatternIndicator } from "./pattern-indicator";
 import { TileGrid } from "./tile-grid";
 import { type TileScene, TileSceneContext } from "./tile-scene";
@@ -27,6 +27,12 @@ function cornerCell(corner: Corner, grid: Grid): Cell {
     : { row: grid.rows - 1, col: grid.cols - 1 };
 }
 
+// Writing grows the panel: the full list beside the title block, and an article up to it.
+function panelSize(pathname: string): PanelSize {
+  if (pathname === "/writing/archive") return "list";
+  return pathname.startsWith("/writing/") ? "article" : "small";
+}
+
 // Spec §9: a painted motif starts at the master block, a browsed one at the first full cell.
 function motifOrigin(grid: Grid, master: Cell | null): Cell {
   return master ?? { row: grid.firstFullRow, col: grid.firstFullCol };
@@ -41,11 +47,14 @@ export function TileShell({
   children: ReactNode;
 }) {
   const pathname = usePathname();
-  // Every route of the (tiles) group is in `pages`; the fallback only satisfies the type.
+  // Every route of the (tiles) group is a page or below one (/writing/…); the fallback only satisfies the type.
   const page: TitlePage =
     fixedPage ??
-    Object.values(pages).find(({ path }) => path === pathname) ??
+    Object.values(pages).find(
+      ({ path }) => path === pathname || pathname.startsWith(`${path}/`),
+    ) ??
     pages.index;
+  const size = fixedPage ? "small" : panelSize(pathname);
   const [view, setView] = useState<View>({
     page: page.id,
     pattern: 0,
@@ -156,12 +165,13 @@ export function TileShell({
   const patterns = PATTERNS[view.page];
   // Community and the 404 page have one pattern, so there is nothing to change.
   const changeable = patterns.length > 1;
+  // An open Writing panel scrolls, so wheel and arrow keys stay with it.
   const input = usePatternInput({
     step,
     isBusy,
     enabled: scene
       ? scene.mode === "browse" && scene.step !== null
-      : changeable,
+      : changeable && size === "small",
   });
 
   return (
@@ -179,15 +189,19 @@ export function TileShell({
           onPaint={painting ? paintTile : undefined}
         />
         {master ? <MasterBlock at={master} onPaint={paint} /> : null}
-        <TitleBlock page={page} away={titleAway} />
-        <Panel>
+        {/* An article's own title is its page's H1. */}
+        <TitleBlock page={page} away={titleAway} heading={size !== "article"} />
+        <Panel size={size}>
           {/* min-h-0 lets the content give way instead of pushing the nav below, so the nav stays at the same place on every page. */}
-          <main className="flex min-h-0 flex-col gap-10 overflow-hidden sm:gap-14">
+          <main className="flex min-h-0 flex-1 flex-col gap-10 overflow-hidden sm:gap-14">
             {children}
           </main>
-          <div className="mt-auto flex flex-col gap-10">
+          {/* As wide as the small panel's content, at its right edge, also when the panel grows. */}
+          <div className="flex w-(--spacing(289)) shrink-0 flex-col gap-10 self-end sm:w-(--spacing(390))">
             {changeable ? (
               <PatternIndicator
+                // The design hides it on mobile while Writing is open; on desktop it sits outside the panel.
+                className={size === "small" ? undefined : "max-sm:hidden"}
                 label={patterns[view.pattern].name}
                 hint="change"
                 live

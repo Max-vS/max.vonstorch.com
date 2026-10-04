@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
 /* The design files and notes in docs/ are full of class-like words that would end up in the CSS. */
 @source not "../docs";
@@ -16,6 +15,17 @@
   --color-danger: #c0392b;
   --ease-flip: cubic-bezier(0.5, 0, 0.5, 1);
   --ease-turn: cubic-bezier(0.65, 0, 0.25, 1);
+  --color-forest: #33503a;
+  --color-lede: #5e5a53;
+  /* New Writing content waits 300 ms for the panel to grow, then rises into place. */
+  --animate-panel-in: panel-in 500ms cubic-bezier(0.2, 0.7, 0.2, 1) 300ms both;
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      translate: 0 10px;
+    }
+  }
   /* In px like the grid switch in lib/tiles/grid.ts, so CSS and JS change layout at the same width. */
   --breakpoint-sm: 640px;
 }
@@ -35,30 +45,90 @@
   }
 }
 
-/* Goes next to `prose` and swaps the typography plugin's gray palette for the site's colors and fonts. */
-@utility prose-site {
-  --tw-prose-body: var(--color-ink);
-  --tw-prose-headings: var(--color-ink);
-  --tw-prose-lead: var(--color-muted);
-  --tw-prose-links: var(--color-ink);
-  --tw-prose-bold: var(--color-ink);
-  --tw-prose-counters: var(--color-muted);
-  --tw-prose-bullets: var(--color-muted);
-  --tw-prose-hr: --alpha(var(--color-ink) / 18%);
-  --tw-prose-quotes: var(--color-ink);
-  --tw-prose-quote-borders: --alpha(var(--color-ink) / 18%);
-  --tw-prose-captions: var(--color-muted);
-  --tw-prose-kbd: var(--color-ink);
-  --tw-prose-kbd-shadows: --alpha(var(--color-ink) / 10%);
-  --tw-prose-code: var(--color-ink);
-  --tw-prose-th-borders: --alpha(var(--color-ink) / 25%);
-  --tw-prose-td-borders: --alpha(var(--color-ink) / 18%);
+/* A list row that moves aside under the pointer, as the design's rows do. */
+@utility row-nudge {
+  transition: padding 300ms cubic-bezier(0.19, 0.8, 0.12, 1);
 
-  & :where(a) {
+  &:hover {
+    padding-left: --spacing(8);
+  }
+}
+
+/* An article in the Writing panel, as in the design; sizes are design pixels, so they scale with the tile. */
+@utility post-body {
+  & > p {
+    font-size: --spacing(16);
+    line-height: 1.6;
+  }
+  & > :is(h2, h3) {
+    margin-top: --spacing(14);
+    font-size: --spacing(20);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  & > ul {
+    display: flex;
+    flex-direction: column;
+    font-size: --spacing(16);
+    line-height: 1.6;
+  }
+  & > ul > li {
+    display: flex;
+    gap: --spacing(12);
+  }
+  & > ul > li::before {
+    content: "–";
+    color: var(--color-forest);
+  }
+  & > ol {
+    padding-left: --spacing(20);
+    list-style: decimal;
+    font-size: --spacing(16);
+    line-height: 1.6;
+  }
+  & > blockquote {
+    margin-block: --spacing(7);
+    padding-left: --spacing(24);
+    font-size: --spacing(20);
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-forest);
+  }
+  & > pre {
+    padding: --spacing(16) --spacing(18);
+    overflow-x: auto;
+    font-size: --spacing(11);
+    line-height: 1.65;
+  }
+  & :is(code, pre) {
+    font-family: var(--font-mono);
+  }
+  & a {
+    text-decoration: underline;
     text-underline-offset: 4px;
   }
+  & img {
+    max-width: 100%;
+    height: auto;
+  }
 
-  & :where(code, pre) {
-    @apply font-mono;
+  @variant sm {
+    & > :is(p, ul, ol) {
+      font-size: --spacing(17);
+    }
+    & > :is(h2, h3) {
+      margin-top: --spacing(16);
+      font-size: --spacing(22);
+    }
+    & > blockquote {
+      margin-block: --spacing(8);
+      padding-left: --spacing(25);
+      font-size: --spacing(24);
+    }
+    & > pre {
+      font-size: --spacing(12);
+    }
   }
 }

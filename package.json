@@ -35,6 +35,7 @@
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
     "remark-mdx-frontmatter": "^6.0.0",
+    "remark-reading-time": "^2.1.0",
     "server-only": "^0.0.1",
     "zod": "^4.6.5"
   },
@@ -42,7 +43,6 @@
     "@biomejs/biome": "2.5.14",
     "@next/env": "^16.3.6",
     "@tailwindcss/postcss": "^4.3.3",
-    "@tailwindcss/typography": "^0.5.20",
     "@types/mdx": "^2.0.14",
     "@types/node": "^24.19.0",
     "@types/pg": "^8.23.1",
