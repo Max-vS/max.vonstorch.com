@@ -1,15 +1,20 @@
-import { Fragment } from "react";
 import { TextLink } from "@/components/ui/text-link";
 
+/** The panel's outside links, in the design's mono link style. */
 export function PanelLinks({
   links,
 }: {
   links: readonly { label: string; href: string }[];
 }) {
-  return links.map((link, index) => (
-    <Fragment key={link.href}>
-      {index > 0 ? " · " : null}
-      <TextLink href={link.href}>{link.label}</TextLink>
-    </Fragment>
-  ));
+  return (
+    <ul className="flex flex-wrap gap-x-18 gap-y-8">
+      {links.map(({ label, href }) => (
+        <li key={href}>
+          <TextLink href={href} variant="action">
+            {label} ↗
+          </TextLink>
+        </li>
+      ))}
+    </ul>
+  );
 }
