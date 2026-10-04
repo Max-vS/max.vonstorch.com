@@ -7,9 +7,8 @@ export const metadata = pageMetadata(pages.education);
 
 export default function EducationPage() {
   return (
-    <>
-      <PanelText>{education.body}</PanelText>
-      <PanelLinks links={education.initiatives} />
-    </>
+    <PanelText>
+      {education.body} <PanelLinks links={education.initiatives} />.
+    </PanelText>
   );
 }

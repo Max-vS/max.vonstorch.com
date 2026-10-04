@@ -88,7 +88,7 @@ export const index = {
 };
 
 export const education = {
-  body: "Computer science at TU Munich, CSEE and UC Berkeley. Philosophy at HFPH. Active in student initiatives:",
+  body: "Computer science at TU Munich, CSEE and UC Berkeley. Philosophy at HFPH. Student initiatives:",
   initiatives: [
     { label: "TUM Speakers Series", href: "https://www.speakersseries.de/" },
     { label: "Sailsetters", href: "https://sailsetters.de/" },
@@ -96,17 +96,14 @@ export const education = {
   ],
 };
 
-const dryft = { label: "dryft.ai", href: "https://dryft.ai" };
-
 export const projects = {
-  body: "Founding engineer at Dryft, building AI for manufacturing, and a few side projects.",
-  links: [
-    dryft,
+  body: "Founding engineer at Dryft, building AI for manufacturing.",
+  sideProjects: [
     { label: "Rémi.fr", href: "https://www.xn--rmi-bma.fr/" },
     { label: "OpenEU", href: "https://openeu.csee.tech/" },
     { label: "curava", href: "https://www.curava.eu/" },
   ],
-  dryft,
+  dryft: { label: "dryft.ai ↗", href: "https://dryft.ai" },
 };
 
 export const writing = {
