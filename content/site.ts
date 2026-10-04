@@ -85,7 +85,7 @@ export const pages: Record<PageId, SitePage> = {
 };
 
 export const index = {
-  body: "Founding engineer at Dryft, building AI for manufacturing. Passionate about music, film, design, philosophy and building things people actually love to use.",
+  body: "Founding engineer at Dryft, building AI for manufacturing. Passionate about music, film, design, philosophy and building things people actually love to use. I believe in honesty, authenticity and creativity.",
 };
 
 export const education = {
