@@ -34,10 +34,10 @@ export const pages: Record<PageId, SitePage> = {
     id: "projects",
     path: "/projects",
     label: "Projects",
-    kicker: "Dryft & side projects",
+    kicker: "Side projects",
     title: "Projects",
     description:
-      "Dryft, where Max von Storch builds AI for manufacturing, and his side projects Rémi.fr, OpenEU and curava.",
+      "The side projects of Max von Storch: Rémi.fr, OpenEU and curava.",
   },
   writing: {
     id: "writing",
@@ -84,7 +84,9 @@ export const pages: Record<PageId, SitePage> = {
 };
 
 export const index = {
-  body: "Founding engineer at Dryft, building AI for manufacturing. Passionate about music, film, design, philosophy and building things people actually love to use.",
+  role: "Founding engineer at",
+  dryft: { label: "Dryft", href: "https://dryft.ai" },
+  rest: "building AI for manufacturing. Passionate about music, film, design, philosophy and building things people actually love to use.",
 };
 
 export const education = {
@@ -97,9 +99,7 @@ export const education = {
 };
 
 export const projects = {
-  role: "Founding engineer at",
-  dryft: { label: "Dryft", href: "https://dryft.ai" },
-  work: "building AI for manufacturing. Side projects:",
+  intro: "Side projects:",
   sideProjects: [
     { label: "Rémi.fr", href: "https://www.xn--rmi-bma.fr/" },
     { label: "OpenEU", href: "https://openeu.csee.tech/" },

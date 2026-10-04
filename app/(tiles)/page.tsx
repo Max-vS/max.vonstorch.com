@@ -1,6 +1,7 @@
 import { JsonLd } from "@/components/json-ld";
 import { PanelText } from "@/components/tiles/panel-text";
-import { contact, index, pages, projects } from "@/content/site";
+import { TextLink } from "@/components/ui/text-link";
+import { contact, index, pages } from "@/content/site";
 import { pageMetadata, SITE_NAME, SITE_URL } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
@@ -28,7 +29,7 @@ const jsonLd = {
         worksFor: {
           "@type": "Organization",
           name: "Dryft",
-          url: projects.dryft.href,
+          url: index.dryft.href,
         },
         alumniOf: {
           "@type": "CollegeOrUniversity",
@@ -46,7 +47,11 @@ const jsonLd = {
 export default function IndexPage() {
   return (
     <>
-      <PanelText>{index.body}</PanelText>
+      <PanelText>
+        {index.role}{" "}
+        <TextLink href={index.dryft.href}>{index.dryft.label}</TextLink>,{" "}
+        {index.rest}
+      </PanelText>
       <JsonLd data={jsonLd} />
     </>
   );
