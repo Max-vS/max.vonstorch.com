@@ -1,6 +1,6 @@
 import { JsonLd } from "@/components/json-ld";
 import { PanelText } from "@/components/tiles/panel-text";
-import { TextLink } from "@/components/ui/text-link";
+import { RichText } from "@/components/tiles/rich-text";
 import { contact, index, pages } from "@/content/site";
 import { pageMetadata, SITE_NAME, SITE_URL } from "@/lib/metadata";
 
@@ -48,9 +48,7 @@ export default function IndexPage() {
   return (
     <>
       <PanelText>
-        {index.role}{" "}
-        <TextLink href={index.dryft.href}>{index.dryft.label}</TextLink>,{" "}
-        {index.rest}
+        <RichText parts={index.body} />
       </PanelText>
       <JsonLd data={jsonLd} />
     </>

@@ -83,19 +83,39 @@ export const pages: Record<PageId, SitePage> = {
   },
 };
 
+export type Link = { label: string; href: string };
+/** Text with links inside it: plain strings and links, in reading order. */
+export type RichText = readonly (string | Link)[];
+
+const dryft = { label: "Dryft", href: "https://dryft.ai" };
+
 export const index = {
-  role: "Founding engineer at",
-  dryft: { label: "Dryft", href: "https://dryft.ai" },
-  rest: "building AI for manufacturing. Passionate about music, film, design, philosophy and building things people actually love to use.",
+  dryft,
+  body: [
+    "Founding engineer at ",
+    dryft,
+    ", building AI for manufacturing. Passionate about music, film, design, philosophy and building things people actually love to use.",
+  ] satisfies RichText,
 };
 
 export const education = {
-  body: "Computer science at TU Munich, CSEE and UC Berkeley. Philosophy at HFPH. Student initiatives:",
-  initiatives: [
+  body: [
+    "Computer science at ",
+    { label: "TU Munich", href: "https://www.tum.de/en/" },
+    ", ",
+    { label: "CSEE", href: "https://csee.tech/" },
+    " and ",
+    { label: "UC Berkeley", href: "https://www.berkeley.edu/" },
+    ", philosophy at ",
+    { label: "HFPH", href: "https://www.hfph.de/" },
+    ". I was part of the ",
     { label: "TUM Speakers Series", href: "https://www.speakersseries.de/" },
-    { label: "Sailsetters", href: "https://sailsetters.de/" },
+    " and of ",
     { label: "TUM.ai", href: "https://www.tum-ai.com/" },
-  ],
+    ", Europe's largest AI student initiative, and founded ",
+    { label: "Sailsetters", href: "https://sailsetters.de/" },
+    ".",
+  ] satisfies RichText,
 };
 
 export const projects = {
