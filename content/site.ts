@@ -117,6 +117,7 @@ export const writing = {
 };
 
 export const music = {
+  heading: "Top tracks this week",
   fallback: "Spotify is quiet right now.",
 };
 
