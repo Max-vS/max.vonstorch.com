@@ -1,0 +1,30 @@
+---
+title: "Notes on a grid of tiles"
+date: 2026-09-26
+summary: "Why this site is built from one rule, and how a pattern works."
+---
+
+This site is built from one rule: everything sits on a grid of square tiles. Each page picks its own palette and three patterns, and scrolling swaps one pattern for the next.
+
+## Why tiles
+
+A tile is small enough to animate cheaply and big enough to carry a shape. Repeat it and you get texture; rotate one and you get motion. The whole visual language comes from about forty shapes drawn in a 120-unit box.
+
+## How a pattern works
+
+A pattern is just a function from a grid position to a tile:
+
+```ts
+type Tile = { shape: string; rotation: number; bg: string; fg: string }
+
+const arcs = (row: number, col: number): Tile =>
+  ({ shape: 'qring', rotation: pick([0, 90, 180, 270]), bg: SAGE, fg: FOREST })
+```
+
+- The grid size is computed from the screen.
+- The title box and card are placed in whole tiles.
+- Patterns never know which page they are on.
+
+> Constraints are the fastest way to make something feel designed.
+
+Everything you read here is a plain Markdown file. Adding a post means adding a file.

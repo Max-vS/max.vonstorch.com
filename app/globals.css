@@ -56,6 +56,10 @@
 
 /* An article in the Writing panel, as in the design; sizes are design pixels, so they scale with the tile. */
 @utility post-body {
+  /* The article scrolls, so its blocks keep their height; a code block, which scrolls sideways, would otherwise shrink to nothing. */
+  & > * {
+    flex-shrink: 0;
+  }
   & > p {
     font-size: --spacing(16);
     line-height: 1.6;

@@ -81,5 +81,5 @@ Accounts and settings for the owner, in order.
 14. **Content still open:**
     - X handle: set `X_PROFILE_URL_TODO` in `content/site.ts`; Contact and the home page's structured data pick it up.
     - CV: `public/cv.pdf` and its month.
-    - Real posts to replace `content/writing/sample-post.mdx`.
+    - More posts in `content/writing/` (one MDX file each).
     - Optional: a real photo for the structured data (`Person.image`).
