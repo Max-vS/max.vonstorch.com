@@ -43,7 +43,7 @@ export const musicColors = {
   rust: "#9C3A12",
 };
 
-export const cvColors = {
+export const linksColors = {
   chartreuse: "#C7F03A",
   black: "#111111",
   paper: "#F6EFE3",
@@ -71,7 +71,7 @@ export const titleColors: Record<SceneId, { bg: string; fg: string }> = {
   projects: { bg: dryftColors.blue, fg: "#FFFFFF" },
   writing: { bg: writingColors.forest, fg: writingColors.ground },
   music: { bg: musicColors.tangerine, fg: musicColors.ink },
-  cv: { bg: cvColors.chartreuse, fg: cvColors.black },
+  links: { bg: linksColors.chartreuse, fg: linksColors.black },
   contact: { bg: contactColors.terracotta, fg: contactColors.ink },
   // Neutral like Index, so the visitors' marks carry the color.
   community: { bg: indexColors.ink, fg: indexColors.ground },

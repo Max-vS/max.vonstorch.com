@@ -7,7 +7,7 @@ export type PageId =
   | "projects"
   | "writing"
   | "music"
-  | "cv"
+  | "links"
   | "contact"
   | "community";
 

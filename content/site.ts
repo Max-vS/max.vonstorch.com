@@ -55,14 +55,13 @@ export const pages: Record<PageId, SitePage> = {
     title: "Music",
     description: "The tracks Max von Storch listens to most right now.",
   },
-  cv: {
-    id: "cv",
-    path: "/cv",
-    label: "CV",
-    kicker: "Résumé · one page",
-    title: "CV",
-    description:
-      "The résumé of Max von Storch: experience, education and skills on one page.",
+  links: {
+    id: "links",
+    path: "/links",
+    label: "Links",
+    kicker: "CV & things I like",
+    title: "Links",
+    description: "The CV of Max von Storch and links to things he likes.",
   },
   contact: {
     id: "contact",
@@ -151,14 +150,11 @@ export const music = {
   fallback: "Spotify is quiet right now.",
 };
 
-export const cv = {
-  body: "Experience, education and skills on one page.",
-  download: {
-    label: "DOWNLOAD CV · PDF ↓",
-    href: "/cv.pdf",
-    // TODO(owner): set the month together with public/cv.pdf (spec §8 checklist).
-    updated: "UPDATED [MONTH YYYY]",
-  },
+export const links: { cv: Link; liked: readonly Link[] } = {
+  // Listed first, once public/cv.pdf exists.
+  cv: { label: "CV", href: "/cv.pdf" },
+  // Links to things you like, in the order they show.
+  liked: [],
 };
 
 // TODO(owner): the X profile is still missing (spec §8 checklist); Contact lists it once this is set.

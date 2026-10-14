@@ -5,10 +5,10 @@ import {
 } from "@/components/share-image";
 import { pages } from "@/content/site";
 
-export const alt = shareImageAlt(pages.cv);
+export const alt = shareImageAlt(pages.links);
 export const size = shareImageSize;
 export const contentType = "image/png";
 
 export default function Image() {
-  return shareImage(pages.cv);
+  return shareImage(pages.links);
 }

@@ -2,10 +2,10 @@ import { panelRect } from "./grid";
 import { RIPPLE_PERIOD_MS } from "./motion";
 import {
   contactColors as contact,
-  cvColors as cv,
   dryftColors as dryft,
   educationColors as education,
   indexColors as index,
+  linksColors as links,
   musicColors as music,
   notFoundColors as notFound,
   writingColors as writing,
@@ -372,7 +372,7 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
       idle: false,
     },
   ],
-  cv: [
+  links: [
     {
       name: "Pinwheel",
       tile: (input) =>
@@ -380,12 +380,12 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
           const x = input.random();
           const [bg, fg] =
             x < 0.3
-              ? [cv.chartreuse, cv.black]
+              ? [links.chartreuse, links.black]
               : x < 0.5
-                ? [cv.black, cv.chartreuse]
+                ? [links.black, links.chartreuse]
                 : x < 0.75
-                  ? [cv.paper, cv.black]
-                  : [cv.white, cv.black];
+                  ? [links.paper, links.black]
+                  : [links.white, links.black];
           return { shape: "pin", rot: 0, bg, fg };
         }),
     },
@@ -396,10 +396,10 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
           const x = input.random();
           const [bg, fg] =
             x < 0.4
-              ? [cv.white, cv.black]
+              ? [links.white, links.black]
               : x < 0.7
-                ? [cv.chartreuse, cv.black]
-                : [cv.black, cv.chartreuse];
+                ? [links.chartreuse, links.black]
+                : [links.black, links.chartreuse];
           return { shape: "lshape", rot: 0, bg, fg };
         });
         return { ...block, rot: BLOCK_TURNS[input.row % 2][input.col % 2] };
@@ -410,8 +410,8 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
       tile: ({ random }) => ({
         shape: barsShape(random),
         rot: 0,
-        bg: random() < 0.5 ? cv.white : cv.paper,
-        fg: random() < 0.15 ? cv.chartreuse : cv.black,
+        bg: random() < 0.5 ? links.white : links.paper,
+        fg: random() < 0.15 ? links.chartreuse : links.black,
       }),
     },
   ],
