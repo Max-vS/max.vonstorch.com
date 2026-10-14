@@ -94,7 +94,7 @@ export const index = {
   body: [
     "Founding engineer at ",
     dryft,
-    ", building the autonomous factory. Passionate about music, film, design, philosophy and building things people actually love to use.",
+    ", building the autonomous factory. Passionate about systems design, music, film, philosophy and building things people actually love to use.",
   ] satisfies RichText,
 };
 
