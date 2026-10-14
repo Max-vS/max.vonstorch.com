@@ -143,7 +143,10 @@ export const writing = {
 export const music = {
   heading: [
     "Top tracks this week on ",
-    { label: "Spotify", href: "https://open.spotify.com/user/potatostudioz" },
+    {
+      label: "my Spotify",
+      href: "https://open.spotify.com/user/potatostudioz",
+    },
   ] satisfies RichText,
   fallback: "Spotify is quiet right now.",
 };
