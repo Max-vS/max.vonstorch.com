@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { PanelText } from "@/components/tiles/panel-text";
+import { RichText } from "@/components/tiles/rich-text";
 import { music, pages } from "@/content/site";
 import { pageMetadata } from "@/lib/metadata";
 import { getTopTracks } from "@/lib/queries/spotify";
@@ -11,7 +12,9 @@ export default async function MusicPage() {
   if (tracks.length === 0) return <PanelText>{music.fallback}</PanelText>;
   return (
     <>
-      <PanelText>{music.heading}</PanelText>
+      <PanelText>
+        <RichText parts={music.heading} />
+      </PanelText>
       <ul className="flex flex-col divide-y divide-ink/18">
         {tracks.map((track) => (
           <li key={track.url}>
