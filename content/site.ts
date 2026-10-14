@@ -154,7 +154,7 @@ export const links: { cv: Link; liked: readonly Link[] } = {
   // Listed first, once public/cv.pdf exists.
   cv: { label: "CV", href: "/cv.pdf" },
   // Links to things you like, in the order they show.
-  liked: [],
+  liked: [{ label: "isaacchacko.com", href: "https://isaacchacko.com/" }],
 };
 
 // TODO(owner): the X profile is still missing (spec §8 checklist); Contact lists it once this is set.
