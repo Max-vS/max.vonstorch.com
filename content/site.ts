@@ -19,7 +19,7 @@ export const pages: Record<PageId, SitePage> = {
     label: "Index",
     title: "Max von Storch",
     description:
-      "Max von Storch is a full-stack engineer, designer and founder. Founding engineer at Dryft in San Francisco, building AI for manufacturing.",
+      "Max von Storch is a full-stack engineer, designer and founder. Founding engineer at Dryft in San Francisco, building the autonomous factory.",
   },
   education: {
     id: "education",
@@ -94,7 +94,7 @@ export const index = {
   body: [
     "Founding engineer at ",
     dryft,
-    ", building AI for manufacturing. Passionate about music, film, design, philosophy and building things people actually love to use.",
+    ", building the autonomous factory. Passionate about music, film, design, philosophy and building things people actually love to use.",
   ] satisfies RichText,
 };
 
