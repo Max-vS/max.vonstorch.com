@@ -203,6 +203,15 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
   ],
   education: [
     {
+      name: "Ascent",
+      tile: ({ row, col }) => ({
+        shape: "tri",
+        rot: 0,
+        bg: cycle(EDUCATION_BANDS, row + col + 1),
+        fg: cycle(EDUCATION_BANDS, row + col),
+      }),
+    },
+    {
       name: "Waves",
       tile: ({ row, col }) => {
         const up = col % 2 === 1;
@@ -221,15 +230,6 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
         rot: random() < 0.5 ? 0 : 90,
         bg: education.ground,
         fg: education.ink,
-      }),
-    },
-    {
-      name: "Ascent",
-      tile: ({ row, col }) => ({
-        shape: "tri",
-        rot: 0,
-        bg: cycle(EDUCATION_BANDS, row + col + 1),
-        fg: cycle(EDUCATION_BANDS, row + col),
       }),
     },
   ],
@@ -334,6 +334,21 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
   ],
   music: [
     {
+      name: "Interference",
+      tile: (cell) => ({
+        ...interferenceColors(cell, 0),
+        shape: "dot",
+        rot: 0,
+        scale: 0.45,
+      }),
+      // Only a tile whose band changes gets a new object, so the other tiles skip the render.
+      animate: (tile, seconds) => {
+        const colors = interferenceColors(tile, seconds);
+        return colors.bg === tile.bg ? null : colors;
+      },
+      idle: false,
+    },
+    {
       name: "Records",
       tile: ({ random }) => {
         const bg = pick(random, [music.ground, music.ground, music.peach]);
@@ -356,39 +371,8 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
         return { shape: "offdot", rot, bg, fg };
       },
     },
-    {
-      name: "Interference",
-      tile: (cell) => ({
-        ...interferenceColors(cell, 0),
-        shape: "dot",
-        rot: 0,
-        scale: 0.45,
-      }),
-      // Only a tile whose band changes gets a new object, so the other tiles skip the render.
-      animate: (tile, seconds) => {
-        const colors = interferenceColors(tile, seconds);
-        return colors.bg === tile.bg ? null : colors;
-      },
-      idle: false,
-    },
   ],
   links: [
-    {
-      name: "Pinwheel",
-      tile: (input) =>
-        blockTile(input, () => {
-          const x = input.random();
-          const [bg, fg] =
-            x < 0.3
-              ? [links.chartreuse, links.black]
-              : x < 0.5
-                ? [links.black, links.chartreuse]
-                : x < 0.75
-                  ? [links.paper, links.black]
-                  : [links.white, links.black];
-          return { shape: "pin", rot: 0, bg, fg };
-        }),
-    },
     {
       name: "Blocks",
       tile: (input) => {
@@ -404,6 +388,22 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
         });
         return { ...block, rot: BLOCK_TURNS[input.row % 2][input.col % 2] };
       },
+    },
+    {
+      name: "Pinwheel",
+      tile: (input) =>
+        blockTile(input, () => {
+          const x = input.random();
+          const [bg, fg] =
+            x < 0.3
+              ? [links.chartreuse, links.black]
+              : x < 0.5
+                ? [links.black, links.chartreuse]
+                : x < 0.75
+                  ? [links.paper, links.black]
+                  : [links.white, links.black];
+          return { shape: "pin", rot: 0, bg, fg };
+        }),
     },
     {
       name: "Bars",
