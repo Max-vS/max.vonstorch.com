@@ -179,8 +179,7 @@ export function CommunityWall({ first }: { first: MarksPage }) {
               {thanked && !entry.date
                 ? community.thanks
                 : community.count(index + 1, count)}
-              {" · "}
-              {entry.date ?? community.waiting}
+              {entry.date ? ` · ${entry.date}` : null}
             </p>
             <p className="font-medium text-[length:--spacing(15)] leading-[1.3] sm:text-[length:--spacing(19)] sm:leading-[1.32]">
               “{entry.note}”

@@ -178,9 +178,8 @@ export const community = {
   loadError: "Marks cannot load right now.",
   start: "Leave your mark",
   // The design prints the date in mixed case, so these are not uppercased in CSS.
-  count: (n: number, total: number) => `MARK ${n} / ${total}`,
+  count: (n: number, total: number) => `${n} / ${total}`,
   thanks: "THANK YOU",
-  waiting: "Waiting for approval",
   thanksStatus: "Thank you. Your mark is waiting for approval.",
   position: (n: number, total: number) => `Mark ${n} of ${total}`,
   anonymous: "Anonymous",
