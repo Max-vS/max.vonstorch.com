@@ -1,7 +1,13 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import {
+  type CSSProperties,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { pages } from "@/content/site";
 import { masterBlock, tileCells } from "@/lib/tiles/grid";
 import { buildMotif, motifIndex } from "@/lib/tiles/motif";
@@ -194,6 +200,19 @@ export function TileShell({
           <div
             aria-hidden="true"
             className="blueprint pointer-events-none absolute inset-0"
+          />
+        ) : null}
+        {/* Every tile paints, so the crosses show where each repeat of the pattern sits instead of outlining one block. */}
+        {master ? (
+          <div
+            aria-hidden="true"
+            className="motif-crosses pointer-events-none absolute inset-0"
+            style={
+              {
+                "--motif-row": master.row,
+                "--motif-col": master.col,
+              } as CSSProperties
+            }
           />
         ) : null}
         {master ? <MasterBlock at={master} onPaint={paint} /> : null}

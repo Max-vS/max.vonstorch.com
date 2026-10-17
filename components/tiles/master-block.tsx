@@ -43,7 +43,7 @@ export function MasterBlock({
     <div className="pointer-events-none absolute right-0 bottom-0 grid grid-cols-[repeat(var(--cols),var(--tile))] grid-rows-[repeat(var(--rows),var(--tile))]">
       <fieldset
         ref={group}
-        className="corner-marks pointer-events-auto grid grid-cols-2 grid-rows-2"
+        className="pointer-events-auto grid grid-cols-2 grid-rows-2"
         style={{
           gridRow: `${at.row + 1} / span ${MOTIF_SIDE}`,
           gridColumn: `${at.col + 1} / span ${MOTIF_SIDE}`,

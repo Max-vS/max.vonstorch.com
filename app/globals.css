@@ -56,19 +56,15 @@
   mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
 }
 
-/* Ink corner marks instead of a full outline, like crop marks on a print sheet. */
-@utility corner-marks {
-  --mark-length: calc(var(--tile) / 5);
-  --mark-ink: linear-gradient(var(--color-ink), var(--color-ink));
-  background:
-    var(--mark-ink) left top / var(--mark-length) 2px no-repeat,
-    var(--mark-ink) left top / 2px var(--mark-length) no-repeat,
-    var(--mark-ink) right top / var(--mark-length) 2px no-repeat,
-    var(--mark-ink) right top / 2px var(--mark-length) no-repeat,
-    var(--mark-ink) left bottom / var(--mark-length) 2px no-repeat,
-    var(--mark-ink) left bottom / 2px var(--mark-length) no-repeat,
-    var(--mark-ink) right bottom / var(--mark-length) 2px no-repeat,
-    var(--mark-ink) right bottom / 2px var(--mark-length) no-repeat;
+/* Crosses where four repeats of the 2×2 pattern meet; --motif-row and --motif-col are the cell where it starts. The SVG holds a quarter cross in each corner, so neighbouring repeats join them into whole crosses. */
+@utility motif-crosses {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cpath d='M0 0H14M0 0V14M240 0H226M240 0V14M0 240H14M0 240V226M240 240H226M240 240V226' fill='none' stroke='%231d1d1b' stroke-width='1.5' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  background-size: calc(2 * var(--tile)) calc(2 * var(--tile));
+  /* Measured from the bottom right like the tile grid: the image then ends on a pattern edge. */
+  background-position: right
+    calc((var(--cols) - var(--motif-col) - 2) * var(--tile)) bottom
+    calc((var(--rows) - var(--motif-row) - 2) * var(--tile));
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
 }
 
 /* A list row that moves aside under the pointer, as the design's rows do. */
