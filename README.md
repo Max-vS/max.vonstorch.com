@@ -1,6 +1,6 @@
 # max.vonstorch.com
 
-The personal site of Max von Storch: one screen of Bauhaus tiles with eight pages (Index, Education, Projects, Writing, Music, Links, Contact, Community), articles that open in the Writing panel, a community wall of visitor marks that the owner approves, and the owner's top Spotify tracks.
+The personal site of Max von Storch: one screen of Bauhaus tiles with eight pages (Index, Education, Projects, Writing, Music, Links, Contact, Community), articles that open in the Writing panel, a community wall of visitor patterns that the owner approves, and the owner's top Spotify tracks.
 
 Design spec: `docs/superpowers/specs/2026-09-27-tile-site-design.md`. Design files: `docs/design/tile-system/`.
 
@@ -31,7 +31,7 @@ bun run dev
 
 The dev server listens on http://127.0.0.1:3000, not `localhost`: Spotify accepts only HTTPS or `127.0.0.1` redirect URIs, and the auth cookies must live on the same host as the OAuth callbacks.
 
-Locally, the database is the Neon `dev` branch of `personal-db` (pooled and direct URL from the Neon console or the Neon MCP). It is a copy of production at the time it was made; reset it from `main` in Neon when you want fresh data. A production build needs the same env: `bun --env-file=.env.development.local run build`.
+Locally, the database is the Neon `dev` branch of `personal-db` (pooled and direct URL from the Neon console or the Neon MCP). Reset it from `main` in Neon when you want fresh data. A production build needs the same env: `bun --env-file=.env.development.local run build`.
 
 ## Scripts
 
@@ -52,40 +52,28 @@ Locally, the database is the Neon `dev` branch of `personal-db` (pooled and dire
 - **Links:** put your CV at `public/cv.pdf`; the Links page lists it first while the file exists. Add more links in `links.liked` in `content/site.ts`.
 - **Favicons:** `bun scripts/make-icons.ts` writes `app/favicon.ico`, `app/icon.png` and `app/apple-icon.png`; commit them.
 
-## Setup before launch
+## Deployment
 
-Accounts and settings for the owner, in order.
+`main` deploys to production; every other branch gets a preview. The build command in `vercel.json` runs the migrations first.
 
-1. **Neon:** add Neon from the Vercel Marketplace (Free plan, region `iad1` like the functions) for Production only (`vercel storage update personal-db -e production`). Neon Auth off, Preview branching off. Create a `dev` branch in Neon; Preview deployments and local development share it.
-2. **GitHub OAuth apps:** one app allows one callback URL, so create two:
-   - production: `https://max.vonstorch.com/api/auth/callback/github`
-   - local: `http://127.0.0.1:3000/api/auth/callback/github`
+| Variable | Production | Preview | Development |
+|---|---|---|---|
+| `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | Neon integration (`main` branch) | Neon `dev` branch, set by hand | Neon `dev` branch |
+| `BETTER_AUTH_SECRET` | `openssl rand -base64 32` | a different value | a different value |
+| `BETTER_AUTH_URL` | `https://max.vonstorch.com` | not set (taken from the request) | `http://127.0.0.1:3000` |
+| `OWNER_EMAIL` | your verified GitHub email | same | same |
+| `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | production app | production app | local app |
+| `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` | Spotify app | same | same |
+| `IP_HASH_SECRET` | `openssl rand -base64 32` | own value | own value |
 
-   Owner sign-in works only on production and locally, not on preview URLs.
-3. **Spotify app:** redirect URIs `https://max.vonstorch.com/api/auth/callback/spotify` and `http://127.0.0.1:3000/api/auth/callback/spotify`. The app owner needs Spotify Premium. After launch, connect Spotify on `/admin`; the link expires after 6 months, then use Reconnect.
-4. **Env vars** in Vercel (Development values go in `.env.development.local`):
+- A GitHub OAuth app allows one callback URL, so production (`https://max.vonstorch.com/api/auth/callback/github`) and local development (`http://127.0.0.1:3000/api/auth/callback/github`) each have their own app. Owner sign-in works only on production and locally, not on preview URLs.
+- The Spotify app lists both redirect URIs (`…/api/auth/callback/spotify` on both hosts); its owner needs Spotify Premium. The link expires after 6 months, then use Reconnect on `/admin`.
+- Vercel project: "Automatically expose System Environment Variables" on, Node.js 24.x, Web Analytics on. The old site is tagged `v1`.
 
-   | Variable | Production | Preview | Development |
-   |---|---|---|---|
-   | `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | Neon integration | Neon `dev` branch, set by hand (`vercel env add … preview --sensitive`) | Neon `dev` branch |
-   | `BETTER_AUTH_SECRET` | `openssl rand -base64 32` | a different value | a different value |
-   | `BETTER_AUTH_URL` | `https://max.vonstorch.com` | not set (taken from the request) | `http://127.0.0.1:3000` |
-   | `OWNER_EMAIL` | your verified GitHub email | same | same |
-   | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | production app | production app | local app |
-   | `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` | Spotify app | same | same |
-   | `IP_HASH_SECRET` | `openssl rand -base64 32` | own value | own value |
+## Still open
 
-5. **Vercel project settings:** turn on "Automatically expose System Environment Variables" (auth trusts only the deployment's own hosts). Reset the Install and Build Command overrides to the default; `vercel.json` sets the build command (migrations, then `next build`). Keep Node.js 24.x and Web Analytics on.
-6. **Git hooks:** after the merge, run `bunx lefthook install` once in the main checkout.
-7. **Tag the old site:** `git tag v1 origin/main && git push origin v1`.
-8. **Check the preview by hand:** admin gate (signed out, no admin page or action works), mark rate limit, BotID, text contrast.
-9. **Merge** `personal-website` into `main`. The production build runs the migrations.
-10. **Clean up:** delete the old Upstash and Blob stores and the env vars `KV_*`, `REDIS_URL`, `BLOB_READ_WRITE_TOKEN` and `SPOTIFY_REFRESH_TOKEN`.
-11. **Google Search Console:** add a Domain property for `vonstorch.com`, verified with a DNS TXT record at IONOS on the apex (`max` is a CNAME, so it cannot hold the TXT record). Submit `https://max.vonstorch.com/sitemap.xml`, then URL Inspection → Request indexing for `/` and `/writing`.
-12. **Bing Webmaster Tools:** import the site from Search Console.
-13. **Profile links:** set `https://max.vonstorch.com` as the website on GitHub, LinkedIn and X, with the same name "Max von Storch" everywhere.
-14. **Content still open:**
-    - X handle: set `X_PROFILE_URL_TODO` in `content/site.ts`; Contact and the home page's structured data pick it up.
-    - CV: `public/cv.pdf`.
-    - More posts in `content/writing/` (one MDX file each).
-    - Optional: a real photo for the structured data (`Person.image`).
+1. Sign in on `/admin` and connect Spotify.
+2. Vercel: delete the old Upstash KV and Blob stores; their env vars are already gone.
+3. Google Search Console: add a Domain property for `vonstorch.com`, verified with a DNS TXT record at IONOS on the apex (`max` is a CNAME, so it cannot hold the TXT record). Submit `https://max.vonstorch.com/sitemap.xml`, then URL Inspection → Request indexing for `/` and `/writing`. Then import the site into Bing Webmaster Tools.
+4. Profile links: set `https://max.vonstorch.com` as the website on GitHub, LinkedIn and X, with the same name "Max von Storch" everywhere.
+5. Content: the X handle (`X_PROFILE_URL_TODO` in `content/site.ts`), the CV at `public/cv.pdf`, more posts in `content/writing/`, and optionally a real photo for the structured data (`Person.image`).

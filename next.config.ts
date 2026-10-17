@@ -16,21 +16,29 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   typedRoutes: true,
   cacheComponents: true,
+  partialPrefetching: true,
   images: {
     remotePatterns: [{ protocol: "https", hostname: "i.scdn.co" }],
   },
   headers: async () => [{ source: "/:path*", headers: securityHeaders }],
-  redirects: async () =>
+  // GitHub and Spotify accept only 127.0.0.1 locally.
+  redirects: async () => [
     process.env.NODE_ENV === "development"
-      ? [
-          {
-            source: "/:path*",
-            has: [{ type: "host", value: "localhost" }],
-            destination: "http://127.0.0.1:3000/:path*",
-            permanent: false,
-          },
-        ]
-      : [],
+      ? {
+          source: "/:path*",
+          has: [{ type: "host", value: "localhost" }],
+          destination: "http://127.0.0.1:3000/:path*",
+          permanent: false,
+        }
+      : {
+          source: "/:path*",
+          has: [
+            { type: "host", value: "maxvonstorchcom(-.*)?\\.vercel\\.app" },
+          ],
+          destination: "https://max.vonstorch.com/:path*",
+          permanent: true,
+        },
+  ],
 };
 
 // Turbopack takes plugins only as package names with JSON options.
