@@ -173,19 +173,18 @@ export function CommunityWall({ first }: { first: MarksPage }) {
           <div
             aria-live="polite"
             aria-atomic="true"
-            className="flex flex-col gap-10 sm:gap-14"
+            className="flex flex-col gap-8 sm:gap-10"
           >
-            <p className="font-mono text-[length:--spacing(10)] text-muted tracking-[0.06em] sm:text-[length:--spacing(11)]">
-              {thanked && !entry.date
-                ? community.thanks
-                : community.count(index + 1, count)}
-              {entry.date ? ` · ${entry.date}` : null}
-            </p>
-            <p className="font-medium text-[length:--spacing(15)] leading-[1.3] sm:text-[length:--spacing(19)] sm:leading-[1.32]">
-              “{entry.note}”
-            </p>
+            {thanked && !entry.date ? (
+              <p className="font-mono text-[length:--spacing(10)] text-muted tracking-[0.06em] sm:text-[length:--spacing(11)]">
+                {community.thanks}
+              </p>
+            ) : null}
+            {/* The quote reads like the other pages' panel text; the position is in the pattern indicator, so only the name and date follow. */}
+            <PanelText>“{entry.note}”</PanelText>
             <p className="text-[length:--spacing(13)] text-muted sm:text-[length:--spacing(15)]">
               — {entry.name ?? community.anonymous}
+              {entry.date ? ` · ${entry.date}` : null}
             </p>
           </div>
           {start}

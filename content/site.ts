@@ -177,8 +177,6 @@ export const community = {
   empty: "Be the first to leave your pattern.",
   loadError: "Patterns cannot load right now.",
   start: "Leave your pattern",
-  // The design prints the date in mixed case, so these are not uppercased in CSS.
-  count: (n: number, total: number) => `${n} / ${total}`,
   thanks: "THANK YOU",
   thanksStatus: "Thank you. Your pattern is waiting for approval.",
   position: (n: number, total: number) => `Pattern ${n} of ${total}`,
