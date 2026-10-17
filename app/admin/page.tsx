@@ -73,7 +73,7 @@ async function Moderation({
 
       <MarkList
         title={`Pending · ${pending.length}`}
-        empty="No marks wait for approval."
+        empty="No patterns wait for approval."
       >
         {pending.map((mark) => (
           <MarkRow key={mark.id} mark={mark} date={mark.createdAt}>
@@ -89,7 +89,7 @@ async function Moderation({
 
       <MarkList
         title={`Approved · ${approved.total}`}
-        empty="No approved marks yet."
+        empty="No approved patterns yet."
       >
         {approved.marks.map((mark) => (
           <MarkRow key={mark.id} mark={mark} date={mark.approvedAt}>
@@ -102,7 +102,7 @@ async function Moderation({
 
       {pages > 1 ? (
         <nav
-          aria-label="Approved marks pages"
+          aria-label="Approved patterns pages"
           className="flex items-center justify-between gap-16"
         >
           {page > 1 ? (

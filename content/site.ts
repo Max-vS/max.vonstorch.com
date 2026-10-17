@@ -75,7 +75,7 @@ export const pages: Record<PageId, SitePage> = {
     id: "community",
     path: "/community",
     label: "Community",
-    kicker: "Leave your mark",
+    kicker: "Leave your pattern",
     title: "Community",
     description:
       "A wall of tile patterns that visitors left for Max von Storch.",
@@ -174,17 +174,17 @@ export const contact = {
 };
 
 export const community = {
-  empty: "Be the first to leave your mark.",
-  loadError: "Marks cannot load right now.",
-  start: "Leave your mark",
+  empty: "Be the first to leave your pattern.",
+  loadError: "Patterns cannot load right now.",
+  start: "Leave your pattern",
   // The design prints the date in mixed case, so these are not uppercased in CSS.
   count: (n: number, total: number) => `${n} / ${total}`,
   thanks: "THANK YOU",
-  thanksStatus: "Thank you. Your mark is waiting for approval.",
-  position: (n: number, total: number) => `Mark ${n} of ${total}`,
+  thanksStatus: "Thank you. Your pattern is waiting for approval.",
+  position: (n: number, total: number) => `Pattern ${n} of ${total}`,
   anonymous: "Anonymous",
-  yourMark: "Your mark",
-  paintArea: "Your mark, 4 by 4 tiles. Arrow keys move, Enter paints.",
+  yourMark: "Your pattern",
+  paintArea: "Your pattern, 4 by 4 tiles. Arrow keys move, Enter paints.",
   paintCell: (row: number, col: number) => `Row ${row}, column ${col}`,
   brush: {
     shape: "Shape",
@@ -215,12 +215,12 @@ export const community = {
   note: "Note",
   notePlaceholder: "Leave a note…",
   noteLeft: "characters left",
-  submit: "Submit mark",
+  submit: "Submit pattern",
   sending: "Sending…",
   cancel: "Cancel",
   // Spec §15: the same message for the rate limit and the pending cap; a bot learns nothing.
-  tooMany: "Too many marks right now. Try again later.",
-  failed: "Your mark could not be sent. Try again later.",
+  tooMany: "Too many patterns right now. Try again later.",
+  failed: "Your pattern could not be sent. Try again later.",
 };
 
 export const errors = {
