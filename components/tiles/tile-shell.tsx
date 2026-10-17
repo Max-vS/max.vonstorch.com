@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { usePathname } from "next/navigation";
 import {
   type CSSProperties,
@@ -223,8 +224,13 @@ export function TileShell({
         {/* An article's own title is its page's H1. */}
         <TitleBlock page={page} away={titleAway} heading={size !== "article"} />
         <Panel size={size}>
-          {/* min-h-0 lets the content give way instead of pushing the nav below, so the nav stays at the same place on every page. */}
-          <main className="flex min-h-0 flex-1 flex-col gap-10 overflow-hidden sm:gap-14">
+          {/* min-h-0 lets the content give way instead of pushing the nav below, so the nav stays at the same place on every page; in paint mode the panel fits the content instead. */}
+          <main
+            className={cn(
+              "flex min-h-0 flex-col gap-10 overflow-hidden sm:gap-14",
+              painting ? "shrink-0" : "flex-1",
+            )}
+          >
             {children}
           </main>
           <div className="flex shrink-0 flex-col gap-10">

@@ -121,7 +121,7 @@ export function MarkPainter({
     <form
       onSubmit={onSubmit}
       noValidate
-      className="flex flex-1 flex-col gap-8 sm:gap-10"
+      className="flex flex-col gap-8 sm:gap-10"
     >
       <BrushPicker brush={brush} onChange={changeBrush} />
       <Field>
@@ -149,7 +149,7 @@ export function MarkPainter({
             {community.note}
           </Label>
           <div className="relative min-w-0 flex-1">
-            {/* Starts one line high like the name and grows with the note; 140 characters stay within the panel's free space. */}
+            {/* Starts one line high like the name and grows with the note; the panel grows with it. */}
             <Textarea
               id="mark-note"
               rows={1}
@@ -176,7 +176,7 @@ export function MarkPainter({
       <FieldError>
         {errors.tiles?.message ?? errors.root?.server?.message}
       </FieldError>
-      <div className="mt-auto flex items-center gap-14">
+      <div className="flex items-center gap-14">
         {/* aria-disabled, not disabled: a disabled button drops the keyboard focus of the visitor who pressed it. */}
         <Button type="submit" aria-disabled={sending}>
           {sending ? community.sending : community.submit}
