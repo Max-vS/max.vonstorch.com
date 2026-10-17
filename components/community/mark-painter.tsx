@@ -122,7 +122,7 @@ export function MarkPainter({
     <form
       onSubmit={onSubmit}
       noValidate
-      className="flex flex-col gap-8 sm:gap-10"
+      className="flex flex-1 flex-col gap-8 sm:gap-10"
     >
       <BrushPicker brush={brush} onChange={changeBrush} />
       <Field>
@@ -166,13 +166,9 @@ export function MarkPainter({
       <FieldError>
         {errors.tiles?.message ?? errors.root?.server?.message}
       </FieldError>
-      <div className="flex items-center gap-14">
-        {/* Grows to fill the row, because the small panel has no room for a row of its own. aria-disabled, not disabled: a disabled button drops the keyboard focus of the visitor who pressed it. */}
-        <Button
-          type="submit"
-          aria-disabled={sending}
-          className="flex-1 justify-start"
-        >
+      <div className="mt-auto flex items-center gap-14">
+        {/* aria-disabled, not disabled: a disabled button drops the keyboard focus of the visitor who pressed it. */}
+        <Button type="submit" aria-disabled={sending}>
           {sending ? community.sending : community.submit}
         </Button>
         <Button variant="ghost" onClick={onCancel}>
@@ -180,7 +176,7 @@ export function MarkPainter({
         </Button>
         <p
           id="mark-note-left"
-          className="font-mono text-[length:--spacing(10)] text-muted sm:text-[length:--spacing(11)]"
+          className="ml-auto font-mono text-[length:--spacing(10)] text-muted sm:text-[length:--spacing(11)]"
         >
           {MARK_NOTE_MAX - note.length}
           <span className="sr-only"> {community.noteLeft}</span>
