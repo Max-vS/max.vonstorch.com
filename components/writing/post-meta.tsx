@@ -23,14 +23,14 @@ function formatDate(date: string) {
   return `${day} ${MONTHS[month - 1]} ${year}`;
 }
 
-/** "27 SEP 2026", with the read time when `minutes` says how to word it. */
+/** "27 SEP 2026", with the read time when `readTime` is set. */
 export function PostMeta({
   post,
-  minutes,
+  readTime = false,
   className,
 }: {
   post: Pick<Post, "date" | "minutes">;
-  minutes?: "short" | "long";
+  readTime?: boolean;
   className?: string;
 }) {
   return (
@@ -41,8 +41,7 @@ export function PostMeta({
       )}
     >
       <time dateTime={post.date}>{formatDate(post.date)}</time>
-      {minutes === "short" ? ` · ${writing.minutes(post.minutes)}` : null}
-      {minutes === "long" ? ` · ${writing.readTime(post.minutes)}` : null}
+      {readTime ? ` · ${writing.readTime(post.minutes)}` : null}
     </span>
   );
 }

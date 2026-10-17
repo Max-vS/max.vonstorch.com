@@ -27,9 +27,11 @@ function cornerCell(corner: Corner, grid: Grid): Cell {
     : { row: grid.rows - 1, col: grid.cols - 1 };
 }
 
-// Writing grows the panel: the full list beside the title block, and an article up to it.
+// A full list grows the panel beside the title block, and an article grows it up to the title block.
 function panelSize(pathname: string): PanelSize {
-  if (pathname === "/writing/archive") return "list";
+  if (pathname === "/writing/archive" || pathname === "/links/all") {
+    return "list";
+  }
   return pathname.startsWith("/writing/") ? "article" : "small";
 }
 
@@ -196,8 +198,7 @@ export function TileShell({
           <main className="flex min-h-0 flex-1 flex-col gap-10 overflow-hidden sm:gap-14">
             {children}
           </main>
-          {/* As wide as the small panel's content, at its right edge, also when the panel grows. */}
-          <div className="flex w-[--spacing(289)] shrink-0 flex-col gap-10 self-end sm:w-[--spacing(390)]">
+          <div className="flex shrink-0 flex-col gap-10">
             {changeable ? (
               <PatternIndicator
                 // The design hides it on mobile while Writing is open; on desktop it sits outside the panel.

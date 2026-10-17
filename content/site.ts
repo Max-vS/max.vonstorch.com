@@ -125,16 +125,18 @@ export const projects = {
   ],
 };
 
+// The small mono controls that grow and shrink the panel.
+export const panelControls = {
+  more: "Show more ↑",
+  less: "Show less ↓",
+  back: "← Back",
+};
+
 export const writing = {
-  allWriting: "All writing ↑",
-  close: "Close ↓",
-  back: "← All writing",
   archive: {
     title: "All writing",
     description: "All writing by Max von Storch, newest first.",
   },
-  count: (n: number) => `All writing · ${n}`,
-  minutes: (n: number) => `${n} min`,
   readTime: (n: number) => `${n} min read`,
   feedTitle: "Writing | Max von Storch",
 };
@@ -150,11 +152,14 @@ export const music = {
   fallback: "Spotify is quiet right now.",
 };
 
-export const links: { cv: Link; liked: readonly Link[] } = {
-  // Listed first, once public/cv.pdf exists.
-  cv: { label: "CV", href: "/cv.pdf" },
-  // Links to things you like, in the order they show.
-  liked: [{ label: "isaacchacko.com", href: "https://isaacchacko.com/" }],
+export const links: {
+  cv: { href: string; label: string; format: string };
+  liked: readonly Link[];
+} = {
+  // Shown once public/cv.pdf exists.
+  cv: { href: "/cv.pdf", label: "Download CV", format: "PDF ↓" },
+  // Links to things you like, in the order they show; each row also shows the link's domain.
+  liked: [{ label: "Isaac Chacko", href: "https://isaacchacko.com/" }],
 };
 
 // TODO(owner): the X profile is still missing (spec §8 checklist); Contact lists it once this is set.
