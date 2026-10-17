@@ -1,4 +1,4 @@
-import { createContext, use, useEffect } from "react";
+import { createContext, type ReactNode, use, useEffect } from "react";
 import type { Tile } from "@/lib/tiles/types";
 import type { Direction } from "./use-pattern-input";
 import type { Corner } from "./use-tile-engine";
@@ -15,6 +15,8 @@ export type TileScene =
       label: string | null;
       /** Wheel, swipe and arrow keys call it; null turns them off. */
       step: ((direction: Direction) => void) | null;
+      /** Sits under the indicator, which on desktop is outside the panel, so there it sits right above the nav. */
+      action: ReactNode;
     }
   | {
       mode: "paint";

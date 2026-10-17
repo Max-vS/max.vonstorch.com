@@ -227,7 +227,7 @@ export function TileShell({
           <main className="flex min-h-0 flex-1 flex-col gap-10 overflow-hidden sm:gap-14">
             {children}
           </main>
-          <div className="flex shrink-0 flex-col gap-10">
+          <div className="flex shrink-0 flex-col gap-10 sm:gap-14">
             {changeable ? (
               <PatternIndicator
                 // The design hides it on mobile while Writing is open; on desktop it sits outside the panel.
@@ -250,6 +250,7 @@ export function TileShell({
                 live={false}
               />
             ) : null}
+            {scene?.mode === "browse" ? scene.action : null}
             {/* The design hides the nav while painting; Cancel leaves paint mode. */}
             {painting ? null : <PageNav current={page.id} />}
           </div>
