@@ -155,8 +155,8 @@ export function CommunityWall({ first }: { first: MarksPage }) {
             step: null,
           }}
         >
-          {start}
           <PanelText>{community.empty}</PanelText>
+          {start}
         </Scene>
       ) : (
         <Scene
@@ -169,7 +169,6 @@ export function CommunityWall({ first }: { first: MarksPage }) {
             step: count > 1 ? step : null,
           }}
         >
-          {start}
           {/* Arrow keys change the mark, so screen readers hear the new one. */}
           <div
             aria-live="polite"
@@ -189,6 +188,7 @@ export function CommunityWall({ first }: { first: MarksPage }) {
               — {entry.name ?? community.anonymous}
             </p>
           </div>
+          {start}
         </Scene>
       )}
     </>
@@ -213,7 +213,7 @@ function StartButton({
     if (focus) button.current?.focus();
   }, [focus]);
   return (
-    <Button ref={button} className="shrink-0 justify-start" onClick={onClick}>
+    <Button ref={button} className="mt-auto shrink-0" onClick={onClick}>
       {community.start}
     </Button>
   );
