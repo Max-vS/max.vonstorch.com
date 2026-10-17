@@ -124,6 +124,10 @@ export function MarkPainter({
       noValidate
       className="flex flex-col gap-8 sm:gap-10"
     >
+      {/* aria-disabled, not disabled: a disabled button drops the keyboard focus of the visitor who pressed it. */}
+      <Button type="submit" aria-disabled={sending} className="justify-start">
+        {sending ? community.sending : community.submit}
+      </Button>
       <BrushPicker brush={brush} onChange={changeBrush} />
       <Field>
         <div className="flex items-baseline">
@@ -167,10 +171,6 @@ export function MarkPainter({
         {errors.tiles?.message ?? errors.root?.server?.message}
       </FieldError>
       <div className="flex items-center gap-14">
-        {/* aria-disabled, not disabled: a disabled button drops the keyboard focus of the visitor who pressed it. */}
-        <Button type="submit" aria-disabled={sending}>
-          {sending ? community.sending : community.submit}
-        </Button>
         <Button variant="ghost" onClick={onCancel}>
           {community.cancel}
         </Button>
