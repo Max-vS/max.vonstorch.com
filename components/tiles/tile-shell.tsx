@@ -76,7 +76,9 @@ export function TileShell({
       ? "small"
       : panelSize(pathname);
   const grid = useGrid();
-  const { tiles, show, turn, isBusy } = useTileEngine({ still: community });
+  const { tiles, show, turn, hover, isBusy } = useTileEngine({
+    still: community,
+  });
 
   const behindTitle =
     community &&
@@ -184,6 +186,7 @@ export function TileShell({
         <TileGrid
           tiles={tiles}
           onTurn={turn}
+          onHover={hover ? turn : undefined}
           onPaint={painting ? paintTile : undefined}
         />
         {painting ? (

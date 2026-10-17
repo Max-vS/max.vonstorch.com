@@ -171,7 +171,7 @@ docs/              design/, superpowers/
 - Hover (desktop) or tap (mobile) on a tile: it turns 90°; each direct neighbor turns with a 35 % chance.
 - Idle: every 450–950 ms one random tile turns (or flips colors, for symmetric shapes). Not on Community.
 - Contact "Pulse": dots scale in a wave.
-- Reduced motion: no waves, no idle turns, no hover turns; patterns change at once.
+- Reduced motion: no waves, no idle turns, no hover turns; patterns change at once. A tap or click still turns a tile, at once.
 
 **Additions (not in the design):**
 

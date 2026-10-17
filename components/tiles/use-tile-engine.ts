@@ -44,10 +44,14 @@ export function useTileEngine({ still }: { still: boolean }) {
     () => true,
   );
 
+  const hover = !reducedMotion && !still;
   useEffect(() => {
-    const turns = !reducedMotion && !still;
-    engine.setMotion({ waves: !reducedMotion, turns, idle: turns && visible });
-  }, [engine, reducedMotion, still, visible]);
+    engine.setMotion({
+      waves: !reducedMotion,
+      turns: !still,
+      idle: hover && visible,
+    });
+  }, [engine, reducedMotion, still, hover, visible]);
 
   useEffect(() => engine.stop, [engine]);
 
@@ -55,6 +59,7 @@ export function useTileEngine({ still }: { still: boolean }) {
     tiles,
     show: engine.show,
     turn: engine.turn,
+    hover,
     isBusy: engine.isBusy,
   };
 }
