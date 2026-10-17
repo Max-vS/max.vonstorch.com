@@ -104,7 +104,7 @@ export function tileCells(grid: Grid, behindTitle = false): Cell[] {
   return cells;
 }
 
-/** The first fully visible 4×4 area that the panel and, unless it slid away, the title block leave free. */
+/** The first fully visible 2×2 area that the panel and, unless it slid away, the title block leave free. */
 export function masterBlock(grid: Grid, titleAway: boolean): Cell | null {
   const panel = panelRect(grid);
   const title = titleRect(grid);

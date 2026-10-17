@@ -184,7 +184,7 @@ export const community = {
   position: (n: number, total: number) => `Pattern ${n} of ${total}`,
   anonymous: "Anonymous",
   yourMark: "Your pattern",
-  paintArea: "Your pattern, 4 by 4 tiles. Arrow keys move, Enter paints.",
+  paintArea: "Your pattern, 2 by 2 tiles. Arrow keys move, Enter paints.",
   paintCell: (row: number, col: number) => `Row ${row}, column ${col}`,
   brush: {
     shape: "Shape",

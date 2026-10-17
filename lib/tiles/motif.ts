@@ -1,13 +1,13 @@
 import type { Cell, PlacedTile, Tile } from "./types";
 
 // Here, not in lib/schemas/mark.ts: the shell loads this file on every page, and that one brings Zod.
-export const MOTIF_SIDE = 4;
+export const MOTIF_SIDE = 2;
 
 function wrap(value: number) {
   return ((value % MOTIF_SIDE) + MOTIF_SIDE) % MOTIF_SIDE;
 }
 
-/** The index (0–15) of the motif tile that a grid cell shows when the motif repeats from `origin`. */
+/** The index (0–3) of the motif tile that a grid cell shows when the motif repeats from `origin`. */
 export function motifIndex({ row, col }: Cell, origin: Cell): number {
   return wrap(row - origin.row) * MOTIF_SIDE + wrap(col - origin.col);
 }

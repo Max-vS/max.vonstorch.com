@@ -88,7 +88,7 @@ Key values from the files:
 | Forms | React Hook Form + Zod | Nothing is clearly better today (TanStack Form v2 is alpha, Conform's API is experimental) |
 | UI library | None; about 5 own components | The design is custom; the admin page is small |
 | Animation library | None | The design uses CSS transitions only; React 19.3 `<ViewTransition>` covers page effects |
-| Community marks | 4×4 repeating motif; paint on desktop and mobile | Every mark fills every screen |
+| Community marks | 2×2 repeating motif; paint on desktop and mobile | Every mark fills every screen |
 | Tests | None (owner decision) | See §2 |
 | Versions | Always the newest version that is compatible with the rest of the stack | Owner rule |
 
@@ -177,7 +177,7 @@ docs/              design/, superpowers/
 
 - Arrow keys change the pattern; the pattern marks at the bottom left are buttons.
 - The animation loop pauses when the tab is hidden.
-- Tiles are `aria-hidden` and not focusable (except the 4×4 paint block in paint mode, §9).
+- Tiles are `aria-hidden` and not focusable (except the 2×2 paint block in paint mode, §9).
 
 **Rendering:** `TileGrid` renders one `Tile` per cell as an SVG. The React Compiler memoizes tiles; CSS transitions do the motion. One `requestAnimationFrame` loop runs only while something moves.
 
@@ -210,7 +210,7 @@ All texts and links live in `content/site.ts`. There is no CMS.
 
 ## 9. Community
 
-**Mark format:** one 4×4 motif of 16 tiles. Each tile: `{ shape, rot, fg, bg }`.
+**Mark format:** one 2×2 motif of 4 tiles. Each tile: `{ shape, rot, fg, bg }`.
 
 - `shape`: one of the 8 brush motifs of the design (`qdisc`, `half`, `tri`, `dot`, `qring`, `leaf`, `squares`, `arc`) or `none`
 - `rot`: 0, 90, 180 or 270
@@ -225,12 +225,12 @@ The motif repeats over the whole grid from an origin cell (r0, c0): cell (row, c
 1. "Leave your mark" starts paint mode. The grid shows an empty motif (shape `none`, ground `#EFEBE4` on all tiles). The default brush is `qdisc`, color `#E2573B`, ground `#EFEBE4` (as in the design).
 2. The panel shows the brush: shape (8 radio buttons), color (7), ground (7), name (optional, max 40), note (required, max 140, with a live counter), Submit, Cancel.
 3. A click or tap on any tile paints its motif cell with the brush; all copies update. A second click on a tile that already has the same brush turns it 90°.
-4. The master block is the first fully visible 4×4 area that the title block and panel do not cover. It is outlined, and it is the motif origin. In paint mode it is focusable: arrow keys move, Enter or Space paints. On mobile the title block slides away in paint mode, so such an area always exists.
+4. The master block is the first fully visible 2×2 area that the title block and panel do not cover. It is outlined, and it is the motif origin. In paint mode it is focusable: arrow keys move, Enter or Space paints. On mobile the title block slides away in paint mode, so such an area always exists.
 
 **Submit (Server Action `submitMark`):**
 
 1. Vercel BotID check (`checkBotId()`); reject bots.
-2. Zod validation with the shared schema: name ≤ 40 (trimmed, optional), note 1–140 (trimmed), exactly 16 tiles, only allowed values, at least 1 painted tile.
+2. Zod validation with the shared schema: name ≤ 40 (trimmed, optional), note 1–140 (trimmed), exactly 4 tiles, only allowed values, at least 1 painted tile.
 3. Rate limit in SQL: at most 3 marks per IP hash per rolling hour; if 50 or more marks are pending, reply "try again later".
 4. Insert with `status = 'pending'`. Return the id.
 
@@ -338,7 +338,7 @@ Monitoring: Vercel logs and Vercel Analytics only.
 | `id` | uuid, primary key | generated in the database |
 | `name` | varchar(40), null | |
 | `note` | varchar(140), not null | |
-| `tiles` | jsonb, not null | 16 tiles (§9) |
+| `tiles` | jsonb, not null | 4 tiles (§9) |
 | `status` | enum `mark_status` (`pending`, `approved`), not null, default `pending` | |
 | `created_at` | timestamptz, not null, default now() | |
 | `approved_at` | timestamptz, null | |

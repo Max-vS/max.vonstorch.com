@@ -12,7 +12,7 @@ const MOVES: Partial<Record<string, Cell>> = {
   ArrowRight: { row: 0, col: 1 },
 };
 
-/** The outlined 4×4 tiles where the motif starts; one tab stop, so arrow keys move and Enter or Space paints. */
+/** The outlined 2×2 tiles where the motif starts; one tab stop, so arrow keys move and Enter or Space paints. */
 export function MasterBlock({
   at,
   onPaint,
@@ -39,11 +39,11 @@ export function MasterBlock({
   }
 
   return (
-    // The tile grid's tracks, so the block sits exactly on its sixteen tiles.
+    // The tile grid's tracks, so the block sits exactly on its four tiles.
     <div className="pointer-events-none absolute right-0 bottom-0 grid grid-cols-[repeat(var(--cols),var(--tile))] grid-rows-[repeat(var(--rows),var(--tile))]">
       <fieldset
         ref={group}
-        className="pointer-events-auto grid grid-cols-4 grid-rows-4 shadow-[inset_0_0_0_2px_var(--color-ink),inset_0_0_0_4px_var(--color-ground)]"
+        className="pointer-events-auto grid grid-cols-2 grid-rows-2 shadow-[inset_0_0_0_2px_var(--color-ink),inset_0_0_0_4px_var(--color-ground)]"
         style={{
           gridRow: `${at.row + 1} / span ${MOTIF_SIDE}`,
           gridColumn: `${at.col + 1} / span ${MOTIF_SIDE}`,
