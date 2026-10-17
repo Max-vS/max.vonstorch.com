@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -7,7 +7,15 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!node_modules", "!.next", "!dist", "!build"]
+    "includes": [
+      "**",
+      "!node_modules",
+      "!.next",
+      "!dist",
+      "!build",
+      "!docs",
+      "!drizzle"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -22,9 +30,25 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
-      "suspicious": {
-        "noUnknownAtRules": "off"
+      "preset": "recommended",
+      "style": {
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "@/lib/db": "The database client belongs to the data access layer. Import from lib/queries/* or lib/mutations/* instead.",
+              "@/lib/auth/auth": "Import getSession, requireOwner or checkOwner from @/lib/auth/session instead, so the owner check cannot be skipped."
+            }
+          }
+        }
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "error",
+          "fix": "safe",
+          "options": { "functions": ["cn", "cva"] }
+        },
+        "useReactCompiler": "error"
       }
     },
     "domains": {
@@ -38,5 +62,25 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "lib/queries/**",
+        "lib/mutations/**",
+        "lib/db/**",
+        "lib/auth/**",
+        "scripts/**",
+        "drizzle.config.ts",
+        "app/api/auth/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": "off"
+          }
+        }
+      }
+    }
+  ]
 }

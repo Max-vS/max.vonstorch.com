@@ -1,47 +1,37 @@
-import type { Metadata } from "next";
-import "../styles/globals.css";
 import { Analytics } from "@vercel/analytics/next";
-import Footer from "@/components/Footer";
-import { helveticaNeue } from "@/lib/fonts";
+import type { Metadata } from "next";
+import "./globals.css";
+import { cn } from "cn";
+import { SITE_NAME, SITE_URL } from "@/lib/metadata";
+import { measureGrid, setGridVariables } from "@/lib/tiles/grid";
+import { fontVariables } from "./fonts";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "MvS",
-    template: "%s | MvS",
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Max von Storch - Full-Stack Engineer, Designer, and Founder based in San Francisco. Passionate about building products people actually love to use.",
-  metadataBase: new URL("https://max.vonstorch.com"),
-  alternates: {
-    canonical: "/",
-  },
-  manifest: "/manifest.json",
-  icons: {
-    shortcut: "/favicon.svg",
-    icon: "/favicon.svg",
-    apple: "/favicon.svg",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-    },
-  },
+    "Max von Storch — full-stack engineer, designer and founder. Founding engineer at Dryft in San Francisco, building the autonomous factory.",
+  twitter: { card: "summary_large_image" },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const gridScript = `(${setGridVariables})((${measureGrid})(innerWidth, innerHeight))`;
+
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={helveticaNeue.variable}>
-      <head />
-      <body className={helveticaNeue.className}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("bg-ground text-ink antialiased", fontVariables)}
+    >
+      <head>
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: our own code, not user input */}
+        <script dangerouslySetInnerHTML={{ __html: gridScript }} />
+      </head>
+      <body className="font-sans">
         {children}
-        <Footer />
         <Analytics />
       </body>
     </html>

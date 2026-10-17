@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+@source not "../docs";
+
+@theme inline {
+  --font-sans: var(--font-familjen-grotesk), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+}
+
+@theme {
+  --color-ground: #efebe4;
+  --color-ink: #1d1d1b;
+  --color-muted: #6b665e;
+  --color-danger: #c0392b;
+  --color-forest: #33503a;
+  --color-lede: #5e5a53;
+  --color-links-black: #111111;
+  --color-links-chartreuse: #c7f03a;
+  --ease-flip: cubic-bezier(0.5, 0, 0.5, 1);
+  --ease-turn: cubic-bezier(0.65, 0, 0.25, 1);
+  /* In px like the grid switch in lib/tiles/grid.ts, so CSS and JS change layout at the same width. */
+  --breakpoint-sm: 640px;
+}
+
+:root {
+  --tile: clamp(64px, min(100vw / 16, 100vh / 10), 120px);
+  --spacing: calc(var(--tile) / 90);
+  --title-width: calc(8 * var(--tile));
+  --title-height: calc(3 * var(--tile));
+  --indicator-width: calc(3 * var(--tile));
+}
+
+@media (width < 640px) {
+  :root {
+    --tile: calc(100vw / 6);
+    --spacing: calc(var(--tile) / 65);
+    --title-width: calc(5 * var(--tile));
+  }
+}
+
+@utility caption {
+  font-family: var(--font-mono);
+  font-size: --spacing(10);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  @variant sm {
+    font-size: --spacing(11);
+  }
+}
+
+@utility caption-sm {
+  font-family: var(--font-mono);
+  font-size: --spacing(9);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  @variant sm {
+    font-size: --spacing(10);
+  }
+}
+
+@utility blueprint {
+  --quarter-line: color-mix(in srgb, var(--color-ink) 5%, transparent);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M0 0H120M0 0V120' fill='none' stroke='%231d1d1b' stroke-opacity='.3' stroke-width='1' stroke-dasharray='2 4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"),
+    linear-gradient(to right, var(--quarter-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--quarter-line) 1px, transparent 1px);
+  background-size:
+    var(--tile) var(--tile),
+    calc(var(--tile) / 4) calc(var(--tile) / 4),
+    calc(var(--tile) / 4) calc(var(--tile) / 4);
+  background-position: right bottom;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+}
+
+@utility motif-crosses {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cpath d='M0 0H14M0 0V14M240 0H226M240 0V14M0 240H14M0 240V226M240 240H226M240 240V226' fill='none' stroke='%231d1d1b' stroke-opacity='.28' stroke-width='1.5' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  background-size: calc(2 * var(--tile)) calc(2 * var(--tile));
+  background-position: right
+    calc((var(--cols) - var(--motif-col) - 2) * var(--tile)) bottom
+    calc((var(--rows) - var(--motif-row) - 2) * var(--tile));
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+}
+
+@utility row-nudge {
+  transition: padding 300ms cubic-bezier(0.19, 0.8, 0.12, 1);
+
+  &:hover {
+    padding-left: --spacing(8);
+  }
+}
+
+@utility post-body {
+  & > * {
+    flex-shrink: 0;
+  }
+  & > p {
+    font-size: --spacing(16);
+    line-height: 1.6;
+  }
+  & > :is(h2, h3) {
+    margin-top: --spacing(14);
+    font-size: --spacing(20);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  & > ul {
+    display: flex;
+    flex-direction: column;
+    font-size: --spacing(16);
+    line-height: 1.6;
+  }
+  & > ul > li {
+    display: flex;
+    gap: --spacing(12);
+  }
+  & > ul > li::before {
+    content: "–";
+    color: var(--color-forest);
+  }
+  & > ol {
+    padding-left: --spacing(20);
+    list-style: decimal;
+    font-size: --spacing(16);
+    line-height: 1.6;
+  }
+  & > blockquote {
+    margin-block: --spacing(7);
+    padding-left: --spacing(24);
+    font-size: --spacing(20);
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-forest);
+  }
+  & > pre {
+    padding: --spacing(16) --spacing(18);
+    overflow-x: auto;
+    font-size: --spacing(11);
+    line-height: 1.65;
+  }
+  & :is(code, pre) {
+    font-family: var(--font-mono);
+  }
+  & a {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  & img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @variant sm {
+    & > :is(p, ul, ol) {
+      font-size: --spacing(17);
+    }
+    & > :is(h2, h3) {
+      margin-top: --spacing(16);
+      font-size: --spacing(22);
+    }
+    & > blockquote {
+      margin-block: --spacing(8);
+      padding-left: --spacing(25);
+      font-size: --spacing(24);
+    }
+    & > pre {
+      font-size: --spacing(12);
+    }
+  }
+}

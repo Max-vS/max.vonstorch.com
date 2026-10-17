@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CV Palette Options</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EFEBE4;color:#1D1D1B;font-family:'Familjen Grotesk',sans-serif}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1180px; box-sizing: border-box; padding: 56px 60px; background: #EFEBE4; color: #1D1D1B; font-family: 'Familjen Grotesk', sans-serif; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<h1 style="margin: 0; font-size: 56px; line-height: 1; font-weight: 700; letter-spacing: -0.04em">CV palette options</h1>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.04em">PICK ONE · PINWHEEL / FRAMES / MOONS</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, 400px); column-gap: 60px; row-gap: 40px">
+<sc-for list="{{pals}}" as="p" hint-placeholder-count="6">
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em"><span>{{p.name}}</span><span style="display: flex; gap: 4px"><sc-for list="{{p.sw}}" as="s" hint-placeholder-count="4"><span style="width: 14px; height: 14px; background: {{s.c}}; outline: 1px solid rgba(0,0,0,0.12)"></span></sc-for></span></div>
+<div style="width: 400px; height: 440px; display: grid; grid-template-columns: repeat(10, 40px); grid-template-rows: repeat(11, 40px); overflow: hidden">
+<div style="grid-column: 1 / span 6; grid-row: 1 / span 2; background: {{p.box}}; color: {{p.txt}}; box-sizing: border-box; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase">Résumé · one page</span>
+<span style="font-size: 30px; line-height: 0.9; font-weight: 700; letter-spacing: -0.04em">CV</span>
+</div>
+<sc-for list="{{p.tiles}}" as="x" hint-placeholder-count="98">
+<div style="grid-column: {{x.col}}; grid-row: {{x.row}}; width: 40px; height: 40px; background: {{x.bg}}">
+<svg aria-hidden="true" width="40" height="40" viewBox="0 0 120 120" style="display: block; transform: rotate({{x.rot}}deg)"><path d="{{x.a}}" fill="{{x.fg}}"></path></svg>
+</div>
+</sc-for>
+</div>
+</figure>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  setup() {
+    if (this._ready) return;
+    this._ready = true;
+    var M = { pin: 'M0 0H60L60 60ZM120 0V60L60 60ZM120 120H60L60 60ZM0 120V60L60 60Z', frame: 'M0 0H120V24H24V120H0ZM48 48H120V72H72V120H48ZM96 96H120V120H96Z', moon: 'M75 10A50 50 0 1 0 75 110A72.5 72.5 0 0 1 75 10Z' };
+    var CR = '#F6EFE3';
+    var P = [
+      { name: 'A · PLUM & MINT', box: '#4B1D3F', txt: CR, c: ['#4B1D3F', '#9FE3C1', CR, '#C58FBF'] },
+      { name: 'B · CHARTREUSE & BLACK', box: '#C7F03A', txt: '#111111', c: ['#111111', '#C7F03A', CR, '#FFFFFF'] },
+      { name: 'C · LAVENDER & INK', box: '#B9A7FF', txt: '#161616', c: ['#161616', '#B9A7FF', CR, '#E6DEFF'] },
+      { name: 'D · CYAN & INK', box: '#2EE6E6', txt: '#0E1116', c: ['#0E1116', '#2EE6E6', CR, '#B8F5F2'] },
+      { name: 'E · MINT & NAVY', box: '#A6F0D0', txt: '#0F1F3D', c: ['#0F1F3D', '#A6F0D0', CR, '#5E7BD6'] },
+      { name: 'F · CHOCOLATE & LILAC', box: '#CDB8F0', txt: '#3B2418', c: ['#3B2418', '#CDB8F0', CR, '#E9A7C8'] }
+    ];
+    var seed = 7, rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    this.pals = P.map(function (p) {
+      var D = p.c[0], A = p.c[1], L = p.c[2], X = p.c[3];
+      var pin = [[A, D], [D, A], [L, D], [X, D]], frm = [[L, D], [A, D], [D, A]];
+      var tiles = [], S = {}, F = {};
+      for (var r = 0; r < 11; r++) for (var c = 0; c < 10; c++) {
+        if (r < 2 && c < 6) continue;
+        var t;
+        if (r < 4) { var k = (r >> 1) + ',' + (c >> 1); if (!S[k]) S[k] = pin[Math.floor(rnd() * 4)]; t = { k: 'pin', rot: 0, bg: S[k][0], fg: S[k][1] }; }
+        else if (r < 8) { var k2 = (r >> 1) + ',' + (c >> 1); if (!F[k2]) F[k2] = frm[Math.floor(rnd() * 3)]; t = { k: 'frame', rot: Math.floor(rnd() * 4) * 90, bg: F[k2][0], fg: F[k2][1] }; }
+        else { var dk = (((r - 8) >> 1) + (c >> 1)) % 2; t = { k: 'moon', rot: ((r + c) % 4) * 90, bg: dk ? D : X, fg: dk ? A : D }; }
+        tiles.push({ col: String(c + 1), row: String(r + 1), bg: t.bg, fg: t.fg, rot: t.rot, a: M[t.k] });
+      }
+      return { name: p.name, box: p.box, txt: p.txt, sw: p.c.map(function (x) { return { c: x }; }), tiles: tiles };
+    });
+  }
+  renderVals() { this.setup(); return { pals: this.pals }; }
+}
+</script>
+</body>
+</html>

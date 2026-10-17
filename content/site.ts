@@ -1,0 +1,253 @@
+import type { Route } from "next";
+import type { BrushColor, BrushShape } from "@/lib/schemas/mark";
+import type { PageId } from "@/lib/tiles/types";
+
+export type SitePage = {
+  id: PageId;
+  path: Route;
+  label: string;
+  kicker?: string;
+  title: string;
+  description: string;
+};
+
+export const pages: Record<PageId, SitePage> = {
+  index: {
+    id: "index",
+    path: "/",
+    label: "Index",
+    title: "Max von Storch",
+    description:
+      "Max von Storch is a full-stack engineer, designer and founder. Founding engineer at Dryft in San Francisco, building the autonomous factory.",
+  },
+  education: {
+    id: "education",
+    path: "/education",
+    label: "Education",
+    kicker: "Computer Science & Philosophy",
+    title: "Education",
+    description:
+      "Max von Storch studied computer science at TU Munich, CSEE and UC Berkeley, and philosophy at HFPH.",
+  },
+  projects: {
+    id: "projects",
+    path: "/projects",
+    label: "Projects",
+    kicker: "Side projects",
+    title: "Projects",
+    description:
+      "The side projects of Max von Storch: Rémi.fr, OpenEU and curava.",
+  },
+  writing: {
+    id: "writing",
+    path: "/writing",
+    label: "Writing",
+    kicker: "Notes & essays",
+    title: "Writing",
+    description: "Notes and essays by Max von Storch.",
+  },
+  music: {
+    id: "music",
+    path: "/music",
+    label: "Music",
+    kicker: "What I listen to",
+    title: "Music",
+    description: "The tracks Max von Storch listens to most right now.",
+  },
+  links: {
+    id: "links",
+    path: "/links",
+    label: "Links",
+    kicker: "CV & things I like",
+    title: "Links",
+    description: "The CV of Max von Storch and links to things he likes.",
+  },
+  contact: {
+    id: "contact",
+    path: "/contact",
+    label: "Contact",
+    kicker: "Because it is and always will be about people",
+    title: "Contact",
+    description: "Find Max von Storch on GitHub and LinkedIn.",
+  },
+  community: {
+    id: "community",
+    path: "/community",
+    label: "Community",
+    kicker: "Leave your pattern",
+    title: "Community",
+    description:
+      "A wall of tile patterns that visitors left for Max von Storch.",
+  },
+};
+
+export type Link = { label: string; href: string };
+export type RichText = readonly (string | Link)[];
+
+const dryft = { label: "Dryft", href: "https://dryft.ai" };
+
+export const index = {
+  dryft,
+  body: [
+    "Founding engineer at ",
+    dryft,
+    ", building the autonomous factory. Passionate about systems design, music, film, philosophy and building things people actually love to use.",
+  ] satisfies RichText,
+};
+
+export const education = {
+  body: [
+    "Computer science at ",
+    { label: "TU Munich", href: "https://www.tum.de/en/" },
+    ", ",
+    { label: "CSEE", href: "https://csee.tech/" },
+    " and ",
+    { label: "UC Berkeley", href: "https://www.berkeley.edu/" },
+    ", philosophy at ",
+    { label: "HFPH", href: "https://www.hfph.de/" },
+    ". I was part of the ",
+    { label: "TUM Speakers Series", href: "https://www.speakersseries.de/" },
+    " and of ",
+    { label: "TUM.ai", href: "https://www.tum-ai.com/" },
+    ", Europe's largest AI student initiative, and founded ",
+    { label: "Sailsetters", href: "https://sailsetters.de/" },
+    ".",
+  ] satisfies RichText,
+};
+
+export const projects = {
+  sideProjects: [
+    { label: "Rémi.fr", href: "https://www.xn--rmi-bma.fr/" },
+    { label: "OpenEU", href: "https://openeu.csee.tech/" },
+    { label: "curava", href: "https://www.curava.eu/" },
+  ],
+};
+
+export const panelControls = {
+  more: "Show more ↑",
+  less: "Show less ↓",
+  back: "← Back",
+};
+
+export const writing = {
+  archive: {
+    title: "All writing",
+    description: "All writing by Max von Storch, newest first.",
+  },
+  readTime: (n: number) => `${n} min read`,
+  feedTitle: "Writing | Max von Storch",
+};
+
+export const music = {
+  heading: [
+    "Top tracks this week on ",
+    {
+      label: "my Spotify",
+      href: "https://open.spotify.com/user/potatostudioz",
+    },
+  ] satisfies RichText,
+  fallback: "Spotify is quiet right now.",
+};
+
+export const links: {
+  cv: { href: string; label: string; format: string };
+  liked: readonly Link[];
+} = {
+  cv: { href: "/cv.pdf", label: "View CV", format: "PDF ↗" },
+  liked: [{ label: "Isaac Chacko", href: "https://isaacchacko.com/" }],
+};
+
+// TODO(owner): Contact lists the X profile once this is set.
+const X_PROFILE_URL_TODO: string | undefined = undefined;
+
+export const contact = {
+  links: [
+    { label: "GitHub", href: "https://github.com/Max-vS" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/maxvonstorch/" },
+    ...(X_PROFILE_URL_TODO ? [{ label: "X", href: X_PROFILE_URL_TODO }] : []),
+  ],
+};
+
+export const community = {
+  empty: "Be the first to leave your pattern.",
+  loadError: "Patterns cannot load right now.",
+  start: "Leave your pattern",
+  thanks: "THANK YOU",
+  thanksStatus: "Thank you. Your pattern is waiting for approval.",
+  position: (n: number, total: number) => `Pattern ${n} of ${total}`,
+  anonymous: "Anonymous",
+  yourMark: "Your pattern",
+  paintArea: "Your pattern, 2 by 2 tiles. Arrow keys move, Enter paints.",
+  paintCell: (row: number, col: number) => `Row ${row}, column ${col}`,
+  brush: {
+    shape: "Shape",
+    colour: "Colour",
+    ground: "Ground",
+  },
+  shapes: {
+    qdisc: "Quarter disc",
+    half: "Half disc",
+    halves: "Two half discs",
+    dot: "Dot",
+    tri: "Triangle",
+    qring: "Quarter ring",
+    leaf: "Leaf",
+    arc: "Arcs",
+    lshape: "L shape",
+    wedge: "Wedge",
+    ring: "Ring",
+    cross: "Cross",
+    squares: "Square",
+    split: "Split disc",
+    offdot: "Corner dot",
+    pin: "Pinwheel",
+    dots4: "Four dots",
+    halfsq: "Half square",
+    pair: "Two dots",
+    hole: "Hole",
+    xmark: "X",
+  } satisfies Record<BrushShape, string>,
+  colours: {
+    "#1D1D1B": "Black",
+    "#EFEBE4": "Off-white",
+    "#E2573B": "Red",
+    "#FF6A13": "Tangerine",
+    "#9C3A12": "Rust",
+    "#D9A08B": "Clay",
+    "#F7C7A6": "Peach",
+    "#F2C14E": "Yellow",
+    "#F6DC97": "Cream",
+    "#C7F03A": "Chartreuse",
+    "#9DB39A": "Sage",
+    "#8FA98A": "Moss",
+    "#33503A": "Forest",
+    "#2F4FD8": "Blue",
+    "#1F3DFF": "Ultramarine",
+    "#B5BAEC": "Lavender",
+  } satisfies Record<BrushColor, string>,
+  name: "Name",
+  namePlaceholder: "Your name (optional)",
+  note: "Note",
+  notePlaceholder: "Leave a note…",
+  noteLeft: "characters left",
+  submit: "Submit pattern",
+  sending: "Sending…",
+  cancel: "Cancel",
+  tooMany: "Too many patterns right now. Try again later.",
+  failed: "Your pattern could not be sent. Try again later.",
+};
+
+export const errors = {
+  notFound: {
+    kicker: "Error 404",
+    title: "Not found",
+    body: "This page does not exist, or it moved.",
+  },
+  failed: {
+    kicker: "Something went wrong",
+    title: "Error",
+    body: "This page could not load.",
+  },
+  retry: "Try again",
+  home: "Back to the index",
+};
