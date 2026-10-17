@@ -64,9 +64,13 @@ function titleRect({ titleCols, titleRows }: Grid): Rect {
   return { row: 0, col: 0, rows: titleRows, cols: titleCols };
 }
 
-// The Panel component sizes itself in CSS with the same cell counts; in paint mode it fits its content, which with a full note takes at most these rows.
+// The Panel component sizes itself in CSS with the same cell counts; in paint mode it fits its content, which with a full note takes at most 9 or 8 rows, but a short screen keeps two full rows above it for the paint block.
 export function panelRect(grid: Grid, painting = false): Rect {
-  const rows = painting ? (grid.mobile ? 8 : 7) : grid.mobile ? 6 : 4;
+  const rows = painting
+    ? Math.min(grid.mobile ? 9 : 8, grid.rows - grid.firstFullRow - MOTIF_SIDE)
+    : grid.mobile
+      ? 6
+      : 4;
   return { row: grid.rows - rows, col: grid.cols - 5, rows, cols: 5 };
 }
 

@@ -121,62 +121,67 @@ export function MarkPainter({
     <form
       onSubmit={onSubmit}
       noValidate
-      className="flex flex-col gap-8 motion-safe:animate-content-in sm:gap-10"
+      className="flex min-h-0 flex-1 flex-col gap-8 sm:gap-10"
     >
-      <BrushPicker brush={brush} onChange={changeBrush} />
-      <Field>
-        <div className="flex items-baseline">
-          <Label htmlFor="mark-name" className={captionWidth}>
-            {community.name}
-          </Label>
-          <Input
-            id="mark-name"
-            placeholder={community.namePlaceholder}
-            maxLength={MARK_NAME_MAX}
-            autoComplete="nickname"
-            aria-invalid={errors.name ? true : undefined}
-            aria-describedby="mark-name-error"
-            {...register("name")}
-          />
+      {/* Takes the panel's spare height, and while the panel grows it hides what does not fit yet, as the Writing list does; the buttons stay at the bottom. */}
+      <div data-panel-fill className="min-h-0 flex-1 overflow-y-clip">
+        <div className="flex flex-col gap-8 sm:gap-10">
+          <BrushPicker brush={brush} onChange={changeBrush} />
+          <Field>
+            <div className="flex items-baseline">
+              <Label htmlFor="mark-name" className={captionWidth}>
+                {community.name}
+              </Label>
+              <Input
+                id="mark-name"
+                placeholder={community.namePlaceholder}
+                maxLength={MARK_NAME_MAX}
+                autoComplete="nickname"
+                aria-invalid={errors.name ? true : undefined}
+                aria-describedby="mark-name-error"
+                {...register("name")}
+              />
+            </div>
+            <FieldError id="mark-name-error" className={captionIndent}>
+              {errors.name?.message}
+            </FieldError>
+          </Field>
+          <Field>
+            <div className="flex items-baseline">
+              <Label htmlFor="mark-note" className={captionWidth}>
+                {community.note}
+              </Label>
+              <div className="relative min-w-0 flex-1">
+                {/* Starts one line high like the name and grows with the note; the panel grows with it. */}
+                <Textarea
+                  id="mark-note"
+                  rows={1}
+                  placeholder={community.notePlaceholder}
+                  maxLength={MARK_NOTE_MAX}
+                  aria-invalid={errors.note ? true : undefined}
+                  aria-describedby="mark-note-left mark-note-error"
+                  className="field-sizing-content block min-h-30 pr-32 sm:min-h-34"
+                  {...register("note")}
+                />
+                <p
+                  id="mark-note-left"
+                  className="pointer-events-none absolute right-0 bottom-8 font-mono text-[length:--spacing(10)] text-muted sm:text-[length:--spacing(11)]"
+                >
+                  {MARK_NOTE_MAX - note.length}
+                  <span className="sr-only"> {community.noteLeft}</span>
+                </p>
+              </div>
+            </div>
+            <FieldError id="mark-note-error" className={captionIndent}>
+              {errors.note?.message}
+            </FieldError>
+          </Field>
+          <FieldError>
+            {errors.tiles?.message ?? errors.root?.server?.message}
+          </FieldError>
         </div>
-        <FieldError id="mark-name-error" className={captionIndent}>
-          {errors.name?.message}
-        </FieldError>
-      </Field>
-      <Field>
-        <div className="flex items-baseline">
-          <Label htmlFor="mark-note" className={captionWidth}>
-            {community.note}
-          </Label>
-          <div className="relative min-w-0 flex-1">
-            {/* Starts one line high like the name and grows with the note; the panel grows with it. */}
-            <Textarea
-              id="mark-note"
-              rows={1}
-              placeholder={community.notePlaceholder}
-              maxLength={MARK_NOTE_MAX}
-              aria-invalid={errors.note ? true : undefined}
-              aria-describedby="mark-note-left mark-note-error"
-              className="field-sizing-content block min-h-30 pr-32 sm:min-h-34"
-              {...register("note")}
-            />
-            <p
-              id="mark-note-left"
-              className="pointer-events-none absolute right-0 bottom-8 font-mono text-[length:--spacing(10)] text-muted sm:text-[length:--spacing(11)]"
-            >
-              {MARK_NOTE_MAX - note.length}
-              <span className="sr-only"> {community.noteLeft}</span>
-            </p>
-          </div>
-        </div>
-        <FieldError id="mark-note-error" className={captionIndent}>
-          {errors.note?.message}
-        </FieldError>
-      </Field>
-      <FieldError>
-        {errors.tiles?.message ?? errors.root?.server?.message}
-      </FieldError>
-      <div className="flex items-center gap-14">
+      </div>
+      <div className="flex shrink-0 items-center gap-14">
         {/* aria-disabled, not disabled: a disabled button drops the keyboard focus of the visitor who pressed it. */}
         <Button type="submit" aria-disabled={sending}>
           {sending ? community.sending : community.submit}

@@ -20,16 +20,6 @@
   /* The Links page's palette, for its CV button. */
   --color-links-black: #111111;
   --color-links-chartreuse: #c7f03a;
-  /* The design's rise-in, delayed until the panel's 750 ms grow ends, so content never shows in a panel still growing. */
-  --animate-content-in: content-in 500ms cubic-bezier(0.2, 0.7, 0.2, 1) 750ms
-    both;
-
-  @keyframes content-in {
-    from {
-      opacity: 0;
-      translate: 0 10px;
-    }
-  }
   /* In px like the grid switch in lib/tiles/grid.ts, so CSS and JS change layout at the same width. */
   --breakpoint-sm: 640px;
 }

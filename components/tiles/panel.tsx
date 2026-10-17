@@ -10,9 +10,9 @@ const SIZES: Record<PanelSize, string> = {
   list: "h-[calc(100%-var(--title-height))] w-full sm:h-full sm:w-[calc(5*var(--tile))]",
   article:
     "h-[calc(100%-var(--title-height))] w-full sm:h-full sm:w-[calc(100%-var(--title-width))]",
-  // As low as its content allows, but on a tile edge; the 0px fallback is a length, so the first height still animates.
+  // One tile more than its content needs, on a tile edge, so the buttons have room; the 0px fallback is a length, so the first height still animates.
   paint:
-    "h-[round(up,var(--content-height,0px),var(--tile))] w-[calc(5*var(--tile))] justify-end",
+    "h-[calc(round(up,var(--content-height,0px),var(--tile))+var(--tile))] w-[calc(5*var(--tile))]",
 };
 
 export function Panel({
@@ -25,19 +25,21 @@ export function Panel({
   const panel = useRef<HTMLDivElement>(null);
   const fit = size === "paint";
 
-  // The content sits at the bottom at its own height, so it reaches from the first child's top down to the panel's bottom.
+  // Only the [data-panel-fill] element takes the spare height or gives way, so swapping its height for its content's gives the panel's natural height.
   useLayoutEffect(() => {
     const element = panel.current;
-    if (!fit || !element) return;
+    const fill = element?.querySelector("[data-panel-fill]");
+    const content = fill?.firstElementChild;
+    if (!fit || !element || !fill || !content) return;
     const observer = new ResizeObserver(() => {
-      const top = element.firstElementChild?.getBoundingClientRect().top ?? 0;
       const height =
-        element.getBoundingClientRect().bottom -
-        top +
-        Number.parseFloat(getComputedStyle(element).paddingTop);
+        element.getBoundingClientRect().height -
+        fill.getBoundingClientRect().height +
+        content.getBoundingClientRect().height;
       element.style.setProperty("--content-height", `${height}px`);
     });
-    for (const child of element.children) observer.observe(child);
+    observer.observe(fill);
+    observer.observe(content);
     return () => observer.disconnect();
   }, [fit]);
 
