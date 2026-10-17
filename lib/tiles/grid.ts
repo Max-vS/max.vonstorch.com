@@ -104,17 +104,27 @@ export function tileCells(grid: Grid, behindTitle = false): Cell[] {
   return cells;
 }
 
-/** The first fully visible 2×2 area that the panel and, unless it slid away, the title block leave free. */
+/** The fully visible 2×2 area nearest the screen center that the panel and, unless it slid away, the title block leave free. */
 export function masterBlock(grid: Grid, titleAway: boolean): Cell | null {
   const panel = panelRect(grid);
   const title = titleRect(grid);
+  let best: Cell | null = null;
+  let bestDistance = Number.POSITIVE_INFINITY;
   for (let row = grid.firstFullRow; row + MOTIF_SIDE <= grid.rows; row++) {
     for (let col = grid.firstFullCol; col + MOTIF_SIDE <= grid.cols; col++) {
       const block = { row, col, rows: MOTIF_SIDE, cols: MOTIF_SIDE };
       if (overlaps(block, panel)) continue;
       if (!titleAway && overlaps(block, title)) continue;
-      return { row, col };
+      // In tiles, from the block's center to the grid's; a cut first row or column moves the true screen center by at most half a tile.
+      const distance = Math.hypot(
+        row + MOTIF_SIDE / 2 - grid.rows / 2,
+        col + MOTIF_SIDE / 2 - grid.cols / 2,
+      );
+      if (distance < bestDistance) {
+        best = { row, col };
+        bestDistance = distance;
+      }
     }
   }
-  return null;
+  return best;
 }

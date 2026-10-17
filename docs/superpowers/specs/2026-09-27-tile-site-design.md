@@ -225,7 +225,7 @@ The motif repeats over the whole grid from an origin cell (r0, c0): cell (row, c
 1. "Leave your mark" starts paint mode. The grid shows an empty motif (shape `none`, ground `#EFEBE4` on all tiles). The default brush is `qdisc`, color `#E2573B`, ground `#EFEBE4` (as in the design).
 2. The panel shows the brush: shape (8 radio buttons), color (7), ground (7), name (optional, max 40), note (required, max 140, with a live counter), Submit, Cancel.
 3. A click or tap on any tile paints its motif cell with the brush; all copies update. A second click on a tile that already has the same brush turns it 90°.
-4. The master block is the first fully visible 2×2 area that the title block and panel do not cover. It is outlined, and it is the motif origin. In paint mode it is focusable: arrow keys move, Enter or Space paints. On mobile the title block slides away in paint mode, so such an area always exists.
+4. The master block is the fully visible 2×2 area nearest the screen center that the title block and panel do not cover. It is outlined, and it is the motif origin. In paint mode it is focusable: arrow keys move, Enter or Space paints. On mobile the title block slides away in paint mode, so such an area always exists.
 
 **Submit (Server Action `submitMark`):**
 
