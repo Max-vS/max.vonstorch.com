@@ -39,17 +39,15 @@
   }
 }
 
-/* Paint mode's backdrop: gray lines on the tile edges and finer quarter lines, fading toward the screen edges. */
+/* Paint mode's backdrop: dotted gray lines on the tile edges and faint quarter lines, fading toward the screen edges. */
 @utility blueprint {
-  --tile-line: color-mix(in srgb, var(--color-ink) 16%, transparent);
-  --quarter-line: color-mix(in srgb, var(--color-ink) 7%, transparent);
+  --quarter-line: color-mix(in srgb, var(--color-ink) 4%, transparent);
+  /* An SVG draws the tile edges, because CSS gradients cannot dash a line; the stroke color is the ink color. */
   background-image:
-    linear-gradient(to right, var(--tile-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--tile-line) 1px, transparent 1px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M0 0H120M0 0V120' fill='none' stroke='%231d1d1b' stroke-opacity='.3' stroke-width='1' stroke-dasharray='2 4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"),
     linear-gradient(to right, var(--quarter-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--quarter-line) 1px, transparent 1px);
   background-size:
-    var(--tile) var(--tile),
     var(--tile) var(--tile),
     calc(var(--tile) / 4) calc(var(--tile) / 4),
     calc(var(--tile) / 4) calc(var(--tile) / 4);
