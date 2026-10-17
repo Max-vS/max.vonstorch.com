@@ -175,16 +175,15 @@ export function CommunityWall({ first }: { first: MarksPage }) {
             aria-atomic="true"
             className="flex flex-col gap-8 sm:gap-10"
           >
-            {thanked && !entry.date ? (
-              <p className="font-mono text-[length:--spacing(10)] text-muted tracking-[0.06em] sm:text-[length:--spacing(11)]">
-                {community.thanks}
+            {/* The date sits at the top right, on the quote's first line; a pattern that is not approved yet has none and shows the thanks instead. */}
+            <div className="flex items-baseline justify-between gap-14">
+              <PanelText>“{entry.note}”</PanelText>
+              <p className="shrink-0 font-mono text-[length:--spacing(10)] text-muted tracking-[0.06em] sm:text-[length:--spacing(11)]">
+                {entry.date ?? (thanked ? community.thanks : null)}
               </p>
-            ) : null}
-            {/* The quote reads like the other pages' panel text; the position is in the pattern indicator, so only the name and date follow. */}
-            <PanelText>“{entry.note}”</PanelText>
+            </div>
             <p className="text-[length:--spacing(13)] text-muted sm:text-[length:--spacing(15)]">
               — {entry.name ?? community.anonymous}
-              {entry.date ? ` · ${entry.date}` : null}
             </p>
           </div>
           {start}
