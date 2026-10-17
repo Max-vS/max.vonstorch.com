@@ -10,9 +10,9 @@ const SIZES: Record<PanelSize, string> = {
   list: "h-[calc(100%-var(--title-height))] w-full sm:h-full sm:w-[calc(5*var(--tile))]",
   article:
     "h-[calc(100%-var(--title-height))] w-full sm:h-full sm:w-[calc(100%-var(--title-width))]",
-  // As low as its content allows, but on a tile edge; the 0px fallback is a length, so the first height still animates.
+  // As low as its content allows, but on a tile edge; the rest of the top tile goes above the content, so the content rides the top edge as on the other pages. The 0px fallback is a length, so the first height still animates.
   paint:
-    "h-[round(up,var(--content-height,0px),var(--tile))] w-[calc(5*var(--tile))] justify-end",
+    "h-(--fit) w-[calc(5*var(--tile))] [--fit:round(up,var(--content-height,0px),var(--tile))] *:first:mt-[calc(var(--fit)-var(--content-height,0px))] *:first:motion-safe:[transition:margin-top_750ms_var(--ease-turn)]",
 };
 
 export function Panel({
@@ -25,16 +25,20 @@ export function Panel({
   const panel = useRef<HTMLDivElement>(null);
   const fit = size === "paint";
 
-  // The content sits at the bottom at its own height, so it reaches from the first child's top down to the panel's bottom.
+  // The children keep their own height, so the content reaches from the first child's top to the last child's bottom; the first child's margin is the remainder and stays out.
   useLayoutEffect(() => {
     const element = panel.current;
     if (!fit || !element) return;
     const observer = new ResizeObserver(() => {
       const top = element.firstElementChild?.getBoundingClientRect().top ?? 0;
+      const bottom =
+        element.lastElementChild?.getBoundingClientRect().bottom ?? 0;
+      const { paddingTop, paddingBottom } = getComputedStyle(element);
       const height =
-        element.getBoundingClientRect().bottom -
+        bottom -
         top +
-        Number.parseFloat(getComputedStyle(element).paddingTop);
+        Number.parseFloat(paddingTop) +
+        Number.parseFloat(paddingBottom);
       element.style.setProperty("--content-height", `${height}px`);
     });
     for (const child of element.children) observer.observe(child);
