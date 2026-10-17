@@ -215,7 +215,6 @@ export const community = {
   colours: {
     "#1D1D1B": "Black",
     "#EFEBE4": "Off-white",
-    "#FFFFFF": "White",
     "#E2573B": "Red",
     "#FF6A13": "Tangerine",
     "#9C3A12": "Rust",

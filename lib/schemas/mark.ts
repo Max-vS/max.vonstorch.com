@@ -32,11 +32,10 @@ export const BRUSH_SHAPES = [
 ] as const;
 export const TILE_SHAPES = [...BRUSH_SHAPES, "none"] as const;
 export const TILE_ROTATIONS = [0, 90, 180, 270] as const;
-// The design's brush colours, with the Projects lavender in place of the pink.
+// The design's brush colours without white, and with the Projects lavender in place of the pink.
 export const BRUSH_COLORS = [
   "#1D1D1B",
   "#EFEBE4",
-  "#FFFFFF",
   "#E2573B",
   "#FF6A13",
   "#9C3A12",
