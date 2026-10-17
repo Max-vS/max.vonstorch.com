@@ -39,6 +39,25 @@
   }
 }
 
+/* Paint mode's backdrop: gray lines on the tile edges and finer quarter lines, fading toward the screen edges. */
+@utility blueprint {
+  --tile-line: color-mix(in srgb, var(--color-ink) 16%, transparent);
+  --quarter-line: color-mix(in srgb, var(--color-ink) 7%, transparent);
+  background-image:
+    linear-gradient(to right, var(--tile-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--tile-line) 1px, transparent 1px),
+    linear-gradient(to right, var(--quarter-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--quarter-line) 1px, transparent 1px);
+  background-size:
+    var(--tile) var(--tile),
+    var(--tile) var(--tile),
+    calc(var(--tile) / 4) calc(var(--tile) / 4),
+    calc(var(--tile) / 4) calc(var(--tile) / 4);
+  /* The tile grid is anchored bottom right, as its first row and column are the ones cut short. */
+  background-position: right bottom;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+}
+
 /* A list row that moves aside under the pointer, as the design's rows do. */
 @utility row-nudge {
   transition: padding 300ms cubic-bezier(0.19, 0.8, 0.12, 1);

@@ -190,6 +190,12 @@ export function TileShell({
           onTurn={turn}
           onPaint={painting ? paintTile : undefined}
         />
+        {painting ? (
+          <div
+            aria-hidden="true"
+            className="blueprint pointer-events-none absolute inset-0"
+          />
+        ) : null}
         {master ? <MasterBlock at={master} onPaint={paint} /> : null}
         {/* An article's own title is its page's H1. */}
         <TitleBlock page={page} away={titleAway} heading={size !== "article"} />
