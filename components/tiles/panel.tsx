@@ -1,7 +1,7 @@
 import { cn } from "cn";
 import type { ReactNode } from "react";
 
-export type PanelSize = "small" | "list" | "article";
+export type PanelSize = "small" | "list" | "article" | "paint";
 
 // Anchored bottom right, so a new size grows the panel up and to the left; heights stay lengths so CSS can interpolate them.
 const SIZES: Record<PanelSize, string> = {
@@ -10,6 +10,8 @@ const SIZES: Record<PanelSize, string> = {
   list: "h-[calc(100%-var(--title-height))] w-full sm:h-full sm:w-[calc(5*var(--tile))]",
   article:
     "h-[calc(100%-var(--title-height))] w-full sm:h-full sm:w-[calc(100%-var(--title-width))]",
+  // Room for every shape and colour; lib/tiles/grid.ts keeps the paint block clear of it.
+  paint: "h-[calc(8*var(--tile))] w-[calc(5*var(--tile))] sm:h-full",
 };
 
 export function Panel({

@@ -58,7 +58,7 @@
 
 /* Crosses where four repeats of the 2×2 pattern meet; --motif-row and --motif-col are the cell where it starts. The SVG holds a quarter cross in each corner, so neighbouring repeats join them into whole crosses. */
 @utility motif-crosses {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cpath d='M0 0H14M0 0V14M240 0H226M240 0V14M0 240H14M0 240V226M240 240H226M240 240V226' fill='none' stroke='%231d1d1b' stroke-opacity='.18' stroke-width='1.5' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cpath d='M0 0H14M0 0V14M240 0H226M240 0V14M0 240H14M0 240V226M240 240H226M240 240V226' fill='none' stroke='%231d1d1b' stroke-opacity='.28' stroke-width='1.5' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
   background-size: calc(2 * var(--tile)) calc(2 * var(--tile));
   /* Measured from the bottom right like the tile grid: the image then ends on a pattern edge. */
   background-position: right

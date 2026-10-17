@@ -90,12 +90,18 @@ function BrushRow({
 }) {
   return (
     // A legend cannot be laid out in a row, so screen readers get it and sighted visitors get the same word as a caption.
-    <fieldset className="flex items-center">
+    <fieldset className="flex items-start">
       <legend className="sr-only">{legend}</legend>
-      <span aria-hidden="true" className={cn(labelText, captionWidth)}>
+      {/* The caption lines up with the first row of choices, which wrap. */}
+      <span
+        aria-hidden="true"
+        className={cn(labelText, captionWidth, "pt-6 sm:pt-8")}
+      >
         {legend}
       </span>
-      <div className={cn("flex items-center", className)}>{children}</div>
+      <div className={cn("flex flex-wrap items-center", className)}>
+        {children}
+      </div>
     </fieldset>
   );
 }

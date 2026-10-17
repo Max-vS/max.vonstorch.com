@@ -64,9 +64,9 @@ function titleRect({ titleCols, titleRows }: Grid): Rect {
   return { row: 0, col: 0, rows: titleRows, cols: titleCols };
 }
 
-// The Panel component sizes itself in CSS with the same cell counts.
-export function panelRect(grid: Grid): Rect {
-  const rows = grid.mobile ? 6 : 4;
+// The Panel component sizes itself in CSS with the same cell counts; in paint mode it grows to hold the brush.
+export function panelRect(grid: Grid, painting = false): Rect {
+  const rows = painting ? (grid.mobile ? 8 : grid.rows) : grid.mobile ? 6 : 4;
   return { row: grid.rows - rows, col: grid.cols - 5, rows, cols: 5 };
 }
 
@@ -106,7 +106,7 @@ export function tileCells(grid: Grid, behindTitle = false): Cell[] {
 
 /** The fully visible 2×2 area nearest the screen center that the panel and, unless it slid away, the title block leave free. */
 export function masterBlock(grid: Grid, titleAway: boolean): Cell | null {
-  const panel = panelRect(grid);
+  const panel = panelRect(grid, true);
   const title = titleRect(grid);
   let best: Cell | null = null;
   let bestDistance = Number.POSITIVE_INFINITY;

@@ -62,7 +62,6 @@ export function TileShell({
       ({ path }) => path === pathname || pathname.startsWith(`${path}/`),
     ) ??
     pages.index;
-  const size = fixedPage ? "small" : panelSize(pathname);
   const [view, setView] = useState<View>({
     page: page.id,
     pattern: 0,
@@ -76,6 +75,11 @@ export function TileShell({
   const [pageScene, setScene] = useState<TileScene | null>(null);
   const scene = community ? pageScene : null;
   const painting = scene?.mode === "paint";
+  const size: PanelSize = painting
+    ? "paint"
+    : fixedPage
+      ? "small"
+      : panelSize(pathname);
   const grid = useGrid();
   const { tiles, show, turn, isBusy } = useTileEngine({ still: community });
 
