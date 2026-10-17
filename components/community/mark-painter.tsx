@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { cn } from "cn";
 import { useRef, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { submitMark } from "@/app/(tiles)/community/actions";
@@ -145,19 +144,30 @@ export function MarkPainter({
         </FieldError>
       </Field>
       <Field>
-        <div className="flex items-start">
-          <Label htmlFor="mark-note" className={cn(captionWidth, "pt-10")}>
+        <div className="flex items-baseline">
+          <Label htmlFor="mark-note" className={captionWidth}>
             {community.note}
           </Label>
-          <Textarea
-            id="mark-note"
-            rows={2}
-            placeholder={community.notePlaceholder}
-            maxLength={MARK_NOTE_MAX}
-            aria-invalid={errors.note ? true : undefined}
-            aria-describedby="mark-note-left mark-note-error"
-            {...register("note")}
-          />
+          <div className="relative min-w-0 flex-1">
+            {/* Starts one line high like the name and grows with the note; 140 characters stay within the panel's free space. */}
+            <Textarea
+              id="mark-note"
+              rows={1}
+              placeholder={community.notePlaceholder}
+              maxLength={MARK_NOTE_MAX}
+              aria-invalid={errors.note ? true : undefined}
+              aria-describedby="mark-note-left mark-note-error"
+              className="field-sizing-content block min-h-30 pr-32 sm:min-h-34"
+              {...register("note")}
+            />
+            <p
+              id="mark-note-left"
+              className="pointer-events-none absolute right-0 bottom-8 font-mono text-[length:--spacing(10)] text-muted sm:text-[length:--spacing(11)]"
+            >
+              {MARK_NOTE_MAX - note.length}
+              <span className="sr-only"> {community.noteLeft}</span>
+            </p>
+          </div>
         </div>
         <FieldError id="mark-note-error" className={captionIndent}>
           {errors.note?.message}
@@ -174,13 +184,6 @@ export function MarkPainter({
         <Button variant="ghost" onClick={onCancel}>
           {community.cancel}
         </Button>
-        <p
-          id="mark-note-left"
-          className="ml-auto font-mono text-[length:--spacing(10)] text-muted sm:text-[length:--spacing(11)]"
-        >
-          {MARK_NOTE_MAX - note.length}
-          <span className="sr-only"> {community.noteLeft}</span>
-        </p>
       </div>
     </form>
   );
