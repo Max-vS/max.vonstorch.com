@@ -56,6 +56,21 @@
   mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
 }
 
+/* Ink corner marks instead of a full outline, like crop marks on a print sheet. */
+@utility corner-marks {
+  --mark-length: calc(var(--tile) / 5);
+  --mark-ink: linear-gradient(var(--color-ink), var(--color-ink));
+  background:
+    var(--mark-ink) left top / var(--mark-length) 2px no-repeat,
+    var(--mark-ink) left top / 2px var(--mark-length) no-repeat,
+    var(--mark-ink) right top / var(--mark-length) 2px no-repeat,
+    var(--mark-ink) right top / 2px var(--mark-length) no-repeat,
+    var(--mark-ink) left bottom / var(--mark-length) 2px no-repeat,
+    var(--mark-ink) left bottom / 2px var(--mark-length) no-repeat,
+    var(--mark-ink) right bottom / var(--mark-length) 2px no-repeat,
+    var(--mark-ink) right bottom / 2px var(--mark-length) no-repeat;
+}
+
 /* A list row that moves aside under the pointer, as the design's rows do. */
 @utility row-nudge {
   transition: padding 300ms cubic-bezier(0.19, 0.8, 0.12, 1);
