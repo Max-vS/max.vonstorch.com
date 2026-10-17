@@ -242,8 +242,9 @@ export function TileShell({
                 }}
               />
             ) : scene?.label ? (
-              // Community announces the whole mark in its panel instead.
+              // Community announces the whole mark in its panel instead; on mobile the paint hint would sit in the builder's panel, so only desktop shows it.
               <PatternIndicator
+                className={painting ? "max-sm:hidden" : undefined}
                 label={scene.label}
                 hint={painting ? "paint" : "browse"}
                 live={false}
