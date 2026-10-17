@@ -19,7 +19,6 @@ export function LinkList({ all = false }: { all?: boolean }) {
       {hasCv ? (
         <a
           href={links.cv.href}
-          download
           className="flex min-h-38 shrink-0 items-center justify-between bg-links-black px-16 font-mono text-[length:--spacing(10)] text-links-chartreuse uppercase tracking-[0.06em] transition-colors duration-200 hover:bg-ink hover:text-ground sm:min-h-44 sm:text-[length:--spacing(11)]"
         >
           <span>{links.cv.label}</span>

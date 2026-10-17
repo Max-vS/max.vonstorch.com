@@ -156,8 +156,8 @@ export const links: {
   cv: { href: string; label: string; format: string };
   liked: readonly Link[];
 } = {
-  // Shown once public/cv.pdf exists.
-  cv: { href: "/cv.pdf", label: "Download CV", format: "PDF ↓" },
+  // Shown once public/cv.pdf exists; it opens in the browser's PDF viewer, which has its own download button.
+  cv: { href: "/cv.pdf", label: "View CV", format: "PDF ↗" },
   // Links to things you like, in the order they show; each row also shows the link's domain.
   liked: [{ label: "Isaac Chacko", href: "https://isaacchacko.com/" }],
 };
