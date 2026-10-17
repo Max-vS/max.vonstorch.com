@@ -11,7 +11,6 @@ export type SitePage = {
   description: string;
 };
 
-// Keys are in nav order.
 export const pages: Record<PageId, SitePage> = {
   index: {
     id: "index",
@@ -83,7 +82,6 @@ export const pages: Record<PageId, SitePage> = {
 };
 
 export type Link = { label: string; href: string };
-/** Text with links inside it: plain strings and links, in reading order. */
 export type RichText = readonly (string | Link)[];
 
 const dryft = { label: "Dryft", href: "https://dryft.ai" };
@@ -125,7 +123,6 @@ export const projects = {
   ],
 };
 
-// The small mono controls that grow and shrink the panel.
 export const panelControls = {
   more: "Show more ↑",
   less: "Show less ↓",
@@ -156,13 +153,11 @@ export const links: {
   cv: { href: string; label: string; format: string };
   liked: readonly Link[];
 } = {
-  // Shown once public/cv.pdf exists; it opens in the browser's PDF viewer, which has its own download button.
   cv: { href: "/cv.pdf", label: "View CV", format: "PDF ↗" },
-  // Links to things you like, in the order they show; each row also shows the link's domain.
   liked: [{ label: "Isaac Chacko", href: "https://isaacchacko.com/" }],
 };
 
-// TODO(owner): the X profile is still missing (spec §8 checklist); Contact lists it once this is set.
+// TODO(owner): Contact lists the X profile once this is set.
 const X_PROFILE_URL_TODO: string | undefined = undefined;
 
 export const contact = {
@@ -238,7 +233,6 @@ export const community = {
   submit: "Submit pattern",
   sending: "Sending…",
   cancel: "Cancel",
-  // Spec §15: the same message for the rate limit and the pending cap; a bot learns nothing.
   tooMany: "Too many patterns right now. Try again later.",
   failed: "Your pattern could not be sent. Try again later.",
 };

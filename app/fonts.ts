@@ -10,5 +10,4 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 });
 
-// Here, not in the root layout: global-error replaces the layout's <html> and needs them too.
 export const fontVariables = `${familjenGrotesk.variable} ${jetbrainsMono.variable}`;

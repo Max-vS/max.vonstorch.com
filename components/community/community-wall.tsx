@@ -26,11 +26,9 @@ type Entry = {
   name: string | null;
   note: string;
   tiles: readonly MarkTile[];
-  // Null for the visitor's own mark, which still waits for approval.
   date: string | null;
 };
 
-// UTC, so the server and the browser print the same day and hydration matches.
 const dateFormat = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -55,7 +53,6 @@ export function CommunityWall({ first }: { first: MarksPage }) {
   const ownApproved = own !== null && marks.some(({ id }) => id === own.id);
   const pending = own && !ownApproved ? own : null;
 
-  // Left in storage, an approved mark would show as pending again once newer marks push it off the first page.
   useEffect(() => {
     if (ownApproved) clearOwnMark();
   }, [ownApproved]);
@@ -67,7 +64,6 @@ export function CommunityWall({ first }: { first: MarksPage }) {
       date: dateFormat.format(new Date(mark.createdAt)),
     })),
   ];
-  // A mark approved during the visit joins the first page, which is never fetched again, so the total can stay out of reach until a page comes back empty.
   const allLoaded = nextPage === null || marks.length >= total;
   const count = allLoaded ? entries.length : total + (pending ? 1 : 0);
   const index = Math.max(0, Math.min(view.index, entries.length - 1));
@@ -79,7 +75,6 @@ export function CommunityWall({ first }: { first: MarksPage }) {
       const response = await fetch(`/api/marks/${nextPage}`);
       if (!response.ok) return;
       const page: MarksPage = await response.json();
-      // A mark approved since the last page shifts the list by one, so the same mark can come twice.
       setMarks((current) => [
         ...current,
         ...page.marks.filter(
@@ -89,7 +84,6 @@ export function CommunityWall({ first }: { first: MarksPage }) {
       setTotal(page.total);
       setNextPage(page.marks.length > 0 ? nextPage + 1 : null);
     } catch {
-      // Browsing stops at the last loaded mark, and the next step there tries again.
     } finally {
       loading.current = false;
     }
@@ -98,7 +92,6 @@ export function CommunityWall({ first }: { first: MarksPage }) {
   function step(direction: Direction) {
     let next = index + direction;
     if (next < 0 || next >= entries.length) {
-      // Wrapping around needs every mark; until then the list only grows at its end.
       if (!allLoaded) {
         if (next >= entries.length) loadMore();
         return;
@@ -120,7 +113,6 @@ export function CommunityWall({ first }: { first: MarksPage }) {
     <StartButton
       focus={leftPaintMode}
       onClick={() => {
-        // Cleared now, so the next thanks is a change the live region announces.
         setThanked(false);
         setPainting(true);
       }}
@@ -130,7 +122,6 @@ export function CommunityWall({ first }: { first: MarksPage }) {
 
   return (
     <>
-      {/* Stays mounted across paint mode, so the thanks is announced although the form is gone. */}
       <p aria-live="polite" className="sr-only">
         {thanked ? community.thanksStatus : ""}
       </p>
@@ -144,7 +135,6 @@ export function CommunityWall({ first }: { first: MarksPage }) {
           }}
         />
       ) : !entry ? (
-        // Spec §9: the empty wall shows the Index "Bauhaus" pattern.
         <Scene
           scene={{
             mode: "browse",
@@ -170,16 +160,14 @@ export function CommunityWall({ first }: { first: MarksPage }) {
             action: start,
           }}
         >
-          {/* Arrow keys change the mark, so screen readers hear the new one. */}
           <div
             aria-live="polite"
             aria-atomic="true"
             className="flex flex-col gap-8 sm:gap-10"
           >
-            {/* The date sits at the top right, on the quote's first line; a pattern that is not approved yet has none and shows the thanks instead. */}
             <div className="flex items-baseline justify-between gap-14">
               <PanelText>“{entry.note}”</PanelText>
-              <p className="shrink-0 font-mono text-[length:--spacing(10)] text-muted tracking-[0.06em] sm:text-[length:--spacing(11)]">
+              <p className="caption shrink-0 text-muted normal-case">
                 {entry.date ?? (thanked ? community.thanks : null)}
               </p>
             </div>
@@ -198,7 +186,6 @@ function Scene({ scene, children }: { scene: TileScene; children: ReactNode }) {
   return children;
 }
 
-/** `focus` takes focus on mount: back from paint mode, the button that was clicked is gone. */
 function StartButton({
   focus,
   onClick,

@@ -7,9 +7,7 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Square, like the Links page's CV button.
-        solid:
-          "min-h-38 bg-ink px-16 font-mono text-[length:--spacing(10)] text-ground uppercase tracking-[0.06em] sm:min-h-44 sm:text-[length:--spacing(11)]",
+        solid: "caption min-h-38 bg-ink px-16 text-ground sm:min-h-44",
         ghost:
           "min-h-40 font-semibold text-[length:--spacing(13)] text-muted [transition:color_200ms] hover:text-ink sm:text-[length:--spacing(15)]",
       },

@@ -1,11 +1,9 @@
 import type { Random } from "./random";
 import type { Cell, Tile } from "./types";
 
-// A flip folds the tile for 260 ms in CSS; the new content goes in once it is edge-on.
 export const SWAP_DELAY_MS = 270;
 export const ANIMATION_STEP_MS = 110;
 
-// The visible range of the earlier JavaScript pulse, whose transitions never reached its targets of 1 and 0.18.
 export const RIPPLE_KEYFRAMES: Keyframe[] = [{ scale: 0.83 }, { scale: 0.26 }];
 export const RIPPLE_TIMING = {
   duration: 1200,
@@ -13,7 +11,6 @@ export const RIPPLE_TIMING = {
   easing: "ease-in-out",
   iterations: Number.POSITIVE_INFINITY,
 } satisfies KeyframeAnimationOptions;
-// One shrink and one grow.
 export const RIPPLE_PERIOD_MS = 2 * RIPPLE_TIMING.duration;
 
 export function waveDelay(cell: Cell, origin: Cell): number {

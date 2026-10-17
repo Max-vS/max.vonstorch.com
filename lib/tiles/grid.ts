@@ -16,14 +16,11 @@ export function measureGrid(width: number, height: number): GridMetrics {
   const fluid = mobile
     ? width / 6
     : Math.min(120, Math.max(64, Math.min(width / 16, height / 10)));
-  // Whole pixels, because tiles at fractional positions blend their edges with what is behind them into hairlines.
   const tile = Math.ceil(fluid - 1e-9);
-  // The epsilon stops float error from adding a track when the tile divides the length exactly.
   const cols = mobile ? 6 : Math.ceil(width / tile - 1e-9);
   const rows = Math.ceil(height / tile - 1e-9);
   const cutX = cols * tile - width;
   const cutY = rows * tile - height;
-  // A track more than half cut joins the title block and indicator, so they end on a tile edge without losing most of a tile.
   const extraCol = cutX > tile / 2 ? 1 : 0;
   const titleCols = (mobile ? 5 : 8) + extraCol;
   const titleRows = cutY > tile / 2 ? 4 : 3;
@@ -33,7 +30,6 @@ export function measureGrid(width: number, height: number): GridMetrics {
     rows,
     titleCols,
     titleRows,
-    // A cut under half a pixel does not show, so that track still counts as full.
     firstFullRow: cutY > 0.5 ? 1 : 0,
     firstFullCol: cutX > 0.5 ? 1 : 0,
     tile,
@@ -64,7 +60,7 @@ function titleRect({ titleCols, titleRows }: Grid): Rect {
   return { row: 0, col: 0, rows: titleRows, cols: titleCols };
 }
 
-// The Panel component sizes itself in CSS with the same cell counts; in paint mode it fits its content, which with a full note takes at most 9 or 8 rows, but a short screen keeps two full rows above it for the paint block.
+// Must match the Panel sizes in components/tiles/panel.tsx; paint mode's panel fits its content, at most these rows.
 export function panelRect(grid: Grid, painting = false): Rect {
   const rows = painting
     ? Math.min(grid.mobile ? 9 : 8, grid.rows - grid.firstFullRow - MOTIF_SIDE)
@@ -92,7 +88,6 @@ function overlaps(a: Rect, b: Rect) {
   );
 }
 
-/** `behindTitle` keeps the cells under the title block, for a page where it can slide away. */
 export function tileCells(grid: Grid, behindTitle = false): Cell[] {
   const title = titleRect(grid);
   const panel = panelRect(grid);
@@ -108,7 +103,6 @@ export function tileCells(grid: Grid, behindTitle = false): Cell[] {
   return cells;
 }
 
-/** The fully visible 2×2 area nearest the screen center that the panel and, unless it slid away, the title block leave free. */
 export function masterBlock(grid: Grid, titleAway: boolean): Cell | null {
   const panel = panelRect(grid, true);
   const title = titleRect(grid);
@@ -119,7 +113,6 @@ export function masterBlock(grid: Grid, titleAway: boolean): Cell | null {
       const block = { row, col, rows: MOTIF_SIDE, cols: MOTIF_SIDE };
       if (overlaps(block, panel)) continue;
       if (!titleAway && overlaps(block, title)) continue;
-      // In tiles, from the block's center to the grid's; a cut first row or column moves the true screen center by at most half a tile.
       const distance = Math.hypot(
         row + MOTIF_SIDE / 2 - grid.rows / 2,
         col + MOTIF_SIDE / 2 - grid.cols / 2,

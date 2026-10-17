@@ -14,23 +14,20 @@ export const metadata: Metadata = {
   },
   description:
     "Max von Storch — full-stack engineer, designer and founder. Founding engineer at Dryft in San Francisco, building the autonomous factory.",
-  // Pages set no twitter object, so each page's og:image also becomes its large card image.
   twitter: { card: "summary_large_image" },
 };
 
-// Sets the grid variables before the first paint, so the title block and panel never jump.
 const gridScript = `(${setGridVariables})((${measureGrid})(innerWidth, innerHeight))`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    // The grid script gives <html> a style attribute that the server HTML does not have.
     <html
       lang="en"
       suppressHydrationWarning
       className={cn("bg-ground text-ink antialiased", fontVariables)}
     >
       <head>
-        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: the script is our own code, not user input */}
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: our own code, not user input */}
         <script dangerouslySetInnerHTML={{ __html: gridScript }} />
       </head>
       <body className="font-sans">

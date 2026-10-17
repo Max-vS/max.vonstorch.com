@@ -10,7 +10,6 @@ import {
 const KEY = "community:own-mark";
 const MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 
-// The browser can hold anything under the key, so it is parsed like any other input.
 const ownMarkSchema = z.object({
   id: z.string(),
   name: z.string().max(MARK_NAME_MAX).nullable(),
@@ -49,9 +48,7 @@ function write(raw: string | null) {
   try {
     if (raw === null) localStorage.removeItem(KEY);
     else localStorage.setItem(KEY, raw);
-  } catch {
-    // Storage can be off (private mode); the mark then just does not show as pending.
-  }
+  } catch {}
   for (const listener of listeners) listener();
 }
 
@@ -64,14 +61,12 @@ function subscribe(onChange: () => void) {
   };
 }
 
-// Parsed once per stored value, so React gets the same object until the value changes.
 function getSnapshot() {
   const raw = read();
   if (raw !== snapshot.raw) snapshot = { raw, mark: parse(raw) };
   return snapshot.mark;
 }
 
-/** The visitor's last mark, until it is approved or 30 days old (spec §9). */
 export function useOwnMark() {
   return useSyncExternalStore(subscribe, getSnapshot, () => null);
 }

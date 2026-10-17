@@ -12,7 +12,6 @@ import { SHAPES, type Shape } from "@/lib/tiles/shapes";
 
 export type Brush = { shape: BrushShape; fg: BrushColor; bg: BrushColor };
 
-// The design's caption column; the name and note fields line up with it too.
 export const captionWidth = "w-48 shrink-0 sm:w-70";
 export const captionIndent = "pl-48 sm:pl-70";
 
@@ -89,10 +88,8 @@ function BrushRow({
   children: ReactNode;
 }) {
   return (
-    // A legend cannot be laid out in a row, so screen readers get it and sighted visitors get the same word as a caption.
     <fieldset className="flex items-start">
       <legend className="sr-only">{legend}</legend>
-      {/* The caption lines up with the first row of choices, which wrap. */}
       <span
         aria-hidden="true"
         className={cn(labelText, captionWidth, "pt-6 sm:pt-8")}

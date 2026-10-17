@@ -6,11 +6,17 @@ Design spec: `docs/superpowers/specs/2026-09-27-tile-site-design.md`. Design fil
 
 ## Stack
 
-- Next.js 16.3 (App Router, Cache Components, Turbopack), React 19.3 with the React Compiler, TypeScript 7
+- Next.js 16.4 (App Router, Cache Components, Turbopack), React 19.3 with the React Compiler, TypeScript 7
 - Tailwind CSS 4, MDX through `@next/mdx`, Shiki
 - Neon Postgres with Drizzle, Better Auth (GitHub sign-in for the owner only, Spotify link)
 - Vercel (Node 24, Fluid compute, BotID, Web Analytics)
 - Bun 1.3 as the package manager, Biome, lefthook
+
+## Security
+
+- Only the owner signs in: a GitHub account must carry the verified `OWNER_EMAIL`, checked before a user exists and again on every `/admin` request and action. Spotify only links to the owner's account; it never signs in.
+- Visitor patterns: BotID, Zod on the server, 3 per IP and hour (the IP stored as a daily HMAC), at most 50 pending, nothing public until the owner approves it.
+- Every response carries `frame-ancestors 'none'`, `nosniff`, a referrer policy and a permissions policy; Vercel adds HSTS. The database connection verifies Neon's certificate.
 
 ## Local development
 

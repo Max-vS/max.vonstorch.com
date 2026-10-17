@@ -7,7 +7,6 @@ import { errors } from "@/content/site";
 
 export const metadata: Metadata = { title: errors.notFound.title };
 
-// Outside the (tiles) layout, so it brings its own shell with the 404 pattern.
 export default function NotFound() {
   return (
     <TileShell page={{ id: "notFound", ...errors.notFound }}>

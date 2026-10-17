@@ -7,7 +7,6 @@ import { SITE_NAME } from "@/lib/metadata";
 import ErrorPage from "./error";
 import { fontVariables } from "./fonts";
 
-// It replaces the root layout, so it brings its own document, styles and fonts; metadata exports do not work here.
 export default function GlobalError({ retry }: { retry: () => void }) {
   return (
     <html

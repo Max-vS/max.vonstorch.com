@@ -13,7 +13,6 @@ const STATUS_TEXT: Record<SpotifyStatus, string> = {
   "reconnect-needed": "Reconnect needed",
 };
 
-/** `linkError` is the code Better Auth adds to /admin when a Spotify link fails. */
 export function SpotifyConnection({
   status,
   linkError,
@@ -30,10 +29,8 @@ export function SpotifyConnection({
       const { error } = await authClient.linkSocial({
         provider: "spotify",
         callbackURL: "/admin",
-        // Without it a failed link would land on the sign-in page and read as a failed GitHub sign-in.
         errorCallbackURL: "/admin",
       });
-      // Without an error the browser is already on its way to Spotify.
       setFailed(Boolean(error));
     });
   }

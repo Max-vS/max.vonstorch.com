@@ -27,7 +27,6 @@ function isEditable(target: EventTarget | null) {
   );
 }
 
-// Wheel, swipe and arrow keys step through the patterns, with a lock so one gesture changes one pattern.
 export function usePatternInput({
   step,
   isBusy,

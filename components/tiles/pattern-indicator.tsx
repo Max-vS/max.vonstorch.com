@@ -6,7 +6,6 @@ const HINTS = {
   paint: { mobile: "TAP TILES TO PAINT", desktop: "CLICK TILES TO PAINT" },
 };
 
-/** `live` announces each new label; turn it off where the page announces the change itself. */
 export function PatternIndicator({
   label,
   hint,
@@ -25,7 +24,6 @@ export function PatternIndicator({
   };
 }) {
   return (
-    // Sits in the panel on mobile; on desktop it is pinned to the bottom-left cells, as in the design.
     <div
       className={cn(
         "flex items-center gap-10 sm:fixed sm:bottom-0 sm:left-0 sm:h-(--tile) sm:w-(--indicator-width) sm:gap-16 sm:bg-ground sm:px-30",
@@ -53,9 +51,9 @@ export function PatternIndicator({
       ) : null}
       <p
         aria-live={live ? "polite" : undefined}
-        className="flex flex-col gap-2 font-mono text-[length:--spacing(10)] tracking-[0.06em] sm:gap-3 sm:text-[length:--spacing(11)]"
+        className="caption flex flex-col gap-2 sm:gap-3"
       >
-        <span className="uppercase">{label}</span>
+        <span>{label}</span>
         <span className="text-muted sm:hidden">{HINTS[hint].mobile}</span>
         <span className="hidden text-muted sm:inline">
           {HINTS[hint].desktop}

@@ -3,7 +3,6 @@ import { buildMotif, MOTIF_SIDE } from "@/lib/tiles/motif";
 import type { Tile } from "@/lib/tiles/types";
 
 const TILE = 120;
-// Spec §9: the motif shown 2×2, so the owner sees how it repeats.
 const SIDE = MOTIF_SIDE * 2;
 const CELLS = Array.from({ length: SIDE * SIDE }, (_, i) => ({
   row: Math.floor(i / SIDE),

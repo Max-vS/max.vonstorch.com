@@ -8,10 +8,8 @@ import * as mutations from "@/lib/mutations/marks";
 
 const markIdSchema = z.uuid();
 
-// An action is a public endpoint that the page's owner check does not cover, so each one checks again.
 async function ownerMarkId(id: string) {
   const owner = await checkOwner();
-  // A plain form action has no state to show an error in, and a lapsed session only needs a new sign-in.
   if (!owner.ok) redirect("/admin/login");
   const parsed = markIdSchema.safeParse(id);
   return parsed.success ? parsed.data : null;

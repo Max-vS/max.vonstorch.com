@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { type ReactNode, Suspense } from "react";
 import { MarkPreview } from "@/components/admin/mark-preview";
+import { PageTitle } from "@/components/admin/page-title";
 import { SignOutButton } from "@/components/admin/sign-out-button";
 import { SpotifyConnection } from "@/components/admin/spotify-connection";
 import { SubmitButton } from "@/components/admin/submit-button";
 import { labelText } from "@/components/ui/label";
+import { textLinkStyle } from "@/components/ui/text-link";
 import { requireOwner } from "@/lib/auth/session";
 import {
   ADMIN_MARKS_PAGE_SIZE,
@@ -19,8 +21,6 @@ import { approveMark, deleteMark } from "./actions";
 
 export const metadata: Metadata = { title: "Admin" };
 
-const pageLink = "underline underline-offset-4 hover:opacity-60";
-
 const dateFormat = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -33,7 +33,6 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
 
 export default function AdminPage({ searchParams }: PageProps<"/admin">) {
   return (
-    // The session is read per request, which Cache Components allows only inside a boundary.
     <Suspense fallback={<p className="text-muted">Loading…</p>}>
       <Moderation searchParams={searchParams} />
     </Suspense>
@@ -45,8 +44,9 @@ async function Moderation({
 }: Pick<PageProps<"/admin">, "searchParams">) {
   await requireOwner();
   const { page: pageParam, error } = await searchParams;
-  // `?page=2` is the second page of approved marks; anything else is the first.
   const page = parsePage(pageParam) ?? 1;
+  const linkError =
+    typeof error === "string" && /^\w{1,64}$/.test(error) ? error : undefined;
   const [pending, approved, spotify] = await Promise.all([
     getPendingMarks(),
     getApprovedMarksForAdmin({ page: page - 1 }),
@@ -59,17 +59,12 @@ async function Moderation({
       <header className="flex items-start justify-between gap-16">
         <div className="flex flex-col gap-12">
           <p className={labelText}>Admin · {pending.length} pending</p>
-          <h1 className="font-bold text-[length:--spacing(48)] leading-[0.9] tracking-[-0.04em]">
-            Community
-          </h1>
+          <PageTitle>Community</PageTitle>
         </div>
         <SignOutButton />
       </header>
 
-      <SpotifyConnection
-        status={spotify}
-        linkError={typeof error === "string" ? error : undefined}
-      />
+      <SpotifyConnection status={spotify} linkError={linkError} />
 
       <MarkList
         title={`Pending · ${pending.length}`}
@@ -106,7 +101,7 @@ async function Moderation({
           className="flex items-center justify-between gap-16"
         >
           {page > 1 ? (
-            <Link href={`/admin?page=${page - 1}`} className={pageLink}>
+            <Link href={`/admin?page=${page - 1}`} className={textLinkStyle}>
               ← Newer
             </Link>
           ) : (
@@ -116,7 +111,7 @@ async function Moderation({
             Page {page} / {pages}
           </span>
           {page < pages ? (
-            <Link href={`/admin?page=${page + 1}`} className={pageLink}>
+            <Link href={`/admin?page=${page + 1}`} className={textLinkStyle}>
               Older →
             </Link>
           ) : (
@@ -167,7 +162,7 @@ function MarkRow({
             {mark.name ?? "Anonymous"}
           </span>
           {date ? (
-            <span className="font-mono text-[length:--spacing(11)] text-muted">
+            <span className="caption text-muted normal-case">
               {dateFormat.format(date)}
             </span>
           ) : null}

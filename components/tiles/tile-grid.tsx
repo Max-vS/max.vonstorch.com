@@ -10,7 +10,6 @@ function tileIndex(target: EventTarget | null) {
   return tile ? Number(tile.dataset.tile) : null;
 }
 
-/** With `onPaint`, a click or tap on any tile paints instead of turning it. */
 export function TileGrid({
   tiles,
   onTurn,
@@ -21,7 +20,6 @@ export function TileGrid({
   onPaint?: (index: number) => void;
 }) {
   return (
-    // One delegated handler pair for all tiles: mouse and pen turn a tile on hover, touch on tap.
     <div
       aria-hidden="true"
       className={cn(

@@ -12,7 +12,6 @@ const MOVES: Partial<Record<string, Cell>> = {
   ArrowRight: { row: 0, col: 1 },
 };
 
-/** The outlined 2×2 tiles where the motif starts; one tab stop, so arrow keys move and Enter or Space paints. */
 export function MasterBlock({
   at,
   onPaint,
@@ -23,7 +22,6 @@ export function MasterBlock({
   const [active, setActive] = useState(0);
   const group = useRef<HTMLFieldSetElement>(null);
 
-  // The button that opened paint mode is gone, so focus lands where painting starts.
   useEffect(() => {
     group.current?.querySelector("button")?.focus();
   }, []);
@@ -39,7 +37,6 @@ export function MasterBlock({
   }
 
   return (
-    // The tile grid's tracks, so the block sits exactly on its four tiles.
     <div className="pointer-events-none absolute right-0 bottom-0 grid grid-cols-[repeat(var(--cols),var(--tile))] grid-rows-[repeat(var(--rows),var(--tile))]">
       <fieldset
         ref={group}

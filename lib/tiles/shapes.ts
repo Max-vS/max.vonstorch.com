@@ -1,6 +1,5 @@
 export type Shape = { fill?: string; fill2?: string; stroke?: string };
 
-// Motifs from the design in a 120×120 box: `fill` takes the tile's fg, `fill2` its fg2, `stroke` its fg.
 export const SHAPES = {
   qdisc: { fill: "M0 0H120A120 120 0 0 1 0 120Z" },
   half: { fill: "M0 0H120A60 60 0 0 1 0 0Z" },
@@ -54,7 +53,6 @@ export function shapePaths(shape: ShapeKey | Shape): Shape {
   return typeof shape === "string" ? SHAPES[shape] : shape;
 }
 
-// A quarter turn would not show on these, so idle flips their colors instead.
 const SYMMETRIC_SHAPES: ReadonlySet<ShapeKey | Shape> = new Set<ShapeKey>([
   "dot",
   "ring",

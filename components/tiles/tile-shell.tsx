@@ -33,7 +33,6 @@ function cornerCell(corner: Corner, grid: Grid): Cell {
     : { row: grid.rows - 1, col: grid.cols - 1 };
 }
 
-// A full list grows the panel beside the title block, and an article grows it up to the title block.
 function panelSize(pathname: string): PanelSize {
   if (pathname === "/writing/archive" || pathname === "/links/all") {
     return "list";
@@ -41,12 +40,10 @@ function panelSize(pathname: string): PanelSize {
   return pathname.startsWith("/writing/") ? "article" : "small";
 }
 
-// Spec §9: a painted motif starts at the master block, a browsed one at the first full cell.
 function motifOrigin(grid: Grid, master: Cell | null): Cell {
   return master ?? { row: grid.firstFullRow, col: grid.firstFullCol };
 }
 
-/** Without `page` the shell shows the page of the current path. */
 export function TileShell({
   page: fixedPage,
   children,
@@ -55,7 +52,6 @@ export function TileShell({
   children: ReactNode;
 }) {
   const pathname = usePathname();
-  // Every route of the (tiles) group is a page or below one (/writing/…); the fallback only satisfies the type.
   const page: TitlePage =
     fixedPage ??
     Object.values(pages).find(
@@ -71,7 +67,6 @@ export function TileShell({
     setView({ page: page.id, pattern: 0, from: "top-left" });
   }
   const community = page.id === "community";
-  // A scene left over from Community never applies to another page.
   const [pageScene, setScene] = useState<TileScene | null>(null);
   const scene = community ? pageScene : null;
   const painting = scene?.mode === "paint";
@@ -83,7 +78,6 @@ export function TileShell({
   const grid = useGrid();
   const { tiles, show, turn, isBusy } = useTileEngine({ still: community });
 
-  // On Community the tiles behind the title block exist, so the block can slide away when paint mode needs the room.
   const behindTitle =
     community &&
     grid !== null &&
@@ -91,22 +85,18 @@ export function TileShell({
   const titleAway = painting && behindTitle;
   const master = grid && painting ? masterBlock(grid, titleAway) : null;
 
-  // Only these decide the tiles, so a new step callback or label from the page never rebuilds them.
   const [contentKey, from, motif]: [string, Corner, readonly Tile[] | null] =
     !scene
       ? [`${view.page}/${view.pattern}`, view.from, null]
       : scene.mode === "browse"
         ? [scene.key, scene.from, scene.motif]
-        : // The design enters paint mode with a wave from the bottom right.
-          ["paint", "bottom-right", scene.motif];
-  // Community waits for its page's scene, so the grid never flashes the fallback pattern first.
+        : ["paint", "bottom-right", scene.motif];
   const waiting = community && !scene;
 
   const shownKey = useRef<string | null>(null);
   useEffect(() => {
     if (!grid || waiting) return;
     const cells = tileCells(grid, behindTitle);
-    // A new key flips the tiles over in a wave; the same key (after a resize or a paint stroke) changes them in place.
     const origin =
       contentKey !== shownKey.current ? cornerCell(from, grid) : undefined;
     shownKey.current = contentKey;
@@ -165,7 +155,6 @@ export function TileShell({
     );
   }
 
-  // A stroke during a wave would cut the wave short, so paint mode ignores it, as the design does.
   function paint(index: number) {
     if (scene?.mode === "paint" && !isBusy()) scene.paint(index);
   }
@@ -175,9 +164,7 @@ export function TileShell({
   }
 
   const patterns = PATTERNS[view.page];
-  // Community and the 404 page have one pattern, so there is nothing to change.
   const changeable = patterns.length > 1;
-  // An open Writing panel scrolls, so wheel and arrow keys stay with it.
   const input = usePatternInput({
     step,
     isBusy,
@@ -188,9 +175,8 @@ export function TileShell({
 
   return (
     <TileSceneContext value={setScene}>
-      {/* One spacing step is one design pixel (tile ÷ 65 on mobile, ÷ 90 on desktop), and touch-pan-x leaves vertical swipes to the pattern instead of pull-to-refresh. */}
       <div
-        className="fixed inset-0 touch-pan-x touch-pinch-zoom overflow-hidden [--spacing:calc(var(--tile)/65)] sm:[--spacing:calc(var(--tile)/90)]"
+        className="fixed inset-0 touch-pan-x touch-pinch-zoom overflow-hidden"
         onWheel={input.onWheel}
         onTouchStart={input.onTouchStart}
         onTouchEnd={input.onTouchEnd}
@@ -206,7 +192,6 @@ export function TileShell({
             className="blueprint pointer-events-none absolute inset-0"
           />
         ) : null}
-        {/* Every tile paints, so the crosses show where each repeat of the pattern sits instead of outlining one block. */}
         {master ? (
           <div
             aria-hidden="true"
@@ -220,17 +205,14 @@ export function TileShell({
           />
         ) : null}
         {master ? <MasterBlock at={master} onPaint={paint} /> : null}
-        {/* An article's own title is its page's H1. */}
         <TitleBlock page={page} away={titleAway} heading={size !== "article"} />
         <Panel size={size}>
-          {/* min-h-0 lets the content give way instead of pushing the nav below, so the nav stays at the same place on every page. */}
           <main className="flex min-h-0 flex-1 flex-col gap-10 overflow-hidden sm:gap-14">
             {children}
           </main>
           <div className="flex shrink-0 flex-col gap-10 sm:gap-14">
             {changeable ? (
               <PatternIndicator
-                // The design hides it on mobile while Writing is open; on desktop it sits outside the panel.
                 className={size === "small" ? undefined : "max-sm:hidden"}
                 label={patterns[view.pattern].name}
                 hint="change"
@@ -242,7 +224,6 @@ export function TileShell({
                 }}
               />
             ) : scene?.label ? (
-              // Community announces the whole mark in its panel instead; on mobile the paint hint would sit in the builder's panel, so only desktop shows it.
               <PatternIndicator
                 className={painting ? "max-sm:hidden" : undefined}
                 label={scene.label}
@@ -251,7 +232,6 @@ export function TileShell({
               />
             ) : null}
             {scene?.mode === "browse" ? scene.action : null}
-            {/* The design hides the nav while painting; Cancel leaves paint mode. */}
             {painting ? null : <PageNav current={page.id} />}
           </div>
         </Panel>

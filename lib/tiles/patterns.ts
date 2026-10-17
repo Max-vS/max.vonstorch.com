@@ -40,7 +40,6 @@ function blockTile(
   return tile;
 }
 
-/** The item at `index` in a list that repeats in both directions. */
 function cycle<T>(items: readonly T[], index: number): T {
   return items[((index % items.length) + items.length) % items.length];
 }
@@ -81,13 +80,11 @@ const INTERFERENCE_COLORS = [
   music.ink,
 ];
 
-// Turns each tile of a 2×2 block so that the four L shapes frame the block.
 const BLOCK_TURNS = [
   [0, 90],
   [270, 180],
 ];
 
-// A quarter disc filling one 60×60 quarter of a tile, for each clockwise quarter turn: its corner, then the path from there.
 const QUARTER_DISCS = [
   [0, 0, "h60a60 60 0 0 1 -60 60z"],
   [60, 0, "v60a60 60 0 0 1 -60 -60z"],
@@ -110,7 +107,6 @@ function threeColors(random: Random, colors: readonly string[]) {
   return { bg, fg, fg2 };
 }
 
-/** Four quarter discs, each turned at random and drawn in fg or fg2. */
 function mosaicShape(random: Random) {
   let fill = "";
   let fill2 = "";
@@ -123,7 +119,6 @@ function mosaicShape(random: Random) {
   return { fill, fill2 };
 }
 
-/** Vertical bars of 1–3 units with gaps of 1–2 units, where a unit is a tenth of the tile. */
 function barsShape(random: Random) {
   let fill = "";
   for (let x = 0; x < 120; ) {
@@ -151,7 +146,6 @@ function interferenceColors(cell: Cell, seconds: number) {
   };
 }
 
-// A tile one cell further from the panel is 420 ms behind, so the ripple travels outward from it.
 function rippleDelay({ row, col }: Cell, grid: Grid) {
   const panel = panelRect(grid);
   const distance = Math.hypot(
@@ -341,7 +335,6 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
         rot: 0,
         scale: 0.45,
       }),
-      // Only a tile whose band changes gets a new object, so the other tiles skip the render.
       animate: (tile, seconds) => {
         const colors = interferenceColors(tile, seconds);
         return colors.bg === tile.bg ? null : colors;
@@ -469,7 +462,6 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
       },
     },
   ],
-  // The empty state; marks replace it once visitors leave some (spec §9).
   community: [bauhaus],
   notFound: [
     {

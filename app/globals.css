@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* The design files and notes in docs/ are full of class-like words that would end up in the CSS. */
 @source not "../docs";
 
 @theme inline {
@@ -13,20 +12,19 @@
   --color-ink: #1d1d1b;
   --color-muted: #6b665e;
   --color-danger: #c0392b;
-  --ease-flip: cubic-bezier(0.5, 0, 0.5, 1);
-  --ease-turn: cubic-bezier(0.65, 0, 0.25, 1);
   --color-forest: #33503a;
   --color-lede: #5e5a53;
-  /* The Links page's palette, for its CV button. */
   --color-links-black: #111111;
   --color-links-chartreuse: #c7f03a;
+  --ease-flip: cubic-bezier(0.5, 0, 0.5, 1);
+  --ease-turn: cubic-bezier(0.65, 0, 0.25, 1);
   /* In px like the grid switch in lib/tiles/grid.ts, so CSS and JS change layout at the same width. */
   --breakpoint-sm: 640px;
 }
 
-/* Without JavaScript this places the blocks approximately; the script in app/layout.tsx sets exact values. */
 :root {
   --tile: clamp(64px, min(100vw / 16, 100vh / 10), 120px);
+  --spacing: calc(var(--tile) / 90);
   --title-width: calc(8 * var(--tile));
   --title-height: calc(3 * var(--tile));
   --indicator-width: calc(3 * var(--tile));
@@ -35,14 +33,35 @@
 @media (width < 640px) {
   :root {
     --tile: calc(100vw / 6);
+    --spacing: calc(var(--tile) / 65);
     --title-width: calc(5 * var(--tile));
   }
 }
 
-/* Paint mode's backdrop: dashed gray lines on the tile edges and faint quarter lines, fading toward the screen edges. */
+@utility caption {
+  font-family: var(--font-mono);
+  font-size: --spacing(10);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  @variant sm {
+    font-size: --spacing(11);
+  }
+}
+
+@utility caption-sm {
+  font-family: var(--font-mono);
+  font-size: --spacing(9);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  @variant sm {
+    font-size: --spacing(10);
+  }
+}
+
 @utility blueprint {
   --quarter-line: color-mix(in srgb, var(--color-ink) 5%, transparent);
-  /* An SVG draws the tile edges, because CSS gradients cannot dash a line; the stroke color is the ink color. */
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M0 0H120M0 0V120' fill='none' stroke='%231d1d1b' stroke-opacity='.3' stroke-width='1' stroke-dasharray='2 4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E"),
     linear-gradient(to right, var(--quarter-line) 1px, transparent 1px),
@@ -51,23 +70,19 @@
     var(--tile) var(--tile),
     calc(var(--tile) / 4) calc(var(--tile) / 4),
     calc(var(--tile) / 4) calc(var(--tile) / 4);
-  /* The tile grid is anchored bottom right, as its first row and column are the ones cut short. */
   background-position: right bottom;
   mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
 }
 
-/* Crosses where four repeats of the 2×2 pattern meet; --motif-row and --motif-col are the cell where it starts. The SVG holds a quarter cross in each corner, so neighbouring repeats join them into whole crosses. */
 @utility motif-crosses {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cpath d='M0 0H14M0 0V14M240 0H226M240 0V14M0 240H14M0 240V226M240 240H226M240 240V226' fill='none' stroke='%231d1d1b' stroke-opacity='.28' stroke-width='1.5' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
   background-size: calc(2 * var(--tile)) calc(2 * var(--tile));
-  /* Measured from the bottom right like the tile grid: the image then ends on a pattern edge. */
   background-position: right
     calc((var(--cols) - var(--motif-col) - 2) * var(--tile)) bottom
     calc((var(--rows) - var(--motif-row) - 2) * var(--tile));
   mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
 }
 
-/* A list row that moves aside under the pointer, as the design's rows do. */
 @utility row-nudge {
   transition: padding 300ms cubic-bezier(0.19, 0.8, 0.12, 1);
 
@@ -76,9 +91,7 @@
   }
 }
 
-/* An article in the Writing panel, as in the design; sizes are design pixels, so they scale with the tile. */
 @utility post-body {
-  /* The article scrolls, so its blocks keep their height; a code block, which scrolls sideways, would otherwise shrink to nothing. */
   & > * {
     flex-shrink: 0;
   }

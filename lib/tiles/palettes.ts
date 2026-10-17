@@ -20,9 +20,7 @@ export const educationColors = {
 
 export const dryftColors = {
   blue: "#1F3DFF",
-  // mix(blue, #0B0D1A, 0.62)
   deep: "#131F71",
-  // mix(blue, #EFEBE4, 0.72)
   tint: "#B5BAEC",
   ground: "#EFEBE4",
 };
@@ -73,7 +71,6 @@ export const titleColors: Record<SceneId, { bg: string; fg: string }> = {
   music: { bg: musicColors.tangerine, fg: musicColors.ink },
   links: { bg: linksColors.chartreuse, fg: linksColors.black },
   contact: { bg: contactColors.terracotta, fg: contactColors.ink },
-  // Neutral like Index, so the visitors' marks carry the color.
   community: { bg: indexColors.ink, fg: indexColors.ground },
   notFound: { bg: notFoundColors.red, fg: notFoundColors.ground },
 };

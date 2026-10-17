@@ -1,7 +1,7 @@
 import { shapePaths } from "@/lib/tiles/shapes";
 import type { Tile } from "@/lib/tiles/types";
 
-/** The motif's paths in the 120×120 box; a plain function, because next/og accepts no components inside an <svg>. */
+// A plain function, because next/og accepts no components inside an <svg>.
 export function tilePaths({
   shape,
   fg,

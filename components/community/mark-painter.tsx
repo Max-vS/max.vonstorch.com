@@ -26,7 +26,6 @@ import {
 } from "./brush-picker";
 import type { OwnMark } from "./own-mark";
 
-// Spec §9: an empty motif, and the design's default brush.
 const EMPTY_MOTIF: MarkTile[] = Array.from({ length: MOTIF_TILES }, () => ({
   shape: "none",
   rot: 0,
@@ -67,7 +66,7 @@ export function MarkPainter({
   const tiles = useWatch({ control, name: "tiles" });
   const note = useWatch({ control, name: "note" });
   const [brush, setBrush] = useState(DEFAULT_BRUSH);
-  // The shell calls the `paint` of the last committed scene, which can be a render old, so it reads the brush from here.
+  // The shell calls the `paint` of the last committed scene, which can be a render old.
   const latestBrush = useRef(brush);
   const [sending, startTransition] = useTransition();
 
@@ -85,7 +84,6 @@ export function MarkPainter({
       setValue(
         "tiles",
         current.with(index, paintTile(current[index], latestBrush.current)),
-        // A stroke always leaves a painted tile, so validating only ever clears "Paint at least one tile.".
         { shouldValidate: true },
       );
     },
@@ -123,7 +121,6 @@ export function MarkPainter({
       noValidate
       className="flex min-h-0 flex-1 flex-col gap-8 sm:gap-10"
     >
-      {/* Takes the panel's spare height, and while the panel grows it hides what does not fit yet, as the Writing list does; the buttons stay at the bottom. */}
       <div data-panel-fill className="min-h-0 flex-1 overflow-y-clip">
         <div className="flex flex-col gap-8 sm:gap-10">
           <BrushPicker brush={brush} onChange={changeBrush} />
@@ -152,7 +149,6 @@ export function MarkPainter({
                 {community.note}
               </Label>
               <div className="relative min-w-0 flex-1">
-                {/* Starts one line high like the name and grows with the note; the panel grows with it. */}
                 <Textarea
                   id="mark-note"
                   rows={1}
@@ -165,7 +161,7 @@ export function MarkPainter({
                 />
                 <p
                   id="mark-note-left"
-                  className="pointer-events-none absolute right-0 bottom-8 font-mono text-[length:--spacing(10)] text-muted sm:text-[length:--spacing(11)]"
+                  className="caption pointer-events-none absolute right-0 bottom-8 text-muted normal-case"
                 >
                   {MARK_NOTE_MAX - note.length}
                   <span className="sr-only"> {community.noteLeft}</span>
@@ -182,7 +178,6 @@ export function MarkPainter({
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-14">
-        {/* aria-disabled, not disabled: a disabled button drops the keyboard focus of the visitor who pressed it. */}
         <Button type="submit" aria-disabled={sending}>
           {sending ? community.sending : community.submit}
         </Button>

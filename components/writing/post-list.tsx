@@ -3,7 +3,6 @@ import type { Post } from "@/content/writing";
 import { PostLink } from "./post-link";
 import { PostMeta } from "./post-meta";
 
-/** Titles with their dates, and the control that shows more or fewer of them. */
 export function PostList({
   posts,
   control,
@@ -13,7 +12,6 @@ export function PostList({
 }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-10">
-      {/* The negative margin lines the first title up with the top of the panel's text, as the rows have no top border. */}
       <ul className="-mt-8 min-h-0 flex-1 overflow-y-auto sm:-mt-9">
         {posts.map((post) => (
           <li key={post.slug}>

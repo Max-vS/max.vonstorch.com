@@ -1,4 +1,3 @@
-// Shared by the mark form and the submit action, so it must stay free of server imports.
 import * as z from "zod";
 import { MOTIF_SIDE } from "@/lib/tiles/motif";
 
@@ -6,7 +5,6 @@ export const MARK_NAME_MAX = 40;
 export const MARK_NOTE_MAX = 140;
 export const MOTIF_TILES = MOTIF_SIDE * MOTIF_SIDE;
 
-// Every tile shape the site's patterns use.
 export const BRUSH_SHAPES = [
   "qdisc",
   "half",
@@ -32,7 +30,6 @@ export const BRUSH_SHAPES = [
 ] as const;
 export const TILE_SHAPES = [...BRUSH_SHAPES, "none"] as const;
 export const TILE_ROTATIONS = [0, 90, 180, 270] as const;
-// The design's brush colours without white, and with the Projects lavender in place of the pink.
 export const BRUSH_COLORS = [
   "#1D1D1B",
   "#EFEBE4",

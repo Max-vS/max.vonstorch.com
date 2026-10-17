@@ -31,7 +31,6 @@ export async function generateMetadata(
 
 export default function PostPage({ params }: PageProps<"/writing/[slug]">) {
   return (
-    // Known slugs prerender in full; the boundary lets an unknown slug's notFound() stream into the shell instead of failing the whole document.
     <Suspense>
       {params.then(({ slug }) => (
         <Post slug={slug} />

@@ -1,7 +1,6 @@
 import type { MDXContent } from "mdx/types";
 import * as z from "zod";
 
-// Static routes win over /writing/[slug], so a post with one of these slugs could never be opened.
 const RESERVED_SLUGS = ["archive", "feed.xml"];
 
 const postSchema = z.strictObject({
@@ -15,7 +14,6 @@ const postSchema = z.strictObject({
   date: z.iso.date(),
   summary: z.string().min(1),
   updated: z.iso.date().optional(),
-  // A post on another site: it is listed and linked, but has no page here.
   url: z.httpUrl().optional(),
 });
 
@@ -30,7 +28,7 @@ type PostModule = {
   readingTime: { minutes: number };
 };
 
-// The glob stays in content/, because Next.js 16.3.6 silently matches nothing for "../" patterns.
+// Inside content/, because Next.js silently matches nothing for "../" patterns.
 const modules = import.meta.glob("./writing/*.mdx", {
   eager: true,
 }) as Record<string, PostModule>;

@@ -5,12 +5,10 @@ import { links, panelControls } from "@/content/site";
 
 const CARD_ROWS = 2;
 
-/** "https://www.example.com/" as "example.com". */
 function domain(href: string) {
   return new URL(href).hostname.replace(/^www\./, "");
 }
 
-/** The CV download, then the liked links: the first two, or with `all` every one. */
 export function LinkList({ all = false }: { all?: boolean }) {
   const hasCv = existsSync(join(process.cwd(), "public", "cv.pdf"));
   const rows = all ? links.liked : links.liked.slice(0, CARD_ROWS);
@@ -19,7 +17,7 @@ export function LinkList({ all = false }: { all?: boolean }) {
       {hasCv ? (
         <a
           href={links.cv.href}
-          className="flex min-h-38 shrink-0 items-center justify-between bg-links-black px-16 font-mono text-[length:--spacing(10)] text-links-chartreuse uppercase tracking-[0.06em] transition-colors duration-200 hover:bg-ink hover:text-ground sm:min-h-44 sm:text-[length:--spacing(11)]"
+          className="caption flex min-h-38 shrink-0 items-center justify-between bg-links-black px-16 text-links-chartreuse transition-colors duration-200 hover:bg-ink hover:text-ground sm:min-h-44"
         >
           <span>{links.cv.label}</span>
           <span>{links.cv.format}</span>

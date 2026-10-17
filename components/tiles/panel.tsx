@@ -10,7 +10,6 @@ const SIZES: Record<PanelSize, string> = {
   list: "h-[calc(100%-var(--title-height))] w-full sm:h-full sm:w-[calc(5*var(--tile))]",
   article:
     "h-[calc(100%-var(--title-height))] w-full sm:h-full sm:w-[calc(100%-var(--title-width))]",
-  // One tile more than its content needs, on a tile edge, so the buttons have room; the 0px fallback is a length, so the first height still animates.
   paint:
     "h-[calc(round(up,var(--content-height,0px),var(--tile))+var(--tile))] w-[calc(5*var(--tile))]",
 };
@@ -25,7 +24,6 @@ export function Panel({
   const panel = useRef<HTMLDivElement>(null);
   const fit = size === "paint";
 
-  // Only the [data-panel-fill] element takes the spare height or gives way, so swapping its height for its content's gives the panel's natural height.
   useLayoutEffect(() => {
     const element = panel.current;
     const fill = element?.querySelector("[data-panel-fill]");

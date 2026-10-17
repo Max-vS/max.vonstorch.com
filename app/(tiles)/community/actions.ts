@@ -16,12 +16,10 @@ export type SubmitMarkResult =
     }
   | { ok: false; error: "too_many" | "failed" };
 
-/** The argument type only helps the form; a Server Action is a public endpoint, so the input is parsed again. */
 export async function submitMark(
   input: MarkSubmission,
 ): Promise<SubmitMarkResult> {
   try {
-    // A bot gets the same answer as a server error, so it learns nothing (spec §15).
     const { isBot } = await checkBotId();
     if (isBot) return { ok: false, error: "failed" };
 
@@ -35,7 +33,6 @@ export async function submitMark(
 
     // Wrapped, because ipAddress() would read the raw Node headers that Next keeps on its own `headers` field.
     const ip = ipAddress({ headers: await headers() });
-    // Only Vercel sets x-real-ip, so in local development all requests share one rate-limit bucket.
     const created = await createPendingMark(
       parsed.data,
       hashIp(ip ?? "unknown"),

@@ -5,7 +5,7 @@ import { tilePaths } from "./tile-paths";
 
 export function Tile({ tile, index }: { tile: TileView; index: number }) {
   const { rippleDelay } = tile;
-  // Web Animations, not a CSS animation: React listens for `animationiteration` on the root, and that listener makes Chrome update every CSS animation on the main thread each frame.
+  // Web Animations, not a CSS animation: React's `animationiteration` listener on the root makes Chrome update every CSS animation on the main thread each frame.
   const ripple = useCallback(
     (element: HTMLElement | null) => {
       if (
@@ -35,7 +35,7 @@ export function Tile({ tile, index }: { tile: TileView; index: number }) {
         transform: tile.folded ? "scaleX(0)" : undefined,
       }}
     >
-      {/* Rotation and scale sit on an HTML element, because Chrome runs transitions and animations of SVG elements on the main thread. */}
+      {/* An HTML element, because Chrome runs transitions of SVG elements on the main thread. */}
       <div
         ref={ripple}
         className="size-full transition-transform duration-700 ease-turn group-data-instant:transition-none motion-reduce:transition-none"

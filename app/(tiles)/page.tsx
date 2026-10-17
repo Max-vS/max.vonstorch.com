@@ -10,7 +10,6 @@ export const metadata = pageMetadata({
   path: pages.index.path,
 });
 
-// Google takes the site name from WebSite and the person the site is about from ProfilePage.
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -37,7 +36,6 @@ const jsonLd = {
           url: "https://www.tum.de",
         },
         url: `${SITE_URL}/`,
-        // The Contact links, so the X profile joins once it is set; no image until there is a real photo (Google rejects placeholders).
         sameAs: contact.links.map(({ href }) => href),
       },
     },

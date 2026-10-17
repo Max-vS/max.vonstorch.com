@@ -12,23 +12,19 @@ import type { Cell, PlacedTile, Tile } from "@/lib/tiles/types";
 
 export type TileView = PlacedTile & {
   folded?: boolean;
-  /** Rotation and scale change without a transition, while the tile is edge-on. */
   instant?: boolean;
 };
 
 export type Motion = { waves: boolean; turns: boolean; idle: boolean };
 
 export type ShowOptions = {
-  /** The tiles flip over in a wave from here; without it they change in place. */
   origin?: Cell;
   animate?: (tile: PlacedTile, seconds: number) => Partial<Tile> | null;
-  /** False turns off the random idle flips and turns. */
   idle?: boolean;
 };
 
 const WAITING = 0;
 const FOLDED = 1;
-// The new content is in but still edge-on, so its rotation and scale apply without turning.
 const SWAPPED = 2;
 const DONE = 3;
 
@@ -43,7 +39,6 @@ function cellKey({ row, col }: Cell) {
   return `${row},${col}`;
 }
 
-// Rotation only grows, so a change from 270° to 0° shows as a quarter turn forward, not three back.
 function turnForward(tile: PlacedTile, shown: TileView | undefined): TileView {
   if (!shown) return tile;
   return {
@@ -52,7 +47,6 @@ function turnForward(tile: PlacedTile, shown: TileView | undefined): TileView {
   };
 }
 
-// The frame loop reads and writes tiles synchronously, so they live here and React renders snapshots.
 export function createTileEngine() {
   let tiles: readonly TileView[] = [];
   let wave: Wave | null = null;
@@ -71,7 +65,7 @@ export function createTileEngine() {
     for (const listener of listeners) listener();
   }
 
-  // Between waves it sleeps until the next change is due, because every frame it asks for also makes Chrome update all running CSS animations on the main thread.
+  // Sleeps between changes: every requested frame also makes Chrome update all running CSS animations on the main thread.
   function run() {
     clearTimeout(timer);
     if (frame !== 0) return;
@@ -166,7 +160,6 @@ export function createTileEngine() {
       wave = null;
       commit(next.map((tile) => turnForward(tile, shown.get(cellKey(tile)))));
     } else {
-      // A cell without a tile yet (the first show, or the cells behind the title block) unfolds from nothing.
       commit(
         next.map(
           (tile) => shown.get(cellKey(tile)) ?? { ...tile, folded: true },

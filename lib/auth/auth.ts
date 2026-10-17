@@ -4,7 +4,7 @@ import { revalidateTag } from "next/cache";
 import { getDb } from "@/lib/db";
 import { adapterOptions, authOptions } from "./options";
 
-/** Linking and relinking Spotify end in the OAuth callback; a token refresh also updates the account, but inside a render or `use cache`, where revalidateTag throws. */
+// Only the OAuth callback: a token refresh also updates the account, but inside a render, where revalidateTag throws.
 async function expireTopTracks(
   { providerId }: { providerId: string },
   context: { path: string } | null,
@@ -33,7 +33,6 @@ export type Session = Auth["$Infer"]["Session"];
 
 let auth: Auth | undefined;
 
-// Built on first use, so `next build` can load this module without DATABASE_URL or BETTER_AUTH_SECRET.
 export function getAuth(): Auth {
   auth ??= createAuth();
   return auth;

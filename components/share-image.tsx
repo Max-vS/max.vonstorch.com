@@ -14,13 +14,10 @@ const font = await readFile(
   join(process.cwd(), "lib/fonts/familjen-grotesk-bold.ttf"),
 );
 
-// Larger than on screen, so the title still reads in a small link preview.
 const TILE = 105;
-// The design's sizes are in pixels at a 90 px tile.
 const PX = TILE / 90;
 const COLS = Math.ceil(shareImageSize.width / TILE);
 const ROWS = Math.ceil(shareImageSize.height / TILE);
-// As on screen, the grid is anchored bottom right, so the cut tiles are at the left and top.
 const CUT_X = COLS * TILE - shareImageSize.width;
 const CUT_Y = ROWS * TILE - shareImageSize.height;
 const GRID: Grid = {
@@ -36,39 +33,31 @@ const CELLS: Cell[] = Array.from({ length: ROWS * COLS }, (_, index) => ({
   row: Math.floor(index / COLS),
   col: index % COLS,
 }));
-// A fixed seed gives a page the same pattern on every build.
 const SEED = 1;
 
 const BLOCK_WIDTH = GRID.titleCols * TILE - CUT_X;
 const BLOCK_HEIGHT = GRID.titleRows * TILE - CUT_Y;
 const PADDING_X = 30 * PX;
 const PADDING_Y = 26 * PX;
-// Bigger than the design's 12 px, which would not read in a link preview.
 const KICKER_SIZE = 22;
-// The room for the title: the block minus its padding and the kicker's line and gap.
 const TITLE_WIDTH = BLOCK_WIDTH - 2 * PADDING_X;
 const TITLE_HEIGHT = BLOCK_HEIGHT - 2 * PADDING_Y - 2 * KICKER_SIZE;
 
-// The renderer wraps text but never shrinks it, so a long post title gets a smaller size from its length.
 function titleSize(title: string, designSize: number) {
   const longestWord = Math.max(...title.split(" ").map(({ length }) => length));
   return Math.min(
     designSize * PX,
-    // The longest word stays on one line, at about 0.55 em per character.
     TITLE_WIDTH / (0.55 * longestWord),
-    // All lines fit, at about 0.7 em² per character with word wrap.
     Math.sqrt((TITLE_WIDTH * TITLE_HEIGHT) / (0.7 * title.length)),
   );
 }
 
 type ShareImagePage = Pick<SitePage, "id" | "kicker" | "title">;
 
-/** The image's words; the pattern behind them is decoration. */
 export function shareImageAlt({ kicker, title }: ShareImagePage) {
   return kicker ? `${title} — ${kicker}` : title;
 }
 
-/** A page's title block over its first pattern, as on the desktop site. */
 export function shareImage({ id, kicker, title }: ShareImagePage) {
   const colors = titleColors[id];
   const { width, height } = shareImageSize;

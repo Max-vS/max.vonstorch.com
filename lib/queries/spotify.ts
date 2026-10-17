@@ -18,9 +18,7 @@ const topTracksSchema = z.object({
     z.object({
       name: z.string(),
       artists: z.array(z.object({ name: z.string() })).min(1),
-      // The URL becomes a link on the page, so only https passes.
       external_urls: z.object({ spotify: z.url({ protocol: /^https$/ }) }),
-      // Spotify lists the covers largest first; next/image scales the largest down.
       album: z.object({
         name: z.string(),
         images: z.array(z.object({ url: z.url({ protocol: /^https$/ }) })),
@@ -29,7 +27,6 @@ const topTracksSchema = z.object({
   ),
 });
 
-/** The owner's newest Spotify link in the exact shape getAccessToken accepts (it rejects extra keys); null when there is none. */
 async function findOwnerSpotifyLink() {
   const links = await getDb()
     .select({
@@ -45,7 +42,6 @@ async function findOwnerSpotifyLink() {
   return link ? { accountId: link.accountId, userId: link.userId } : null;
 }
 
-/** Better Auth refreshes an expired token and stores the new pair; it throws when Spotify refuses the refresh. */
 async function getSpotifyAccessToken(link: {
   accountId: string;
   userId: string;
@@ -66,13 +62,11 @@ export async function getSpotifyStatus(): Promise<SpotifyStatus> {
   }
 }
 
-/** Null when Spotify is not linked. */
 async function fetchTopTracks() {
   const link = await findOwnerSpotifyLink();
   if (!link) return null;
   const res = await fetch(TOP_TRACKS_URL, {
     headers: { Authorization: `Bearer ${await getSpotifyAccessToken(link)}` },
-    // A request that hangs inside `use cache` fails the build after 50 seconds.
     signal: AbortSignal.timeout(10_000),
   });
   if (res.status === 429) {
@@ -99,7 +93,6 @@ export async function getTopTracks() {
     return null;
   });
   if (!tracks) {
-    // A throw would fail the prerender even where the page catches it; the empty list lasts minutes, so a fix or a new link shows soon.
     cacheLife("minutes");
     return [];
   }

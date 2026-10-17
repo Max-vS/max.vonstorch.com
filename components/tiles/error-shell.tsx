@@ -6,7 +6,6 @@ import { Panel } from "./panel";
 import { TitleBlock } from "./title-block";
 import { useGrid } from "./use-grid";
 
-/** The tile shell's title block and panel without the tiles, because the tile engine may be what failed. */
 export function ErrorShell({
   kicker,
   title,
@@ -16,10 +15,10 @@ export function ErrorShell({
   title: string;
   children: ReactNode;
 }) {
-  // Without the tile shell, nothing else resizes the blocks with the window.
+  // Nothing else resizes the blocks with the window here.
   useGrid();
   return (
-    <div className="fixed inset-0 overflow-hidden [--spacing:calc(var(--tile)/65)] sm:[--spacing:calc(var(--tile)/90)]">
+    <div className="fixed inset-0 overflow-hidden">
       <TitleBlock page={{ id: "index", kicker, title }} away={false} />
       <Panel>
         <main className="flex flex-col items-start gap-10 sm:gap-14">

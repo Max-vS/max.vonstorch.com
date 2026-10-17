@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Comments
 
-A comment carries what the code cannot: constraint, tradeoff, alternative rejected and why. One sentence, at the line that made the choice.
+A comment carries what the code cannot: constraint, tradeoff, alternative rejected and why. One sentence, at the line that made the choice. Most files have none.
 
 Comments should be concise, precise and simple in language unless the topic requires complexity.
 

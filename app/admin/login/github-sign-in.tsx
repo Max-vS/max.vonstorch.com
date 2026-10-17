@@ -17,7 +17,6 @@ export function GitHubSignIn() {
         callbackURL: "/admin",
         errorCallbackURL: "/admin/login",
       });
-      // Without an error the browser is already on its way to GitHub.
       setFailed(Boolean(error));
     });
   }

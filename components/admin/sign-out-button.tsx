@@ -13,7 +13,6 @@ export function SignOutButton() {
       onClick={() =>
         startTransition(async () => {
           await authClient.signOut();
-          // A full page load, not client navigation: the router would keep the signed-in admin page around.
           window.location.assign("/admin/login");
         })
       }

@@ -1,6 +1,5 @@
 export type Random = () => number;
 
-// mulberry32: a few lines, and random enough for picking tile colors.
 export function createRandom(seed: number): Random {
   let state = seed >>> 0;
   return () => {

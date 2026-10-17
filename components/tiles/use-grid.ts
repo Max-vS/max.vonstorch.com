@@ -9,13 +9,11 @@ function subscribe(onChange: () => void) {
     setGridVariables(measureGrid(window.innerWidth, window.innerHeight));
     onChange();
   }
-  // The window may have changed since the pre-paint script ran.
   resize();
   window.addEventListener("resize", resize);
   return () => window.removeEventListener("resize", resize);
 }
 
-// A new object only when the cell layout changes, so a resize that only scales the tiles keeps the pattern.
 function getGrid() {
   const {
     mobile,
