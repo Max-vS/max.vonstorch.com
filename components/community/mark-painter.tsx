@@ -121,7 +121,7 @@ export function MarkPainter({
     <form
       onSubmit={onSubmit}
       noValidate
-      className="flex flex-col gap-8 sm:gap-10"
+      className="flex flex-col gap-8 motion-safe:animate-content-in sm:gap-10"
     >
       <BrushPicker brush={brush} onChange={changeBrush} />
       <Field>
