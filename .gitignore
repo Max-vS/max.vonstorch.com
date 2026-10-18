@@ -44,3 +44,6 @@ next-env.d.ts
 # browser-automation scratch output
 .playwright-mcp/
 
+
+# local-only design spec, research and design exports
+/docs/

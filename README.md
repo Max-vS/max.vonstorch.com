@@ -2,8 +2,6 @@
 
 The personal site of Max von Storch: one screen of Bauhaus tiles with eight pages (Index, Education, Projects, Writing, Music, Links, Contact, Community), articles that open in the Writing panel, a community wall of visitor patterns that the owner approves, and the owner's top Spotify tracks.
 
-Design spec: `docs/superpowers/specs/2026-09-27-tile-site-design.md`. Design files: `docs/design/tile-system/`.
-
 ## Stack
 
 - Next.js 16.4 (App Router, Cache Components, Turbopack), React 19.3 with the React Compiler, TypeScript 7

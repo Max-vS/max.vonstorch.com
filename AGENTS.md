@@ -18,6 +18,6 @@ When the pull is to narrate what the code does, rename the thing instead.
 
 # Project
 
-- Spec: `docs/superpowers/specs/2026-09-27-tile-site-design.md`. Design source of truth: `docs/design/tile-system/`.
+- Spec: `docs/superpowers/specs/2026-09-27-tile-site-design.md`. Design source of truth: `docs/design/tile-system/`. Both are local only; `docs/` is not in git.
 - No test suite. Verify with `bun run lint`, `bun run build` and the browser.
 - Add no code the spec does not need.
