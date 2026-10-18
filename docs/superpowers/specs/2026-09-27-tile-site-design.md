@@ -1,9 +1,9 @@
-# max.vonstorch.com v2 — Tile System: design spec
+# max.vonstorch.com v2 Tile System: design spec
 
 - **Date:** 2026-09-27
 - **Status:** implemented on `personal-website` (2026-09-27). §22 lists what changed during implementation; where it disagrees with an earlier section, §22 wins.
 - **Branch:** `personal-website`
-- **Design source:** Claude Design canvas "Personal Website" — https://claude.ai/artifact/WpPUEUFrEoAV1bd9JfJMnJ — round 5, item 23 ("Tile System")
+- **Design source:** Claude Design canvas "Personal Website", https://claude.ai/artifact/WpPUEUFrEoAV1bd9JfJMnJ, round 5, item 23 ("Tile System")
 - **Research:** `docs/superpowers/research/2026-09-27-*.md` (exact commands, config snippets and sources for every decision below)
 
 ---
@@ -46,7 +46,7 @@ The design files are in `docs/design/tile-system/`. They are the source of truth
 
 | File | Content |
 |---|---|
-| `Truchet.dc.html` | Desktop tile system (1440×900, 16×10 tiles of 90 px) — the main reference |
+| `Truchet.dc.html` | Desktop tile system (1440×900, 16×10 tiles of 90 px), the main reference |
 | `MobileTiles.dc.html` | Mobile tile system (390×910, 6×14 tiles of 65 px) |
 | `TileLibrary.dc.html` | Final pattern set: 7 pages × 3 patterns |
 | `CVPalettes.dc.html` | CV palette options; option B (chartreuse `#C7F03A` + `#111111`) is the one in use |
@@ -191,8 +191,8 @@ All texts and links live in `content/site.ts`. There is no CMS.
 | Education | Computer Science & Philosophy | "Computer science at TU Munich, CSEE and UC Berkeley. Philosophy at HFPH." (no link) |
 | Projects | DRYFT & SIDE PROJECTS | "Founding engineer at Dryft, building AI for manufacturing." + "Rémi.fr · OpenEU · curava" (links below) + "dryft.ai ↗" |
 | Writing | NOTES & ESSAYS | The 3 newest posts (title + date, each a link) + "All posts →" (`/writing/archive`) |
-| Music | WHAT I LISTEN TO (proposed) | "My top 3 tracks lately: …" (title — artist, each links to Spotify); fallback line on error |
-| CV | Résumé · one page | "Experience, education and skills on one page." + "DOWNLOAD CV · PDF ↓" and "UPDATED [MONTH YYYY]" — shown only when `public/cv.pdf` exists |
+| Music | WHAT I LISTEN TO (proposed) | "My top 3 tracks lately: …" (title and artist, each links to Spotify); fallback line on error |
+| CV | Résumé · one page | "Experience, education and skills on one page." + "DOWNLOAD CV · PDF ↓" and "UPDATED [MONTH YYYY]", shown only when `public/cv.pdf` exists |
 | Contact | Because it is and always will be about people | "GitHub · LinkedIn · X" (links; no email) |
 | Community | Leave your mark | See §9 |
 
@@ -203,7 +203,7 @@ All texts and links live in `content/site.ts`. There is no CMS.
 **Content checklist (owner):**
 
 - [ ] X handle (Contact, JSON-LD `sameAs`)
-- [ ] Music kicker — confirm "WHAT I LISTEN TO" or give another
+- [ ] Music kicker: confirm "WHAT I LISTEN TO" or give another
 - [ ] CV PDF and its "updated" month (later)
 - [ ] Real posts to replace the sample post (later)
 - [ ] Optional: a Spotify profile link for Music; a real photo for the JSON-LD `Person.image`
@@ -218,7 +218,7 @@ All texts and links live in `content/site.ts`. There is no CMS.
 
 The motif repeats over the whole grid from an origin cell (r0, c0): cell (row, col) shows motif tile ((row − r0) mod 4, (col − c0) mod 4). In browse mode the origin is the grid's first full cell. In paint mode the origin is the top-left cell of the master block (see Paint, step 4).
 
-**Browse (desktop and mobile):** `/community` shows approved marks, newest first. Wheel, swipe or arrow keys move between marks (tile wave on each change). The panel shows "MARK n / N · date", the note in quotes, "— name", and "LEAVE YOUR MARK".
+**Browse (desktop and mobile):** `/community` shows approved marks, newest first. Wheel, swipe or arrow keys move between marks (tile wave on each change). The panel shows "MARK n / N · date", the note in quotes, the name, and "LEAVE YOUR MARK".
 
 **Paint:**
 
@@ -288,7 +288,7 @@ The form uses React Hook Form with the same Zod schema (`import * as z from "zod
 
 On the site:
 
-- `metadataBase: new URL("https://max.vonstorch.com")`; title template `"%s | Max von Storch"`; the home page uses `title.absolute: "Max von Storch — Founding engineer at Dryft"`.
+- `metadataBase: new URL("https://max.vonstorch.com")`; title template `"%s | Max von Storch"`; the home page uses `title.absolute: "Max von Storch · Founding engineer at Dryft"`.
 - Each page sets its own description and `alternates.canonical` through one helper in `lib/metadata.ts`. The root layout sets no canonical (children would inherit it).
 - Metadata is static (no cookies, headers or search params), so it is in `<head>`.
 - One H1 per page (the title block).
@@ -304,7 +304,7 @@ Off-site steps (owner):
 
 1. Now: Google Search Console Domain property for `vonstorch.com`, verified with a DNS TXT record at IONOS (not on `max.`, which is a CNAME); submit the sitemap.
 2. Now: add `https://max.vonstorch.com` as the website on GitHub (empty today), LinkedIn and X; same name everywhere.
-3. Now: Bing Webmaster Tools — import the site from Search Console.
+3. Now: in Bing Webmaster Tools, import the site from Search Console.
 4. After launch: submit the new sitemap; URL Inspection → Request indexing for `/` and `/writing`.
 
 ## 14. Accessibility
@@ -358,7 +358,7 @@ Better Auth tables (`user`, `session`, `account`, `verification`, `rateLimit`) c
 
 - **Vercel:** Hobby plan, Fluid compute, Node 24 (`"engines": { "node": "24.x" }`; Vercel runs 24, 22 and 20 only). Bun 1.4.2 is the package manager only; the app runs on Node.
 - **`vercel.json`:** `buildCommand: "bun run db:migrate && bun run build"` and the host redirect (§13). Reset the dashboard install/build overrides to auto-detect.
-- **Neon:** `bunx vercel@latest integration add neon --name max-vonstorch-db --plan free_v3 -m region=iad1 -m auth=false -e production -e preview --no-env-pull` (check first that `free_v3` is the Neon Free plan); in the dashboard turn on Preview branching and "Resource must be active before deployment". Free plan limits: 100 compute hours a month and 10 branches — cache all reads and delete merged preview branches.
+- **Neon:** `bunx vercel@latest integration add neon --name max-vonstorch-db --plan free_v3 -m region=iad1 -m auth=false -e production -e preview --no-env-pull` (check first that `free_v3` is the Neon Free plan); in the dashboard turn on Preview branching and "Resource must be active before deployment". Free plan limits: 100 compute hours a month and 10 branches, cache all reads and delete merged preview branches.
 - **BotID:** Basic mode (free on Hobby); `withBotId` in `next.config.ts`, `initBotId` in `instrumentation-client.ts` for the Community submit path.
 - **Analytics:** `@vercel/analytics` 2.x `<Analytics />` in the root layout. No Speed Insights (Hobby shows only one score).
 
@@ -458,7 +458,7 @@ These decisions were made while building. They replace the matching parts of the
 | Bun | 1.3.x as package manager (`bun.lock` v1) | 1.4.2 | Vercel's build image runs Bun 1.3.14 and cannot read a Bun 1.4 lockfile ("latest compatible" rule) |
 | Git hooks | `lefthook.yml` committed; run `bunx lefthook install` once after the merge | automatic install | The hooks folder is shared by all worktrees and the old site on `main` |
 | Owner login (§10) | GitHub OAuth only. The first sign-in creates the owner; `validateUserInfo` allows only a **verified** `OWNER_EMAIL`. Default Better Auth rate limit (database storage). OAuth errors land on `/admin/login` | email + password, seed script | Owner decision; no password to leak or guess |
-| GitHub apps | Two OAuth apps (production and local), one callback URL each | — | A GitHub OAuth app allows one callback URL |
+| GitHub apps | Two OAuth apps (production and local), one callback URL each | n/a | A GitHub OAuth app allows one callback URL |
 | Spotify (§11) | Linked to the owner with `authClient.linkSocial`; Spotify can never sign in or create a user (`disableImplicitLinking`, link-only exception in `validateUserInfo`); tokens encrypted; code in `lib/queries/spotify.ts`; `baseURL.fallback = BETTER_AUTH_URL` | `lib/spotify.ts` | Biome allows database access only in `lib/queries` / `lib/mutations`; Better Auth 1.7.6 needs the fallback to read a token without a request |
 | Local database | Neon `dev` branch of `personal-db` | PGlite | Same Postgres, TLS and driver as production; PGlite was only a stand-in before the Neon account existed |
 | Preview database | The Neon integration covers Production only; Preview `DATABASE_URL` and `DATABASE_URL_UNPOOLED` point to the `dev` branch | one Neon branch per preview | Two fixed branches instead of one per git branch; one developer, so shared preview and local data is fine |
@@ -472,12 +472,12 @@ These decisions were made while building. They replace the matching parts of the
 | Tile size | Rounded up to whole CSS pixels | the exact fluid size | Tiles at fractional positions blend their edges into 1-pixel lines; screens with a fractional pixel ratio (Windows 125 %) can still show faint lines |
 | Titles | H1 size = `min(design size, 100cqi / 4.7)`; mobile page titles are 61.5 design px | 68 px | "Community" must fit the mobile title block |
 | Grey text | `#6B665E` | `#8A857C` | 4.5:1 contrast |
-| Community (§9) | The browser keeps only the visitor's last own mark; more marks load from `/api/marks/[page]`; pages drive the grid through `useTileScene`; on a small desktop window without a free 4×4 area the title block also slides away | — | Simpler state; one small typed channel between pages and the shell |
+| Community (§9) | The browser keeps only the visitor's last own mark; more marks load from `/api/marks/[page]`; pages drive the grid through `useTileScene`; on a small desktop window without a free 4×4 area the title block also slides away | n/a | Simpler state; one small typed channel between pages and the shell |
 | Unknown post slug | The tile 404 page | reading-style "Post not found" | The article now lives in the tile shell |
 | Writing (design update, Oct 2026) | `/writing` card (3 newest), `/writing/archive` list of all posts, `/writing/[slug]` article, all in the tile shell. The panel grows (list: full height; article: up to the title block; mobile: full width below the title block) with a 750 ms CSS transition; new content fades in after 300 ms. On an article the post title is the H1 | plain reading layout, "All posts" page | Owner's Claude Design; every view keeps its own URL for links, sharing and search |
 | Post data | One kind of post, no types or filters; read time from `remark-reading-time` | the design's Essay / Note / Blog types and filters | Owner decision; Turbopack's `?raw` import returns the compiled MDX, not the text |
 | Article styles | A `post-body` utility in `globals.css`; Shiki with `github-light` only and the design's sage code background (`colorReplacements`) | `@tailwindcss/typography`, light and dark Shiki themes | Matches the design; the site has no dark mode |
-| Analytics | `@vercel/analytics` 2.x, plain `<Analytics />` | — | As in §17 |
-| Tests | None; checks are Biome, the type check, the build and manual browser checks | — | Owner decision |
+| Analytics | `@vercel/analytics` 2.x, plain `<Analytics />` | n/a | As in §17 |
+| Tests | None; checks are Biome, the type check, the build and manual browser checks | n/a | Owner decision |
 
 **Still open for the owner:** X handle, Music kicker confirmation, CV PDF and month, real posts; all launch steps are in `README.md`.

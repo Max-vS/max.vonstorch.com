@@ -55,7 +55,7 @@ function titleSize(title: string, designSize: number) {
 type ShareImagePage = Pick<SitePage, "id" | "kicker" | "title">;
 
 export function shareImageAlt({ kicker, title }: ShareImagePage) {
-  return kicker ? `${title} — ${kicker}` : title;
+  return kicker ? `${title}, ${kicker}` : title;
 }
 
 export function shareImage({ id, kicker, title }: ShareImagePage) {

@@ -5,7 +5,7 @@ import { contact, index, pages } from "@/content/site";
 import { pageMetadata, SITE_NAME, SITE_URL } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: { absolute: "Max von Storch — Founding engineer at Dryft" },
+  title: { absolute: "Max von Storch · Founding engineer at Dryft" },
   description: pages.index.description,
   path: pages.index.path,
 });

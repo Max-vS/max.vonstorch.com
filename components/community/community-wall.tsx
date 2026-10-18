@@ -172,7 +172,7 @@ export function CommunityWall({ first }: { first: MarksPage }) {
               </p>
             </div>
             <p className="text-[length:--spacing(13)] text-muted sm:text-[length:--spacing(15)]">
-              — {entry.name ?? community.anonymous}
+              {entry.name ?? community.anonymous}
             </p>
           </div>
         </Scene>

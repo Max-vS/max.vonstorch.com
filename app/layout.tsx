@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Max von Storch — full-stack engineer, designer and founder. Founding engineer at Dryft in San Francisco, building the autonomous factory.",
+    "Max von Storch is a full-stack engineer, designer and founder. Founding engineer at Dryft in San Francisco, building the autonomous factory.",
   twitter: { card: "summary_large_image" },
 };
 
