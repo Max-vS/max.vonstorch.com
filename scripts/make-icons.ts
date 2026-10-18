@@ -5,15 +5,34 @@ import { createElement as h } from "react";
 import { tilePaths } from "@/components/tiles/tile-paths";
 import { indexColors } from "@/lib/tiles/palettes";
 
+const { ink, ground, red, blue, yellow } = indexColors;
+
+// Design "F5 · Leaf": four quarter discs, read row by row.
+const LEAF = [
+  { bg: blue, fg: yellow, rot: 180 },
+  { bg: red, fg: ground, rot: 0 },
+  { bg: ink, fg: red, rot: 0 },
+  { bg: yellow, fg: ink, rot: 180 },
+];
+
 async function png(size: number) {
-  const tile = h(
+  const leaf = h(
     "svg",
-    { width: size, height: size, viewBox: "0 0 120 120" },
-    h("rect", { width: 120, height: 120, fill: indexColors.ink }),
-    tilePaths({ shape: "qdisc", fg: indexColors.red }),
+    { width: size, height: size, viewBox: "0 0 240 240" },
+    LEAF.map(({ bg, fg, rot }, i) =>
+      h(
+        "g",
+        {
+          key: i,
+          transform: `translate(${(i % 2) * 120} ${Math.floor(i / 2) * 120}) rotate(${rot} 60 60)`,
+        },
+        h("rect", { width: 120, height: 120, fill: bg }),
+        tilePaths({ shape: "qdisc", fg }),
+      ),
+    ),
   );
   const image = new ImageResponse(
-    h("div", { style: { display: "flex" } }, tile),
+    h("div", { style: { display: "flex" } }, leaf),
     { width: size, height: size },
   );
   return Buffer.from(await image.arrayBuffer());
