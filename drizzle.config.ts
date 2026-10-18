@@ -10,7 +10,6 @@ export default defineConfig({
   dialect: "postgresql",
   schema: "./lib/db/schema.ts",
   out: "./drizzle",
-  // drizzle-kit v1 manages every schema by default and would drop ones it did not create.
   schemaFilter: ["public"],
   strict: true,
   verbose: true,

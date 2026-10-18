@@ -36,11 +36,11 @@ export default async function MusicPage() {
               ) : (
                 <span className="size-44 bg-ink" />
               )}
-              <span className="flex min-w-0 flex-col gap-7 sm:gap-9 [&>*]:[text-box:trim-both_cap_alphabetic]">
-                <span className="overflow-x-clip text-ellipsis whitespace-nowrap font-semibold text-[length:--spacing(15)] sm:text-[length:--spacing(18)]">
+              <span className="flex min-w-0 flex-col gap-7 sm:gap-9 *:[text-box:trim-both_cap_alphabetic]">
+                <span className="overflow-x-clip text-ellipsis whitespace-nowrap font-semibold text-[--spacing(15)] sm:text-[--spacing(18)]">
                   {track.title}
                 </span>
-                <span className="overflow-x-clip text-ellipsis whitespace-nowrap text-[length:--spacing(12)] text-muted sm:text-[length:--spacing(14)]">
+                <span className="overflow-x-clip text-ellipsis whitespace-nowrap text-[--spacing(12)] text-muted sm:text-[--spacing(14)]">
                   {track.artist}
                 </span>
               </span>
