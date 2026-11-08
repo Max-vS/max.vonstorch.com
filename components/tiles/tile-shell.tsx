@@ -81,8 +81,7 @@ export function TileShell({
       : panelSize(pathname);
   const grid = useGrid();
   const { tiles, show, turn, hover, isBusy } = useTileEngine({
-    still: community,
-    idle: !community || scene?.mode === "browse",
+    still: community && scene?.mode !== "browse",
   });
 
   const behindTitle =
