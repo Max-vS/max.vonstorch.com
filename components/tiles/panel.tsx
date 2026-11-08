@@ -45,8 +45,8 @@ export function Panel({
     <div
       ref={panel}
       className={cn(
-        // Its own GPU layer: without it, iOS Safari can paint a turning tile's layer over the panel background.
-        "will-change-transform",
+        // Its own GPU layer: without it, iOS Safari can paint a turning tile's layer over the panel background. Opacity, not transform, so the fixed pattern indicator stays fixed to the viewport.
+        "will-change-[opacity]",
         "absolute right-0 bottom-0 flex flex-col gap-10 overflow-hidden bg-ground px-18 pt-16 pb-18 sm:gap-14 sm:px-30 sm:py-26 motion-safe:[transition:width_750ms_var(--ease-turn),height_750ms_var(--ease-turn)]",
         SIZES[size],
       )}
