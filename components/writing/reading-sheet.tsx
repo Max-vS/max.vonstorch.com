@@ -48,8 +48,11 @@ export function ReadingSheet({
           "absolute inset-0 transition-opacity duration-450 motion-reduce:transition-none",
           open ? "opacity-100" : "pointer-events-none opacity-0",
         )}
+        // Halfway through the wave, so the text is in as the last tile lands.
         style={{
-          transitionDelay: open ? `${last * step + FLIP_MS + 50}ms` : undefined,
+          transitionDelay: open
+            ? `${(last * step) / 2 + FLIP_MS}ms`
+            : undefined,
         }}
       >
         <div
