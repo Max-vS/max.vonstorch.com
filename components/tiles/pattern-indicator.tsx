@@ -3,7 +3,6 @@ import { cn } from "cn";
 const HINTS = {
   change: { mobile: "SWIPE TO CHANGE", desktop: "SCROLL TO CHANGE" },
   browse: { mobile: "SWIPE TO BROWSE", desktop: "SCROLL TO BROWSE" },
-  paint: { mobile: "TAP TILES TO PAINT", desktop: "CLICK TILES TO PAINT" },
 };
 
 export function PatternIndicator({

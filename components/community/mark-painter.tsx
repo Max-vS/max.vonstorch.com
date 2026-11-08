@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { submitMark } from "@/app/(tiles)/community/actions";
-import { PatternIndicator } from "@/components/tiles/pattern-indicator";
 import { useTileScene } from "@/components/tiles/tile-scene";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
@@ -123,11 +122,12 @@ export function MarkPainter({
     >
       <div data-panel-fill className="min-h-0 flex-1 overflow-y-clip">
         <div className="flex flex-col gap-8 sm:gap-10">
-          <PatternIndicator
-            label={community.yourMark}
-            hint="paint"
-            live={false}
-          />
+          <p className="caption text-muted">
+            <span className="sm:hidden">{community.paintHint.mobile}</span>
+            <span className="hidden sm:inline">
+              {community.paintHint.desktop}
+            </span>
+          </p>
           <BrushPicker brush={brush} onChange={changeBrush} />
           <Field>
             <div className="flex items-baseline">
