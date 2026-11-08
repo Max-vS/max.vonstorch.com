@@ -32,7 +32,7 @@ export function ReadingSheet({
                 className="bg-ground transition-transform duration-340 ease-turn motion-reduce:transition-none"
                 style={{
                   transform: open ? undefined : "scaleX(0)",
-                  transitionDelay: `${(open ? diagonal : last - diagonal) * step}ms`,
+                  transitionDelay: `${(open ? last - diagonal : diagonal) * step}ms`,
                 }}
               />
             );
