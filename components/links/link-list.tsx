@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { PanelControl } from "@/components/tiles/panel-control";
+import { ListRow } from "@/components/ui/list-row";
 import { links, panelControls } from "@/content/site";
 
 const CARD_ROWS = 2;
@@ -26,17 +27,11 @@ export function LinkList({ all = false }: { all?: boolean }) {
       <ul className="min-h-0 flex-1 overflow-y-auto border-ink border-t-[1.5px]">
         {rows.map((link) => (
           <li key={link.href}>
-            <a
+            <ListRow
               href={link.href}
-              className="row-nudge flex items-baseline gap-12 border-ink/18 border-b py-9 sm:py-7"
-            >
-              <span className="truncate font-semibold text-[length:--spacing(15)] sm:text-[length:--spacing(18)]">
-                {link.label}
-              </span>
-              <span className="truncate text-[length:--spacing(12)] text-muted sm:text-[length:--spacing(14)]">
-                {domain(link.href)}
-              </span>
-            </a>
+              title={link.label}
+              sub={domain(link.href)}
+            />
           </li>
         ))}
       </ul>

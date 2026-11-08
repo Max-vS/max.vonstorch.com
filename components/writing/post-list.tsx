@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
+import { ListRow } from "@/components/ui/list-row";
 import type { Post } from "@/content/writing";
-import { PostLink } from "./post-link";
 import { PostMeta } from "./post-meta";
 
 export function PostList({
@@ -12,19 +12,16 @@ export function PostList({
 }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-10">
-      <ul className="-mt-8 min-h-0 flex-1 overflow-y-auto sm:-mt-9">
+      <ul className="-mt-9 min-h-0 flex-1 overflow-y-auto sm:-mt-7">
         {posts.map((post) => (
           <li key={post.slug}>
-            <PostLink
-              post={post}
-              className="row-nudge flex items-baseline justify-between gap-16 border-ink/18 border-b py-8 sm:py-9"
-            >
-              <span className="min-w-0 truncate font-semibold text-[length:--spacing(15)] tracking-[-0.01em] sm:text-[length:--spacing(18)]">
-                {post.title}
-                {post.url ? " ↗" : null}
-              </span>
-              <PostMeta post={post} className="shrink-0 whitespace-nowrap" />
-            </PostLink>
+            <ListRow
+              href={post.url ?? `/writing/${post.slug}`}
+              target={post.url ? "_blank" : undefined}
+              rel={post.url ? "noopener" : undefined}
+              title={post.url ? `${post.title} ↗` : post.title}
+              meta={<PostMeta post={post} />}
+            />
           </li>
         ))}
       </ul>
