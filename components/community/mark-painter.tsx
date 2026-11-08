@@ -1,15 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { cn } from "cn";
 import { useRef, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { submitMark } from "@/app/(tiles)/community/actions";
-import { PanelText } from "@/components/tiles/panel-text";
 import { useTileScene } from "@/components/tiles/tile-scene";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Label, labelText } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { community } from "@/content/site";
 import {
@@ -123,15 +123,17 @@ export function MarkPainter({
     >
       <div data-panel-fill className="min-h-0 flex-1 overflow-y-clip">
         <div className="flex flex-col gap-8 sm:gap-10">
-          <div className="flex flex-col gap-4 pb-4 sm:gap-6 sm:pb-6">
-            <PanelText>{community.paintTitle}</PanelText>
-            <p className="caption text-muted">
-              <span className="sm:hidden">{community.paintHint.mobile}</span>
-              <span className="hidden sm:inline">
-                {community.paintHint.desktop}
-              </span>
-            </p>
-          </div>
+          <p className="flex items-baseline">
+            <span className={cn(labelText, captionWidth)}>
+              {community.paintHint.label}
+            </span>
+            <span className="caption-sm sm:hidden">
+              {community.paintHint.mobile}
+            </span>
+            <span className="caption-sm hidden sm:inline">
+              {community.paintHint.desktop}
+            </span>
+          </p>
           <BrushPicker brush={brush} onChange={changeBrush} />
           <Field>
             <div className="flex items-baseline">

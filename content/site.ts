@@ -176,10 +176,10 @@ export const community = {
   thanksStatus: "Thank you. Your pattern is waiting for approval.",
   position: (n: number, total: number) => `Pattern ${n} of ${total}`,
   anonymous: "Anonymous",
-  paintTitle: "Paint your pattern",
   paintHint: {
-    mobile: "Tap tiles to paint · again to turn",
-    desktop: "Click tiles to paint · again to turn",
+    label: "Tiles",
+    mobile: "Tap to paint · again to turn",
+    desktop: "Click to paint · again to turn",
   },
   paintArea: "Your pattern, 2 by 2 tiles. Arrow keys move, Enter paints.",
   paintCell: (row: number, col: number) => `Row ${row}, column ${col}`,
