@@ -218,33 +218,35 @@ export function TileShell({
           <main className="flex min-h-0 flex-1 flex-col gap-10 overflow-hidden sm:gap-14">
             {children}
           </main>
-          <div className="flex shrink-0 flex-col gap-10 sm:gap-14">
-            {changeable ? (
-              <PatternIndicator
-                className={cn(
-                  DOCKED_INDICATOR,
-                  size !== "small" && "max-sm:hidden",
-                )}
-                label={patterns[view.pattern].name}
-                hint="change"
-                live
-                ticks={{
-                  names: patterns.map(({ name }) => name),
-                  current: view.pattern,
-                  onSelect: select,
-                }}
-              />
-            ) : scene?.mode === "browse" && scene.label ? (
-              <PatternIndicator
-                className={DOCKED_INDICATOR}
-                label={scene.label}
-                hint="browse"
-                live={false}
-              />
-            ) : null}
-            {scene?.mode === "browse" ? scene.action : null}
-            {painting ? null : <PageNav current={page.id} />}
-          </div>
+          {painting ? null : (
+            <div className="flex shrink-0 flex-col gap-10 sm:gap-14">
+              {changeable ? (
+                <PatternIndicator
+                  className={cn(
+                    DOCKED_INDICATOR,
+                    size !== "small" && "max-sm:hidden",
+                  )}
+                  label={patterns[view.pattern].name}
+                  hint="change"
+                  live
+                  ticks={{
+                    names: patterns.map(({ name }) => name),
+                    current: view.pattern,
+                    onSelect: select,
+                  }}
+                />
+              ) : scene?.mode === "browse" && scene.label ? (
+                <PatternIndicator
+                  className={DOCKED_INDICATOR}
+                  label={scene.label}
+                  hint="browse"
+                  live={false}
+                />
+              ) : null}
+              {scene?.mode === "browse" ? scene.action : null}
+              <PageNav current={page.id} />
+            </div>
+          )}
         </Panel>
       </div>
     </TileSceneContext>

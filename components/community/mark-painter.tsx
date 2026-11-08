@@ -122,9 +122,8 @@ export function MarkPainter({
       className="flex min-h-0 flex-1 flex-col gap-8 sm:gap-10"
     >
       <div data-panel-fill className="min-h-0 flex-1 overflow-y-clip">
-        <div className="flex flex-col gap-8 sm:gap-10">
-          {/* Extra space on desktop only: on mobile it would add a tile to the panel. */}
-          <p className={cn("caption-sm sm:pb-8", captionIndent)}>
+        <div className="flex flex-col gap-8">
+          <p className={cn("caption-sm leading-none", captionIndent)}>
             <span className="sm:hidden">{community.paintHint.mobile}</span>
             <span className="hidden sm:inline">
               {community.paintHint.desktop}
