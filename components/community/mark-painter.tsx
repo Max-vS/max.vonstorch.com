@@ -123,7 +123,7 @@ export function MarkPainter({
     >
       <div data-panel-fill className="min-h-0 flex-1 overflow-y-clip">
         <div className="flex flex-col gap-8">
-          <p className={cn("caption-sm leading-none", captionIndent)}>
+          <p className={cn("caption-sm pb-4 leading-none", captionIndent)}>
             <span className="sm:hidden">{community.paintHint.mobile}</span>
             <span className="hidden sm:inline">
               {community.paintHint.desktop}
