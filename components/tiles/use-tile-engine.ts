@@ -26,7 +26,13 @@ function isVisible() {
   return !document.hidden;
 }
 
-export function useTileEngine({ still }: { still: boolean }) {
+export function useTileEngine({
+  still,
+  idle,
+}: {
+  still: boolean;
+  idle: boolean;
+}) {
   const [engine] = useState(createTileEngine);
   const tiles = useSyncExternalStore(
     engine.subscribe,
@@ -49,9 +55,9 @@ export function useTileEngine({ still }: { still: boolean }) {
     engine.setMotion({
       waves: !reducedMotion,
       turns: !still,
-      idle: hover && visible,
+      idle: idle && !reducedMotion && visible,
     });
-  }, [engine, reducedMotion, still, hover, visible]);
+  }, [engine, reducedMotion, still, idle, visible]);
 
   useEffect(() => engine.stop, [engine]);
 

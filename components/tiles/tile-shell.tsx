@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "cn";
 import { usePathname } from "next/navigation";
 import {
   type CSSProperties,
@@ -78,6 +79,7 @@ export function TileShell({
   const grid = useGrid();
   const { tiles, show, turn, hover, isBusy } = useTileEngine({
     still: community,
+    idle: !community || scene?.mode === "browse",
   });
 
   const behindTitle =
@@ -216,7 +218,10 @@ export function TileShell({
           <div className="flex shrink-0 flex-col gap-10 sm:gap-14">
             {changeable ? (
               <PatternIndicator
-                className={size === "small" ? undefined : "max-sm:hidden"}
+                className={cn(
+                  "sm:fixed sm:bottom-0 sm:left-0 sm:h-(--tile) sm:w-(--indicator-width) sm:bg-ground sm:px-30",
+                  size !== "small" && "max-sm:hidden",
+                )}
                 label={patterns[view.pattern].name}
                 hint="change"
                 live
@@ -225,13 +230,6 @@ export function TileShell({
                   current: view.pattern,
                   onSelect: select,
                 }}
-              />
-            ) : scene?.label ? (
-              <PatternIndicator
-                className={painting ? "max-sm:hidden" : undefined}
-                label={scene.label}
-                hint={painting ? "paint" : "browse"}
-                live={false}
               />
             ) : null}
             {scene?.mode === "browse" ? scene.action : null}

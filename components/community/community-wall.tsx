@@ -2,6 +2,7 @@
 
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { PanelText } from "@/components/tiles/panel-text";
+import { PatternIndicator } from "@/components/tiles/pattern-indicator";
 import { type TileScene, useTileScene } from "@/components/tiles/tile-scene";
 import type { Direction } from "@/components/tiles/use-pattern-input";
 import type { Corner } from "@/components/tiles/use-tile-engine";
@@ -141,7 +142,6 @@ export function CommunityWall({ first }: { first: MarksPage }) {
             key: "empty",
             from: view.from,
             motif: null,
-            label: null,
             step: null,
             action: start,
           }}
@@ -155,11 +155,15 @@ export function CommunityWall({ first }: { first: MarksPage }) {
             key: entry.id,
             from: view.from,
             motif: entry.tiles,
-            label: community.position(index + 1, count),
             step: count > 1 ? step : null,
             action: start,
           }}
         >
+          <PatternIndicator
+            label={community.position(index + 1, count)}
+            hint="browse"
+            live={false}
+          />
           <div
             aria-live="polite"
             aria-atomic="true"

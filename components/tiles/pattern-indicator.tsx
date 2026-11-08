@@ -24,12 +24,7 @@ export function PatternIndicator({
   };
 }) {
   return (
-    <div
-      className={cn(
-        "flex items-center gap-10 sm:fixed sm:bottom-0 sm:left-0 sm:h-(--tile) sm:w-(--indicator-width) sm:gap-16 sm:bg-ground sm:px-30",
-        className,
-      )}
-    >
+    <div className={cn("flex items-center gap-10 sm:gap-16", className)}>
       {ticks ? (
         <div className="flex flex-col gap-3 sm:gap-4">
           {ticks.names.map((name, index) => (
