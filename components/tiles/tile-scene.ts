@@ -9,6 +9,7 @@ export type TileScene =
       key: string;
       from: Corner;
       motif: readonly Tile[] | null;
+      label: string | null;
       step: ((direction: Direction) => void) | null;
       action: ReactNode;
     }

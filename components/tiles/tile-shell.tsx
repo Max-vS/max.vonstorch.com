@@ -28,6 +28,9 @@ import { type Corner, useTileEngine } from "./use-tile-engine";
 
 type View = { page: SceneId; pattern: number; from: Corner };
 
+const DOCKED_INDICATOR =
+  "sm:fixed sm:bottom-0 sm:left-0 sm:h-(--tile) sm:w-(--indicator-width) sm:bg-ground sm:px-30";
+
 function cornerCell(corner: Corner, grid: Grid): Cell {
   return corner === "top-left"
     ? { row: 0, col: 0 }
@@ -219,7 +222,7 @@ export function TileShell({
             {changeable ? (
               <PatternIndicator
                 className={cn(
-                  "sm:fixed sm:bottom-0 sm:left-0 sm:h-(--tile) sm:w-(--indicator-width) sm:bg-ground sm:px-30",
+                  DOCKED_INDICATOR,
                   size !== "small" && "max-sm:hidden",
                 )}
                 label={patterns[view.pattern].name}
@@ -230,6 +233,13 @@ export function TileShell({
                   current: view.pattern,
                   onSelect: select,
                 }}
+              />
+            ) : scene?.mode === "browse" && scene.label ? (
+              <PatternIndicator
+                className={DOCKED_INDICATOR}
+                label={scene.label}
+                hint="browse"
+                live={false}
               />
             ) : null}
             {scene?.mode === "browse" ? scene.action : null}
