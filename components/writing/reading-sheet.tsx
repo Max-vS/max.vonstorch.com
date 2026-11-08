@@ -29,7 +29,7 @@ export function ReadingSheet({
             return (
               <div
                 key={`${row}-${col}`}
-                className="inset-ring-[0.5px] inset-ring-ink/8 bg-ground transition-transform duration-340 ease-turn motion-reduce:transition-none"
+                className="bg-ground transition-transform duration-340 ease-turn motion-reduce:transition-none"
                 style={{
                   transform: open ? undefined : "scaleX(0)",
                   transitionDelay: `${(open ? diagonal : last - diagonal) * step}ms`,
@@ -52,7 +52,11 @@ export function ReadingSheet({
           transitionDelay: open ? `${last * step + FLIP_MS + 50}ms` : undefined,
         }}
       >
-        {children}
+        <div
+          aria-hidden="true"
+          className="blueprint pointer-events-none absolute inset-0"
+        />
+        <div className="relative h-full">{children}</div>
       </div>
     </>
   );
