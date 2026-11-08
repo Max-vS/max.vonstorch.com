@@ -1,15 +1,13 @@
 import { cn } from "cn";
 import { type ReactNode, useLayoutEffect, useRef } from "react";
 
-export type PanelSize = "small" | "list" | "article" | "paint";
+export type PanelSize = "small" | "list" | "paint";
 
 // Anchored bottom right, so a new size grows the panel up and to the left; heights stay lengths so CSS can interpolate them.
 const SIZES: Record<PanelSize, string> = {
   small:
     "h-[calc(6*var(--tile))] w-[calc(5*var(--tile))] sm:h-[calc(4*var(--tile))]",
   list: "h-[calc(100%-var(--title-height))] w-full sm:h-full sm:w-[calc(5*var(--tile))]",
-  article:
-    "h-[calc(100%-var(--title-height))] w-full sm:h-full sm:w-[calc(100%-var(--title-width))]",
   paint:
     "h-[calc(round(up,var(--content-height,0px),var(--tile))+var(--tile))] w-[calc(5*var(--tile))]",
 };

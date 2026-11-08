@@ -1,5 +1,5 @@
 import { TileShell } from "@/components/tiles/tile-shell";
 
-export default function TilesLayout({ children }: LayoutProps<"/">) {
-  return <TileShell>{children}</TileShell>;
+export default function TilesLayout({ children, reader }: LayoutProps<"/">) {
+  return <TileShell reader={reader}>{children}</TileShell>;
 }

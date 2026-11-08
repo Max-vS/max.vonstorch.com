@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { ReadingSheet } from "@/components/writing/reading-sheet";
 import { pages } from "@/content/site";
 import { masterBlock, tileCells } from "@/lib/tiles/grid";
 import { buildMotif, motifIndex } from "@/lib/tiles/motif";
@@ -38,10 +39,13 @@ function cornerCell(corner: Corner, grid: Grid): Cell {
 }
 
 function panelSize(pathname: string): PanelSize {
-  if (pathname === "/writing/archive" || pathname === "/links/all") {
-    return "list";
-  }
-  return pathname.startsWith("/writing/") ? "article" : "small";
+  return pathname === "/writing/archive" || pathname === "/links/all"
+    ? "list"
+    : "small";
+}
+
+function isPost(pathname: string) {
+  return pathname.startsWith("/writing/") && pathname !== "/writing/archive";
 }
 
 function motifOrigin(grid: Grid, master: Cell | null): Cell {
@@ -50,9 +54,11 @@ function motifOrigin(grid: Grid, master: Cell | null): Cell {
 
 export function TileShell({
   page: fixedPage,
+  reader,
   children,
 }: {
   page?: TitlePage;
+  reader?: ReactNode;
   children: ReactNode;
 }) {
   const pathname = usePathname();
@@ -79,9 +85,10 @@ export function TileShell({
     : fixedPage
       ? "small"
       : panelSize(pathname);
+  const reading = !fixedPage && isPost(pathname);
   const grid = useGrid();
   const { tiles, show, turn, hover, isBusy } = useTileEngine({
-    still: community && scene?.mode !== "browse",
+    still: reading || (community && scene?.mode !== "browse"),
   });
 
   const behindTitle =
@@ -176,7 +183,7 @@ export function TileShell({
     isBusy,
     enabled: scene
       ? scene.mode === "browse" && scene.step !== null
-      : changeable && size === "small",
+      : changeable && size === "small" && !reading,
   });
 
   return (
@@ -187,66 +194,73 @@ export function TileShell({
         onTouchStart={input.onTouchStart}
         onTouchEnd={input.onTouchEnd}
       >
-        <TileGrid
-          tiles={tiles}
-          onTurn={turn}
-          onHover={hover ? turn : undefined}
-          onPaint={painting ? paintTile : undefined}
-        />
-        {painting ? (
-          <div
-            aria-hidden="true"
-            className="blueprint pointer-events-none absolute inset-0"
+        <div className="contents" inert={reading}>
+          <TileGrid
+            tiles={tiles}
+            onTurn={turn}
+            onHover={hover ? turn : undefined}
+            onPaint={painting ? paintTile : undefined}
           />
+          {painting ? (
+            <div
+              aria-hidden="true"
+              className="blueprint pointer-events-none absolute inset-0"
+            />
+          ) : null}
+          {master ? (
+            <div
+              aria-hidden="true"
+              className="motif-crosses pointer-events-none absolute inset-0"
+              style={
+                {
+                  "--motif-row": master.row,
+                  "--motif-col": master.col,
+                } as CSSProperties
+              }
+            />
+          ) : null}
+          {master ? <MasterBlock at={master} onPaint={paint} /> : null}
+          <TitleBlock page={page} away={titleAway} heading={!reading} />
+          <Panel size={size}>
+            <main className="flex min-h-0 flex-1 flex-col gap-10 overflow-hidden sm:gap-14">
+              {children}
+            </main>
+            {painting ? null : (
+              <div className="flex shrink-0 flex-col gap-10 sm:gap-14">
+                {changeable ? (
+                  <PatternIndicator
+                    className={cn(
+                      DOCKED_INDICATOR,
+                      size !== "small" && "max-sm:hidden",
+                    )}
+                    label={patterns[view.pattern].name}
+                    hint="change"
+                    live
+                    ticks={{
+                      names: patterns.map(({ name }) => name),
+                      current: view.pattern,
+                      onSelect: select,
+                    }}
+                  />
+                ) : scene?.mode === "browse" && scene.label ? (
+                  <PatternIndicator
+                    className={DOCKED_INDICATOR}
+                    label={scene.label}
+                    hint="browse"
+                    live={false}
+                  />
+                ) : null}
+                {scene?.mode === "browse" ? scene.action : null}
+                <PageNav current={page.id} />
+              </div>
+            )}
+          </Panel>
+        </div>
+        {page.id === "writing" ? (
+          <ReadingSheet open={reading} grid={grid}>
+            {reader}
+          </ReadingSheet>
         ) : null}
-        {master ? (
-          <div
-            aria-hidden="true"
-            className="motif-crosses pointer-events-none absolute inset-0"
-            style={
-              {
-                "--motif-row": master.row,
-                "--motif-col": master.col,
-              } as CSSProperties
-            }
-          />
-        ) : null}
-        {master ? <MasterBlock at={master} onPaint={paint} /> : null}
-        <TitleBlock page={page} away={titleAway} heading={size !== "article"} />
-        <Panel size={size}>
-          <main className="flex min-h-0 flex-1 flex-col gap-10 overflow-hidden sm:gap-14">
-            {children}
-          </main>
-          {painting ? null : (
-            <div className="flex shrink-0 flex-col gap-10 sm:gap-14">
-              {changeable ? (
-                <PatternIndicator
-                  className={cn(
-                    DOCKED_INDICATOR,
-                    size !== "small" && "max-sm:hidden",
-                  )}
-                  label={patterns[view.pattern].name}
-                  hint="change"
-                  live
-                  ticks={{
-                    names: patterns.map(({ name }) => name),
-                    current: view.pattern,
-                    onSelect: select,
-                  }}
-                />
-              ) : scene?.mode === "browse" && scene.label ? (
-                <PatternIndicator
-                  className={DOCKED_INDICATOR}
-                  label={scene.label}
-                  hint="browse"
-                  live={false}
-                />
-              ) : null}
-              {scene?.mode === "browse" ? scene.action : null}
-              <PageNav current={page.id} />
-            </div>
-          )}
-        </Panel>
       </div>
     </TileSceneContext>
   );

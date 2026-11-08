@@ -95,22 +95,22 @@
   & > * {
     flex-shrink: 0;
   }
-  & > p {
-    font-size: --spacing(16);
-    line-height: 1.6;
+  & > :is(p, ul, ol) {
+    font-size: --spacing(17);
+    line-height: 1.65;
   }
   & > :is(h2, h3) {
-    margin-top: --spacing(14);
-    font-size: --spacing(20);
+    margin-top: --spacing(18);
+    font-size: --spacing(24);
     line-height: 1.15;
     font-weight: 700;
     letter-spacing: -0.02em;
   }
-  & > ul {
+  & > :is(ul, ol) {
     display: flex;
     flex-direction: column;
-    font-size: --spacing(16);
-    line-height: 1.6;
+    gap: --spacing(10);
+    margin-top: --spacing(-10);
   }
   & > ul > li {
     display: flex;
@@ -123,22 +123,25 @@
   & > ol {
     padding-left: --spacing(20);
     list-style: decimal;
-    font-size: --spacing(16);
-    line-height: 1.6;
   }
   & > blockquote {
-    margin-block: --spacing(7);
-    padding-left: --spacing(24);
-    font-size: --spacing(20);
-    line-height: 1.25;
+    margin-block: --spacing(10);
+    font-size: --spacing(28);
+    line-height: 1.22;
     font-weight: 600;
     letter-spacing: -0.015em;
     color: var(--color-forest);
   }
+  & > blockquote > :first-child::before {
+    content: "“";
+  }
+  & > blockquote > :last-child::after {
+    content: "”";
+  }
   & > pre {
-    padding: --spacing(16) --spacing(18);
+    padding: --spacing(18) --spacing(20);
     overflow-x: auto;
-    font-size: --spacing(11);
+    font-size: --spacing(12.5);
     line-height: 1.65;
   }
   & :is(code, pre) {
@@ -155,19 +158,7 @@
 
   @variant sm {
     & > :is(p, ul, ol) {
-      font-size: --spacing(17);
-    }
-    & > :is(h2, h3) {
-      margin-top: --spacing(16);
-      font-size: --spacing(22);
-    }
-    & > blockquote {
-      margin-block: --spacing(8);
-      padding-left: --spacing(25);
-      font-size: --spacing(24);
-    }
-    & > pre {
-      font-size: --spacing(12);
+      font-size: --spacing(18);
     }
   }
 }

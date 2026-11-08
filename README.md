@@ -1,6 +1,6 @@
 # max.vonstorch.com
 
-The personal site of Max von Storch: one screen of Bauhaus tiles with eight pages (Index, Education, Projects, Writing, Music, Links, Contact, Community), articles that open in the Writing panel, a community wall of visitor patterns that the owner approves, and the owner's top Spotify tracks.
+The personal site of Max von Storch: one screen of Bauhaus tiles with eight pages (Index, Education, Projects, Writing, Music, Links, Contact, Community), articles that open on a full-screen paper sheet, a community wall of visitor patterns that the owner approves, and the owner's top Spotify tracks.
 
 ## Stack
 
