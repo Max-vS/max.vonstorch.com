@@ -176,6 +176,7 @@ export const community = {
   thanksStatus: "Thank you. Your pattern is waiting for approval.",
   position: (n: number, total: number) => `Pattern ${n} of ${total}`,
   anonymous: "Anonymous",
+  paintTitle: "Paint your pattern",
   paintHint: {
     mobile: "Tap tiles to paint · again to turn",
     desktop: "Click tiles to paint · again to turn",
