@@ -9,7 +9,7 @@ import { useTileScene } from "@/components/tiles/tile-scene";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label, labelText } from "@/components/ui/label";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { community } from "@/content/site";
 import {
@@ -123,14 +123,10 @@ export function MarkPainter({
     >
       <div data-panel-fill className="min-h-0 flex-1 overflow-y-clip">
         <div className="flex flex-col gap-8 sm:gap-10">
-          <p className="flex items-baseline">
-            <span className={cn(labelText, captionWidth)}>
-              {community.paintHint.label}
-            </span>
-            <span className="caption-sm sm:hidden">
-              {community.paintHint.mobile}
-            </span>
-            <span className="caption-sm hidden sm:inline">
+          {/* Extra space on desktop only: on mobile it would add a tile to the panel. */}
+          <p className={cn("caption-sm sm:pb-8", captionIndent)}>
+            <span className="sm:hidden">{community.paintHint.mobile}</span>
+            <span className="hidden sm:inline">
               {community.paintHint.desktop}
             </span>
           </p>

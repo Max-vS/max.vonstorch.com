@@ -177,7 +177,6 @@ export const community = {
   position: (n: number, total: number) => `Pattern ${n} of ${total}`,
   anonymous: "Anonymous",
   paintHint: {
-    label: "Tiles",
     mobile: "Tap to paint · again to turn",
     desktop: "Click to paint · again to turn",
   },
