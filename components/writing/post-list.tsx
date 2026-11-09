@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { ListRow } from "@/components/ui/list-row";
 import type { Post } from "@/content/writing";
 import { PostMeta } from "./post-meta";
-import { PostTitle } from "./post-title";
 
 export function PostList({
   posts,
@@ -20,12 +19,7 @@ export function PostList({
               href={post.url ?? `/writing/${post.slug}`}
               target={post.url ? "_blank" : undefined}
               rel={post.url ? "noopener" : undefined}
-              title={
-                <>
-                  <PostTitle title={post.title} />
-                  {post.url ? " ↗" : null}
-                </>
-              }
+              title={post.url ? `${post.title} ↗` : post.title}
               meta={<PostMeta post={post} />}
             />
           </li>
