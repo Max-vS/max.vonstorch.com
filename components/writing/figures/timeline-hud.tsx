@@ -81,10 +81,10 @@ export function TimelineHud({
       }
       return end;
     };
-    // The line's tip: 60% down the reading sheet's scroll box, as in the CSS view timelines.
+    // The line's tip: two thirds down the reading sheet's scroll box, as in the CSS view timelines.
     const tipY = () =>
       scroller.getBoundingClientRect().top +
-      scroller.clientHeight * 0.6 -
+      (scroller.clientHeight * 2) / 3 -
       line.getBoundingClientRect().top;
 
     let frame = 0;
