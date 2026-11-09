@@ -11,24 +11,24 @@ import timeline from "./forty-days-with-an-agent-team.json";
 
 Up to 49 agents at once, usually just four.
 
-<dl className="grid grid-cols-[max-content_1fr] gap-x-20 gap-y-7 text-[length:--spacing(16)] leading-[1.4]">
-  <dt className="whitespace-nowrap font-semibold"><i className="mr-8 inline-block size-9 bg-ink align-[1px]" />Lead</dt>
+<dl className="grid grid-cols-[max-content_1fr] gap-x-[20px] gap-y-[8px] text-(length:--body) leading-[1.5]">
+  <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-ink align-[1px]" />Lead</dt>
   <dd className="min-w-0 text-lede">Coordinates and routes the work and talks to me.</dd>
-  <dt className="whitespace-nowrap font-semibold"><i className="mr-8 inline-block size-9 bg-ink align-[1px]" />Architect</dt>
+  <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-ink align-[1px]" />Architect</dt>
   <dd className="min-w-0 text-lede">Decides design questions, also while I sleep.</dd>
-  <dt className="whitespace-nowrap font-semibold"><i className="mr-8 inline-block size-9 bg-chart-blue align-[1px]" />Workers</dt>
+  <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-chart-blue align-[1px]" />Workers</dt>
   <dd className="min-w-0 text-lede">One task each, in their own copy of the code.</dd>
-  <dt className="whitespace-nowrap font-semibold"><i className="mr-8 inline-block size-9 bg-chart-blue align-[1px]" />Integrator</dt>
+  <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-chart-blue align-[1px]" />Integrator</dt>
   <dd className="min-w-0 text-lede">Merges the workers' work. Nothing else.</dd>
-  <dt className="whitespace-nowrap font-semibold"><i className="mr-8 inline-block size-9 bg-chart-ochre align-[1px]" />Testers</dt>
+  <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-chart-ochre align-[1px]" />Testers</dt>
   <dd className="min-w-0 text-lede">Write the tests first, run the replays. A hash freezes the tests.</dd>
-  <dt className="whitespace-nowrap font-semibold"><i className="mr-8 inline-block size-9 bg-chart-ochre align-[1px]" />Reviewers</dt>
+  <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-chart-ochre align-[1px]" />Reviewers</dt>
   <dd className="min-w-0 text-lede">Review the work.</dd>
-  <dt className="whitespace-nowrap font-semibold"><i className="mr-8 inline-block size-9 bg-ink align-[1px]" />Meta</dt>
+  <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-ink align-[1px]" />Meta</dt>
   <dd className="min-w-0 text-lede">Every 30 minutes: where did the time go? Then fixes one thing.</dd>
-  <dt className="whitespace-nowrap font-semibold"><i className="mr-8 inline-block size-9 bg-ink align-[1px]" />Notetaker</dt>
+  <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-ink align-[1px]" />Notetaker</dt>
   <dd className="min-w-0 text-lede">Writes down learnings = most of this blog's content.</dd>
-  <dt className="whitespace-nowrap font-semibold"><i className="mr-8 inline-block size-9 bg-ink/22 align-[1px]" />Helpers</dt>
+  <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-ink/22 align-[1px]" />Helpers</dt>
   <dd className="min-w-0 text-lede">Fast one-off agents for emergent tasks.</dd>
 </dl>
 
@@ -37,15 +37,15 @@ Up to 49 agents at once, usually just four.
 ## What I learned
 
 <div>
-  <ul className="flex flex-col gap-22 text-[length:--spacing(16.5)] text-lede leading-[1.55]">
-    <li><b className="mb-3 block font-semibold text-ink">Go absolutely philosophical on your agents</b>Agents take your word literally. Every extra bit of context, nudge or mild constraint can backfire, especially in a project of this size: at some point that little speck gets "perverted" and evolves into a big seam of unwanted behaviour or code. Phrase your ideas positively, big picture and holistically instead. Most of the time the agent will find the right way.</li>
-    <li><b className="mb-3 block font-semibold text-ink">Meta, Meta², Meta³, Metaⁿ</b>Create meta agents that monitor your team and spot inefficiencies or gaps. They can speed up the whole process dramatically or spawn new team members. Ours checked every 30 minutes, and one fix cut the median wait for a test run from 419 to 4 seconds. You can probably escalate this infinitely: a whole agent organisation in which each layer manages the one below. It's so interesting to me that agents need leadership, oversight and someone who reminds them of the overall goal.</li>
-    <li><b className="mb-3 block font-semibold text-ink">Ban considerations of time and effort</b>Agents are so bad at estimating time and effort, and keeping that as an influence in decision-making steers agents toward unwanted behaviour or shortcuts.</li>
-    <li><b className="mb-3 block font-semibold text-ink">Avoid feature hallucination</b>Checks test that a feature works, not that it should exist. Agents added about 20 features the old code never had, and every check passed them. We removed 11.</li>
-    <li><b className="mb-3 block font-semibold text-ink">You are the best judge, especially for UX and behaviour</b>The click-through caught the most important failures. After 47 green CI gates, 45 minutes of clicking through the app found five defects.</li>
-    <li><b className="mb-3 block font-semibold text-ink">Plan for shipping, not for building</b>Our plan gave shipping zero agents. After the new code first matched the old system, we still spent 60% of the money and found 92% of the bugs, over 19 of 40 days: review, QA, replays, removing invented features and rehearsing the switch. Plan for proof and release, not for the build.</li>
-    <li><b className="mb-3 block font-semibold text-ink">More agents do not ship faster</b>When limits cut the team from 18 agents to 3, commits per hour fell fivefold, but passing gates stayed at one an hour. More agents make more code, not more finished code. Human review is the next limit: agents wrote faster than my peers could read.</li>
-    <li><b className="mb-3 block font-semibold text-ink">Don't let your agents wait</b>In this project, most of the time was just agents waiting: the model ran only 26% of active agent time. Agents have no clock. One night all 14 sat idle for almost eight hours with work ready. Waiting is also expensive: the prompt cache expires after five minutes, so the 3% of calls after longer pauses cost a third of the money. Wait in scripts, keep waits under five minutes, wake idle agents with a timer and leave approvals before you sleep.</li>
-    <li><b className="mb-3 block font-semibold text-ink">Put rules in scripts, not in messages</b>We told agents in messages how to wait, and their waiting grew from 64% to 92% of their time. A wait script cut it to 36%. We asked for maximum effort, and a config file ran one worker for 4,369 turns at medium. Rules that must hold belong in scripts, hooks or configs. Check what actually runs.</li>
+  <ul className="flex flex-col gap-(--flow) text-(length:--body) text-lede leading-[1.6]">
+    <li><b className="mb-[2px] block font-semibold text-ink">Go absolutely philosophical on your agents</b>Agents take your word literally. Every extra bit of context, nudge or mild constraint can backfire, especially in a project of this size: at some point that little speck gets "perverted" and evolves into a big seam of unwanted behaviour or code. Phrase your ideas positively, big picture and holistically instead. Most of the time the agent will find the right way.</li>
+    <li><b className="mb-[2px] block font-semibold text-ink">Meta, Meta², Meta³, Metaⁿ</b>Create meta agents that monitor your team and spot inefficiencies or gaps. They can speed up the whole process dramatically or spawn new team members. Ours checked every 30 minutes, and one fix cut the median wait for a test run from 419 to 4 seconds. You can probably escalate this infinitely: a whole agent organisation in which each layer manages the one below. It's so interesting to me that agents need leadership, oversight and someone who reminds them of the overall goal.</li>
+    <li><b className="mb-[2px] block font-semibold text-ink">Ban considerations of time and effort</b>Agents are so bad at estimating time and effort, and keeping that as an influence in decision-making steers agents toward unwanted behaviour or shortcuts.</li>
+    <li><b className="mb-[2px] block font-semibold text-ink">Avoid feature hallucination</b>Checks test that a feature works, not that it should exist. Agents added about 20 features the old code never had, and every check passed them. We removed 11.</li>
+    <li><b className="mb-[2px] block font-semibold text-ink">You are the best judge, especially for UX and behaviour</b>The click-through caught the most important failures. After 47 green CI gates, 45 minutes of clicking through the app found five defects.</li>
+    <li><b className="mb-[2px] block font-semibold text-ink">Plan for shipping, not for building</b>Our plan gave shipping zero agents. After the new code first matched the old system, we still spent 60% of the money and found 92% of the bugs, over 19 of 40 days: review, QA, replays, removing invented features and rehearsing the switch. Plan for proof and release, not for the build.</li>
+    <li><b className="mb-[2px] block font-semibold text-ink">More agents do not ship faster</b>When limits cut the team from 18 agents to 3, commits per hour fell fivefold, but passing gates stayed at one an hour. More agents make more code, not more finished code. Human review is the next limit: agents wrote faster than my peers could read.</li>
+    <li><b className="mb-[2px] block font-semibold text-ink">Don't let your agents wait</b>In this project, most of the time was just agents waiting: the model ran only 26% of active agent time. Agents have no clock. One night all 14 sat idle for almost eight hours with work ready. Waiting is also expensive: the prompt cache expires after five minutes, so the 3% of calls after longer pauses cost a third of the money. Wait in scripts, keep waits under five minutes, wake idle agents with a timer and leave approvals before you sleep.</li>
+    <li><b className="mb-[2px] block font-semibold text-ink">Put rules in scripts, not in messages</b>We told agents in messages how to wait, and their waiting grew from 64% to 92% of their time. A wait script cut it to 36%. We asked for maximum effort, and a config file ran one worker for 4,369 turns at medium. Rules that must hold belong in scripts, hooks or configs. Check what actually runs.</li>
   </ul>
 </div>

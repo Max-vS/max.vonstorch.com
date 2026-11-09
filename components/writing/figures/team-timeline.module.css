@@ -14,7 +14,7 @@
 
   position: relative;
   width: min(1040px, calc(100cqw - 2 * var(--aside, 18px)));
-  margin: 24px
+  margin: 48px
     calc((100% - min(1040px, calc(100cqw - 2 * var(--aside, 18px)))) / 2)
     calc(max(140px, 16vh) - 40px);
   view-timeline: --team block;

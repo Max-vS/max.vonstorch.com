@@ -50,14 +50,14 @@ function Post({ slug }: { slug: string }) {
       </div>
       {/* From lg the column clears the controls, so the title shares their row; --aside keeps wide figures clear of them, --cap-top is their cap line. */}
       <div className="@container min-h-0 flex-1 overflow-y-auto lg:[--aside:calc(2*var(--tile)+16px)] lg:[--cap-top:--spacing(40.5)]">
-        <article className="mx-auto flex max-w-720 flex-col gap-20 px-24 pt-20 pb-96 sm:px-40 sm:pt-40 sm:pb-120 lg:pt-28">
-          <h1 className="text-balance font-bold text-[length:--spacing(40)] leading-[0.98] tracking-[-0.035em] sm:text-[length:--spacing(56)]">
+        <article className="mx-auto box-content max-w-[520px] px-24 pt-20 pb-96 sm:px-40 sm:pt-40 sm:pb-120 lg:pt-[calc(var(--cap-top)-13px)]">
+          <h1 className="text-balance font-bold text-[32px] leading-[1.1] tracking-[-0.03em] sm:text-[48px] sm:leading-[1.05]">
             <PostTitle title={post.title} />
           </h1>
-          <p className="mb-12 font-medium text-[length:--spacing(21)] text-lede leading-[1.4]">
+          <p className="mt-[12px] text-pretty text-[18px] text-lede leading-[1.5] sm:mt-[16px] sm:text-[20px]">
             {post.summary}
           </p>
-          <div className="post-body contents">
+          <div className="post-body mt-[32px] sm:mt-[40px]">
             <post.Body />
           </div>
         </article>
