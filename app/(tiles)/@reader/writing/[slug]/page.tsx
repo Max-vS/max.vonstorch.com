@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { JsonLd } from "@/components/json-ld";
 import { PanelControl } from "@/components/tiles/panel-control";
 import { formatDate } from "@/components/writing/post-meta";
+import { PostTitle } from "@/components/writing/post-title";
 import { panelControls } from "@/content/site";
 import { getLocalPosts, getPost } from "@/content/writing";
 import { SITE_NAME, SITE_URL } from "@/lib/metadata";
@@ -51,7 +52,7 @@ function Post({ slug }: { slug: string }) {
       <div className="@container min-h-0 flex-1 overflow-y-auto lg:[--aside:calc(2*var(--tile)+16px)] lg:[--cap-top:--spacing(40.5)]">
         <article className="mx-auto flex max-w-720 flex-col gap-20 px-24 pt-20 pb-96 sm:px-40 sm:pt-40 sm:pb-120 lg:pt-28">
           <h1 className="text-balance font-bold text-[length:--spacing(40)] leading-[0.98] tracking-[-0.035em] sm:text-[length:--spacing(56)]">
-            {post.title}
+            <PostTitle title={post.title} />
           </h1>
           <p className="mb-12 font-medium text-[length:--spacing(21)] text-lede leading-[1.4]">
             {post.summary}
