@@ -35,17 +35,21 @@ function Post({ slug }: { slug: string }) {
   };
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex h-(--tile) shrink-0 items-center justify-between px-24 sm:px-(--tile)">
-        <PanelControl href="/writing" className="self-center">
+    <div className="relative flex h-full flex-col">
+      <div className="flex h-(--tile) shrink-0 items-center justify-between px-24 sm:px-(--tile) lg:pointer-events-none lg:absolute lg:inset-x-0 lg:top-0 lg:z-10">
+        <PanelControl
+          href="/writing"
+          className="self-center lg:pointer-events-auto"
+        >
           {panelControls.back}
         </PanelControl>
         <time dateTime={post.date} className="caption">
           {formatDate(post.date)}
         </time>
       </div>
-      <div className="@container min-h-0 flex-1 overflow-y-auto">
-        <article className="mx-auto flex max-w-720 flex-col gap-20 px-24 pt-20 pb-96 sm:px-40 sm:pt-40 sm:pb-120">
+      {/* From lg the column clears the controls, so the title shares their row; --aside keeps wide figures clear of them, --cap-top is their cap line. */}
+      <div className="@container min-h-0 flex-1 overflow-y-auto lg:[--aside:calc(2*var(--tile)+16px)] lg:[--cap-top:--spacing(40.5)]">
+        <article className="mx-auto flex max-w-720 flex-col gap-20 px-24 pt-20 pb-96 sm:px-40 sm:pt-40 sm:pb-120 lg:pt-28">
           <h1 className="text-balance font-bold text-[length:--spacing(40)] leading-[0.98] tracking-[-0.035em] sm:text-[length:--spacing(56)]">
             {post.title}
           </h1>
