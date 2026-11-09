@@ -12,7 +12,7 @@
   --color-ink: #1d1d1b;
   --color-muted: #6b665e;
   --color-danger: #c0392b;
-  --color-forest: #33503a;
+  --color-violet: #3e2c8a;
   --color-lede: #5e5a53;
   --color-links-black: #111111;
   --color-links-chartreuse: #c7f03a;
@@ -140,7 +140,7 @@
   }
   & > ul > li::before {
     content: "–";
-    color: var(--color-forest);
+    color: var(--color-violet);
   }
   & > ol {
     padding-left: 20px;
@@ -152,7 +152,7 @@
     line-height: 1.35;
     font-weight: 600;
     letter-spacing: -0.015em;
-    color: var(--color-forest);
+    color: var(--color-violet);
   }
   & > blockquote > :first-child::before {
     content: "“";

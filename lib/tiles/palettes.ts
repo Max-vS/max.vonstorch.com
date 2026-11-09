@@ -26,11 +26,11 @@ export const dryftColors = {
 };
 
 export const writingColors = {
-  sage: "#8FA98A",
-  forest: "#33503A",
+  lavender: "#ADA2DD",
+  violet: "#3E2C8A",
   ground: "#EFEBE4",
   ink: "#1D1D1B",
-  clay: "#D9A08B",
+  yellow: "#F2C14E",
 };
 
 export const musicColors = {
@@ -67,7 +67,7 @@ export const titleColors: Record<SceneId, { bg: string; fg: string }> = {
   index: { bg: indexColors.ink, fg: indexColors.ground },
   education: { bg: educationColors.yellow, fg: educationColors.ink },
   projects: { bg: dryftColors.blue, fg: "#FFFFFF" },
-  writing: { bg: writingColors.forest, fg: writingColors.ground },
+  writing: { bg: writingColors.violet, fg: writingColors.ground },
   music: { bg: musicColors.tangerine, fg: musicColors.ink },
   links: { bg: linksColors.chartreuse, fg: linksColors.black },
   contact: { bg: contactColors.terracotta, fg: contactColors.ink },

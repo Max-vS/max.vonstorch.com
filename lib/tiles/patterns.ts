@@ -65,11 +65,11 @@ const EDUCATION_BANDS = [
 
 const WRITING_BANDS = [
   writing.ground,
-  writing.sage,
-  writing.forest,
+  writing.lavender,
+  writing.violet,
   writing.ink,
-  writing.forest,
-  writing.sage,
+  writing.violet,
+  writing.lavender,
 ];
 
 const INTERFERENCE_COLORS = [
@@ -288,9 +288,9 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
       tile: ({ random }) => {
         const colors = [
           writing.ground,
-          writing.sage,
-          writing.forest,
-          writing.clay,
+          writing.lavender,
+          writing.violet,
+          writing.yellow,
         ];
         const bg = pick(random, colors);
         const fg = pickOther(random, colors, bg);
@@ -302,10 +302,10 @@ export const PATTERNS: Record<SceneId, readonly Pattern[]> = {
       tile: ({ row, col }) => {
         const colors = [
           writing.ground,
-          writing.sage,
-          writing.forest,
+          writing.lavender,
+          writing.violet,
           writing.ink,
-          writing.clay,
+          writing.yellow,
         ];
         return {
           shape: "squares",
