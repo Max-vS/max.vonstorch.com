@@ -181,9 +181,11 @@
   inset: 0;
 }
 
+/* A window slid away covers other rows and the text above the figure; the tooltip reads the pointer off the line instead. */
 .window {
   overflow-x: visible;
   overflow-y: clip;
+  pointer-events: none;
 }
 
 .slice {
