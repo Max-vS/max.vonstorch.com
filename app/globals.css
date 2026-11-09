@@ -96,7 +96,7 @@
 }
 
 /* Long-form text in fixed sizes, after Linear's articles: on the tile scale, body text shrank to 13px on a short window.
-   Familjen Grotesk runs about a fifth narrower and smaller than Linear's Inter, so the body is a pixel larger and the column narrower. */
+   Familjen Grotesk runs smaller than Linear's Inter, so the body is a pixel larger. */
 @utility post-body {
   --body: 16px;
   --flow: 16px;

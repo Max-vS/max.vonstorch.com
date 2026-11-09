@@ -50,7 +50,7 @@ function Post({ slug }: { slug: string }) {
       </div>
       {/* From lg the column clears the controls, so the title shares their row; --aside keeps wide figures clear of them, --cap-top is their cap line. */}
       <div className="@container min-h-0 flex-1 overflow-y-auto lg:[--aside:calc(2*var(--tile)+16px)] lg:[--cap-top:--spacing(40.5)]">
-        <article className="mx-auto box-content max-w-[520px] px-24 pt-20 pb-96 sm:px-40 sm:pt-40 sm:pb-120 lg:pt-[calc(var(--cap-top)-13px)]">
+        <article className="mx-auto max-w-720 px-24 pt-20 pb-96 sm:px-40 sm:pt-40 sm:pb-120 lg:pt-[calc(var(--cap-top)-13px)]">
           <h1 className="text-balance font-bold text-[32px] leading-[1.1] tracking-[-0.03em] sm:text-[48px] sm:leading-[1.05]">
             <PostTitle title={post.title} />
           </h1>
