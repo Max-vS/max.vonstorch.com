@@ -14,7 +14,8 @@
       "!dist",
       "!build",
       "!docs",
-      "!drizzle"
+      "!drizzle",
+      "!content/writing/*.json"
     ]
   },
   "formatter": {

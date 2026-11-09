@@ -1,0 +1,612 @@
+/* Geometry: the line, the agent bands to its left, the checks to its right, then the cards. Phone: the line at a third. */
+.root {
+  --x: 50%;
+  --base: 150px;
+  --gap-l: 16px;
+  --agents-w: min(var(--vw), 27.5%);
+  --bug-w: calc(var(--agents-w) * var(--bug-ratio));
+  --ck-l: 12px;
+  --ck-w: min(120px, calc(var(--agents-w) * var(--ck-ratio)));
+  --cd-l: calc(var(--x) + var(--ck-l) + var(--ck-w) + 18px);
+  --faint: rgb(29 29 27 / 0.22);
+
+  position: relative;
+  width: min(1040px, calc(100cqw - 36px));
+  margin: 24px calc((100% - min(1040px, calc(100cqw - 36px))) / 2)
+    calc(max(140px, 16vh) - 40px);
+  view-timeline: --team block;
+  view-timeline-inset: 60% 40%;
+}
+
+@media (width < 640px) {
+  .root {
+    --x: 34%;
+    --base: 120px;
+    --gap-l: 12px;
+    --agents-w: min(var(--vw), calc(34% - 16px));
+    --ck-l: 8px;
+    --ck-w: 30px;
+    --cd-l: calc(var(--x) + 48px);
+  }
+}
+
+/* sticky header: the HUD, then the lane names; both sit on a rule that shoots out of the line */
+.head {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  background: var(--color-ground);
+}
+
+.hud {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 24px;
+  padding: 14px 0 11px;
+  overflow: hidden;
+}
+
+.when {
+  font: 600 17px / 1.2 var(--font-familjen-grotesk);
+  letter-spacing: -0.015em;
+  font-variant-numeric: tabular-nums;
+}
+
+.phase {
+  margin-left: 12px;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.stats {
+  display: flex;
+  gap: 22px;
+  font: 500 14px / 1.2 var(--font-familjen-grotesk);
+  letter-spacing: -0.01em;
+  color: var(--color-muted);
+}
+
+.stats b {
+  font-weight: 600;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.lanes {
+  position: relative;
+  height: 26px;
+  overflow: hidden;
+  color: var(--color-muted);
+}
+
+.lanes > span {
+  position: absolute;
+  top: 7px;
+  white-space: nowrap;
+  font: 400 10px / 1.6 var(--font-jetbrains-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lanes > span i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 5px;
+}
+
+.rule {
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: var(--faint);
+  transform-origin: var(--x) 50%;
+}
+
+.lanes .rule {
+  background: rgb(29 29 27 / 0.1);
+}
+
+.mobile {
+  display: none;
+}
+
+@media (width < 640px) {
+  .when {
+    font-size: 15px;
+  }
+  .stats {
+    gap: 14px;
+    font-size: 13px;
+  }
+  .lanes {
+    height: 40px;
+  }
+  .desktop {
+    display: none;
+  }
+  .mobile {
+    display: inline;
+  }
+  .lanes > span.second {
+    top: 22px;
+  }
+}
+
+/* the line: one row per stretch between two cards; a row grows when its card needs more room than its days */
+.line {
+  position: relative;
+  view-timeline: --line block;
+  view-timeline-inset: 60% 40%;
+}
+
+.spine {
+  position: absolute;
+  inset: 0 auto 0 var(--x);
+  width: 1px;
+  margin-left: -0.5px;
+  background: var(--color-ink);
+}
+
+.tip,
+.cue {
+  display: none;
+}
+
+.start {
+  position: relative;
+  height: 56px;
+}
+
+.row {
+  position: relative;
+  min-height: calc(var(--days) * var(--base));
+}
+
+.row.carded {
+  padding-bottom: 14px;
+}
+
+.slice {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  overflow: visible;
+}
+
+.agents {
+  right: calc(100% - var(--x) + var(--gap-l));
+  width: var(--agents-w);
+}
+
+.bugs {
+  right: calc(100% - var(--x) + var(--gap-l) + var(--agents-w) + 14px);
+  width: var(--bug-w);
+}
+
+.checks {
+  left: calc(var(--x) + var(--ck-l));
+  width: var(--ck-w);
+}
+
+.slice path {
+  vector-effect: non-scaling-stroke;
+  fill: none;
+}
+
+.mark {
+  stroke-width: 2px;
+}
+
+.span {
+  stroke-width: 0.6px;
+  stroke-opacity: 0.3;
+}
+
+@media (width < 640px) {
+  .bugs {
+    display: none;
+  }
+  .mark {
+    stroke-width: 1px;
+  }
+}
+
+.day {
+  position: absolute;
+  left: 0;
+  font: 400 10px / 1 var(--font-jetbrains-mono);
+  color: var(--color-muted);
+  translate: 0 -50%;
+}
+
+.day.monday {
+  color: var(--color-ink);
+}
+
+.tick {
+  position: absolute;
+  left: calc(var(--x) - 5px);
+  width: 10px;
+  height: 1px;
+  background: var(--color-ink);
+}
+
+.phaseMark {
+  position: absolute;
+  left: 0;
+  width: calc(var(--cd-l) - 12px);
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgb(29 29 27 / 0.3) 0 2px,
+    transparent 2px 6px
+  );
+}
+
+.phaseName {
+  position: absolute;
+  left: 0;
+  bottom: 7px;
+  font: 600 13px / 1 var(--font-familjen-grotesk);
+  white-space: nowrap;
+}
+
+.start .phaseName {
+  bottom: 12px;
+}
+
+@media (width < 640px) {
+  .day {
+    left: var(--x);
+    padding: 2px 4px;
+    font-size: 9px;
+    background: var(--color-ground);
+    translate: -50% -50%;
+  }
+  .tick {
+    display: none;
+  }
+  .phaseName {
+    padding-right: 6px;
+    background: var(--color-ground);
+  }
+}
+
+.node {
+  position: absolute;
+  top: -4.5px;
+  left: calc(var(--x) - 4.5px);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  box-shadow: 0 0 0 2px var(--color-ground);
+}
+
+.node.incident {
+  background: var(--color-chart-red);
+}
+
+.link {
+  position: absolute;
+  top: 0;
+  left: calc(var(--x) + 7px);
+  width: calc(var(--cd-l) - var(--x) - 15px);
+  height: 1px;
+  background: rgb(29 29 27 / 0.2);
+}
+
+/* a card: date and kind, number and title, the text */
+.card {
+  position: relative;
+  top: -12px;
+  margin-left: var(--cd-l);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cardMeta {
+  font: 400 10px / 1.6 var(--font-jetbrains-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.cardTitle {
+  margin: 0;
+  font: 600 16px / 1.25 var(--font-familjen-grotesk);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.number {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 16px;
+  margin-right: 7px;
+  padding: 0 3px;
+  background: var(--color-ink);
+  color: var(--color-ground);
+  font: 700 10px / 1 var(--font-familjen-grotesk);
+  vertical-align: 1px;
+}
+
+.cardText {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--color-lede);
+}
+
+.card.incident .cardMeta {
+  color: var(--color-chart-red);
+}
+
+.card.incident .number {
+  background: var(--color-chart-red);
+}
+
+@media (width < 640px) {
+  .cardTitle {
+    font-size: 14.5px;
+  }
+  .cardText {
+    font-size: 13px;
+  }
+}
+
+.end {
+  height: 40px;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  max-width: 300px;
+  padding: 9px 11px;
+  border: 1.5px solid var(--color-ink);
+  background: var(--color-ground);
+  font: 12px / 1.55 var(--font-jetbrains-mono);
+  pointer-events: none;
+}
+
+/* Scroll-driven build: the line's tip sits at 60% of the reading sheet's height; everything above it is built.
+   The insets shrink the view to a line at 60%, so a cover range runs from an element's top to its bottom crossing it,
+   whatever its height (entry would end early for elements taller than the view).
+   Without support or with reduced motion, the whole timeline shows at once. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .spine,
+    .slice {
+      animation: reveal linear both;
+      animation-timeline: view(block 60% 40%);
+      animation-range: cover;
+    }
+
+    .tip {
+      display: block;
+      position: absolute;
+      left: var(--x);
+      width: 8px;
+      height: 8px;
+      margin: -4px 0 0 -4px;
+      border-radius: 50%;
+      background: var(--color-ink);
+      box-shadow: 0 0 0 5px rgb(29 29 27 / 0.1);
+      opacity: 0;
+      animation: tip linear forwards;
+      animation-timeline: --line;
+      animation-range: cover;
+    }
+
+    .day,
+    .tick,
+    .node,
+    .link,
+    .phaseMark,
+    .phaseName {
+      animation: show linear both;
+      animation-timeline: view(block 60% 40%);
+      animation-range: cover 0% cover 100%;
+    }
+
+    .card {
+      animation: card ease-out both;
+      animation-timeline: view(block 60% 40%);
+      animation-range: cover 0px cover 60px;
+    }
+
+    .rule {
+      animation: rule ease-out both;
+      animation-timeline: --team;
+      animation-range: cover 0px cover 80px;
+    }
+
+    .lanes .rule {
+      animation-range: cover 10px cover 90px;
+    }
+
+    .rise {
+      animation: rise ease-out both;
+      animation-timeline: --team;
+      animation-range: cover calc(20px + var(--d, 0px)) cover
+        calc(80px + var(--d, 0px));
+    }
+
+    /* the cue: a ball bounces on a short track that ends where the line starts, settles there and becomes the line's tip */
+    .cue {
+      display: flex;
+      position: absolute;
+      bottom: 100%;
+      left: var(--x);
+      z-index: 7;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding-top: 40px;
+      translate: -50% 0;
+      pointer-events: none;
+      animation:
+        settle ease-in-out both,
+        gone steps(1) forwards;
+      animation-timeline: view(block 60% 40%), --line;
+      animation-range: cover, cover;
+    }
+
+    .cue > span {
+      font: 500 10.5px / 1 var(--font-jetbrains-mono);
+      letter-spacing: 0.2em;
+      padding-left: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      opacity: max(0, 1 - 2 * var(--e));
+    }
+
+    .track {
+      width: 1px;
+      height: 46px;
+      background: linear-gradient(rgb(29 29 27 / 0.04), var(--faint));
+      opacity: calc(1 - var(--e));
+    }
+
+    .ball {
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      margin-left: -4px;
+      border-radius: 50%;
+      background: var(--color-ink);
+      box-shadow: 0 0 0 5px rgb(29 29 27 / 0.1);
+      translate: 0 calc((var(--b) - 38) * (1 - var(--e)) * 1px);
+      opacity: calc(var(--o) + (1 - var(--o)) * var(--e));
+      animation: bounce 1.9s infinite;
+    }
+  }
+}
+
+@property --e {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --b {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 38;
+}
+
+@property --o {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+@keyframes reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes tip {
+  from {
+    top: 0;
+    opacity: 1;
+  }
+  99.9% {
+    opacity: 1;
+  }
+  to {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes card {
+  from {
+    opacity: 0;
+    translate: 14px 0;
+  }
+}
+
+@keyframes rule {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 130%;
+  }
+}
+
+@keyframes settle {
+  from {
+    --e: 0;
+  }
+  to {
+    --e: 1;
+  }
+}
+
+@keyframes gone {
+  from,
+  to {
+    visibility: hidden;
+  }
+}
+
+/* one bounce cycle: fall onto the line's start, two small bounces, rest, fade */
+@keyframes bounce {
+  0% {
+    --b: 0;
+    --o: 0;
+    animation-timing-function: ease-in;
+  }
+  10% {
+    --o: 1;
+  }
+  52% {
+    --b: 38;
+    animation-timing-function: ease-out;
+  }
+  63% {
+    --b: 28;
+    animation-timing-function: ease-in;
+  }
+  74% {
+    --b: 38;
+    animation-timing-function: ease-out;
+  }
+  80% {
+    --b: 35;
+    animation-timing-function: ease-in;
+  }
+  86% {
+    --b: 38;
+    --o: 1;
+  }
+  100% {
+    --b: 38;
+    --o: 0;
+  }
+}

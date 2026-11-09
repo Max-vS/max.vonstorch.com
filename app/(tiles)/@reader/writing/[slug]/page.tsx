@@ -44,7 +44,7 @@ function Post({ slug }: { slug: string }) {
           {formatDate(post.date)}
         </time>
       </div>
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="@container min-h-0 flex-1 overflow-y-auto">
         <article className="mx-auto flex max-w-720 flex-col gap-20 px-24 pt-20 pb-96 sm:px-40 sm:pt-40 sm:pb-120">
           <h1 className="text-balance font-bold text-[length:--spacing(40)] leading-[0.98] tracking-[-0.035em] sm:text-[length:--spacing(56)]">
             {post.title}
