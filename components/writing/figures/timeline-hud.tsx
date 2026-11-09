@@ -81,10 +81,12 @@ export function TimelineHud({
       }
       return end;
     };
-    // The line's tip: two thirds down the reading sheet's scroll box, as in the CSS view timelines.
+    const tipShare =
+      Number.parseFloat(getComputedStyle(figure).getPropertyValue("--tip")) /
+      100;
     const tipY = () =>
       scroller.getBoundingClientRect().top +
-      (scroller.clientHeight * 2) / 3 -
+      scroller.clientHeight * tipShare -
       line.getBoundingClientRect().top;
 
     let frame = 0;

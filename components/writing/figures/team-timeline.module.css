@@ -1,5 +1,7 @@
 /* Geometry: the line, the agent bands to its left, the checks to its right, then the cards. Phone: the line at a third. */
 .root {
+  /* How far down the view the line's tip sits; the HUD reads it too. */
+  --tip: 75%;
   --x: 50%;
   --base: 150px;
   --gap-l: 16px;
@@ -16,7 +18,7 @@
     calc((100% - min(1040px, calc(100cqw - 2 * var(--aside, 18px)))) / 2)
     calc(max(140px, 16vh) - 40px);
   view-timeline: --team block;
-  view-timeline-inset: 66.667% 33.333%;
+  view-timeline-inset: var(--tip) calc(100% - var(--tip));
 }
 
 @media (width < 640px) {
@@ -142,7 +144,7 @@
 .line {
   position: relative;
   view-timeline: --line block;
-  view-timeline-inset: 66.667% 33.333%;
+  view-timeline-inset: var(--tip) calc(100% - var(--tip));
 }
 
 .spine {
@@ -378,8 +380,8 @@
   pointer-events: none;
 }
 
-/* Scroll-driven build: the line's tip sits at two thirds of the reading sheet's height; everything above it is built.
-   The insets shrink the view to a line at two thirds, so a cover range runs from an element's top to its bottom crossing it,
+/* Scroll-driven build: the line's tip sits at --tip of the reading sheet's height; everything above it is built.
+   The insets shrink the view to a line at --tip, so a cover range runs from an element's top to its bottom crossing it,
    whatever its height (entry would end early for elements taller than the view).
    Without support or with reduced motion, the whole timeline shows at once. */
 @supports (animation-timeline: view()) {
@@ -387,7 +389,7 @@
     .spine,
     .slice {
       animation: reveal linear both;
-      animation-timeline: view(block 66.667% 33.333%);
+      animation-timeline: view(block var(--tip) calc(100% - var(--tip)));
       animation-range: cover;
     }
 
@@ -414,13 +416,13 @@
     .phaseMark,
     .phaseName {
       animation: show linear both;
-      animation-timeline: view(block 66.667% 33.333%);
+      animation-timeline: view(block var(--tip) calc(100% - var(--tip)));
       animation-range: cover 0% cover 100%;
     }
 
     .card {
       animation: card ease-out both;
-      animation-timeline: view(block 66.667% 33.333%);
+      animation-timeline: view(block var(--tip) calc(100% - var(--tip)));
       animation-range: cover 0px cover 60px;
     }
 
@@ -457,7 +459,8 @@
       animation:
         settle ease-in-out both,
         gone steps(1) forwards;
-      animation-timeline: view(block 66.667% 33.333%), --line;
+      animation-timeline:
+        view(block var(--tip) calc(100% - var(--tip))), --line;
       animation-range: cover, cover;
     }
 
