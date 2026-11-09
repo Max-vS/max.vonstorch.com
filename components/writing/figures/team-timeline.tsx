@@ -312,24 +312,28 @@ export function TeamTimeline({ data }: { data: TimelineData }) {
             data-from={row.from}
             data-to={row.to}
           >
-            <Slice
-              row={row}
-              bars={agentBars}
-              width={width}
-              className={styles.agents}
-            />
-            <Slice
-              row={row}
-              bars={bugBars}
-              width={bugWidth}
-              className={styles.bugs}
-            />
-            <Slice
-              row={row}
-              bars={checkBars}
-              width={checkWidth}
-              className={styles.checks}
-            />
+            <div className={styles.window}>
+              <div className={styles.bars}>
+                <Slice
+                  row={row}
+                  bars={agentBars}
+                  width={width}
+                  className={styles.agents}
+                />
+                <Slice
+                  row={row}
+                  bars={bugBars}
+                  width={bugWidth}
+                  className={styles.bugs}
+                />
+                <Slice
+                  row={row}
+                  bars={checkBars}
+                  width={checkWidth}
+                  className={styles.checks}
+                />
+              </div>
+            </div>
             {days
               .filter((t) => rowOf(t) === row)
               .map((t) => (
