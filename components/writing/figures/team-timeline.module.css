@@ -11,8 +11,9 @@
   --faint: rgb(29 29 27 / 0.22);
 
   position: relative;
-  width: min(1040px, calc(100cqw - 36px));
-  margin: 24px calc((100% - min(1040px, calc(100cqw - 36px))) / 2)
+  width: min(1040px, calc(100cqw - 2 * var(--aside, 18px)));
+  margin: 24px
+    calc((100% - min(1040px, calc(100cqw - 2 * var(--aside, 18px)))) / 2)
     calc(max(140px, 16vh) - 40px);
   view-timeline: --team block;
   view-timeline-inset: 60% 40%;
@@ -45,7 +46,8 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 6px 24px;
-  padding: 14px 0 11px;
+  /* 5px: the cap top inside the first line, so its caps sit on the reader's --cap-top. */
+  padding: max(14px, calc(var(--cap-top, 0px) - 5px)) 0 11px;
   overflow: hidden;
 }
 
