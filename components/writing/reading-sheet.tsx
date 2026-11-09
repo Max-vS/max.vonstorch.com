@@ -55,11 +55,7 @@ export function ReadingSheet({
             : undefined,
         }}
       >
-        <div
-          aria-hidden="true"
-          className="blueprint pointer-events-none absolute inset-0 opacity-30"
-        />
-        <div className="relative h-full">{children}</div>
+        {children}
       </div>
     </>
   );
