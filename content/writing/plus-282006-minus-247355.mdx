@@ -5,11 +5,11 @@ summary: "The refactor moved a Temporal-centric core onto a Postgres-based, even
 ---
 
 import { TeamTimeline } from "@/components/writing/figures/team-timeline";
-import timeline from "./forty-days-with-an-agent-team.json";
+import timeline from "./plus-282006-minus-247355.json";
 
 ## Agent Team
 
-Up to 49 agents at once, usually just four.
+The team grew and shrunk and   
 
 <dl className="grid grid-cols-[max-content_1fr] gap-x-[20px] gap-y-[8px] text-(length:--body) leading-[1.5]">
   <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-ink align-[1px]" />Lead</dt>
@@ -17,15 +17,15 @@ Up to 49 agents at once, usually just four.
   <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-ink align-[1px]" />Architect</dt>
   <dd className="min-w-0 text-lede">Decides design questions, also while I sleep.</dd>
   <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-chart-blue align-[1px]" />Workers</dt>
-  <dd className="min-w-0 text-lede">One task each, in their own copy of the code.</dd>
+  <dd className="min-w-0 text-lede">One task each, in their own worktree.</dd>
   <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-chart-blue align-[1px]" />Integrator</dt>
-  <dd className="min-w-0 text-lede">Merges the workers' work. Nothing else.</dd>
+  <dd className="min-w-0 text-lede">Merges stuff. Nothing else.</dd>
   <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-chart-ochre align-[1px]" />Testers</dt>
-  <dd className="min-w-0 text-lede">Write the tests first, run the replays. A hash freezes the tests.</dd>
+  <dd className="min-w-0 text-lede">Independently write tests and run replays.</dd>
   <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-chart-ochre align-[1px]" />Reviewers</dt>
-  <dd className="min-w-0 text-lede">Review the work.</dd>
+  <dd className="min-w-0 text-lede">Review and red-team work.</dd>
   <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-ink align-[1px]" />Meta</dt>
-  <dd className="min-w-0 text-lede">Every 30 minutes: where did the time go? Then fixes one thing.</dd>
+  <dd className="min-w-0 text-lede">Every 15-30 minutes: where did the time go? Then fixes one thing.</dd>
   <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-ink align-[1px]" />Notetaker</dt>
   <dd className="min-w-0 text-lede">Writes down learnings = most of this blog's content.</dd>
   <dt className="whitespace-nowrap font-semibold"><i className="mr-[8px] inline-block size-[9px] bg-ink/22 align-[1px]" />Helpers</dt>

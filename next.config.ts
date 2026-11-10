@@ -23,6 +23,12 @@ const nextConfig: NextConfig = {
   headers: async () => [{ source: "/:path*", headers: securityHeaders }],
   // GitHub and Spotify accept only 127.0.0.1 locally.
   redirects: async () => [
+    // The post's first slug, live from 8 to 10 Nov 2026; links to it may be out there.
+    {
+      source: "/writing/forty-days-with-an-agent-team/:rest*",
+      destination: "/writing/plus-282006-minus-247355/:rest*",
+      permanent: true,
+    },
     process.env.NODE_ENV === "development"
       ? {
           source: "/:path*",
