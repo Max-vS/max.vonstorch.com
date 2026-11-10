@@ -24,9 +24,15 @@ const nextConfig: NextConfig = {
   // GitHub and Spotify accept only 127.0.0.1 locally.
   redirects: async () => [
     // The post's first slug, live from 8 to 10 Nov 2026; links to it may be out there.
+    // Two rules: on Vercel an empty :rest* leaves a trailing slash, which costs a second redirect.
     {
-      source: "/writing/forty-days-with-an-agent-team/:rest*",
-      destination: "/writing/plus-282006-minus-247355/:rest*",
+      source: "/writing/forty-days-with-an-agent-team",
+      destination: "/writing/plus-282006-minus-247355",
+      permanent: true,
+    },
+    {
+      source: "/writing/forty-days-with-an-agent-team/:rest+",
+      destination: "/writing/plus-282006-minus-247355/:rest+",
       permanent: true,
     },
     process.env.NODE_ENV === "development"
