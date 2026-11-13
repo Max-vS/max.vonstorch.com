@@ -294,10 +294,13 @@ export function TeamTimeline({ data }: { data: TimelineData }) {
         </div>
       </div>
       <div className={styles.line} data-line>
-        <div className={styles.cue} aria-hidden="true">
-          <span>Scroll</span>
-          <div className={styles.track} />
-          <i className={styles.ball} />
+        <div className={styles.runin} aria-hidden="true">
+          <div className={styles.cue}>
+            <span>Scroll</span>
+            <div className={styles.track} />
+            <i className={styles.ball} />
+          </div>
+          <i className={styles.ride} />
         </div>
         <div className={styles.spine} data-spine />
         <i className={styles.tip} aria-hidden="true" />

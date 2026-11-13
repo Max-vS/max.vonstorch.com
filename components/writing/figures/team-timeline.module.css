@@ -11,10 +11,13 @@
   --ck-w: min(120px, calc(var(--agents-w) * var(--ck-ratio)));
   --cd-l: calc(var(--x) + var(--ck-l) + var(--ck-w) + 18px);
   --faint: rgb(29 29 27 / 0.22);
+  /* How far the dot rides with the scroll before the timeline starts. */
+  --carry: 5cm;
 
   position: relative;
   width: min(1040px, calc(100cqw - 2 * var(--aside, 18px)));
-  margin: 48px
+  /* room above the cue, then the cue (68px) and the carry */
+  margin: calc(max(140px, 18vh) + 68px + var(--carry))
     calc((100% - min(1040px, calc(100cqw - 2 * var(--aside, 18px)))) / 2)
     calc(max(140px, 16vh) - 40px);
   view-timeline: --team block;
@@ -156,7 +159,7 @@
 }
 
 .tip,
-.cue {
+.runin {
   display: none;
 }
 
@@ -357,7 +360,8 @@
 
 .cardText {
   margin: 0;
-  font-size: 14px;
+  font-family: var(--font-source-serif), Georgia, serif;
+  font-size: 15px;
   line-height: 1.45;
   color: var(--color-lede);
 }
@@ -375,7 +379,7 @@
     font-size: 14.5px;
   }
   .cardText {
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 
@@ -436,7 +440,8 @@
       animation-range: cover;
     }
 
-    .tip::before {
+    .tip::before,
+    .ride::before {
       content: "";
       position: absolute;
       left: var(--x);
@@ -462,45 +467,90 @@
     .card {
       animation: card ease-out both;
       animation-timeline: view(block var(--tip) calc(100% - var(--tip)));
-      animation-range: cover 0px cover 60px;
+      animation-range: cover 0px cover 120px;
     }
 
     .rule {
       animation: rule ease-out both;
       animation-timeline: --team;
-      animation-range: cover 0px cover 80px;
+      animation-range: cover 0px cover 160px;
     }
 
     .lanes .rule {
-      animation-range: cover 10px cover 90px;
+      animation-range: cover 20px cover 180px;
     }
 
     .rise {
       animation: rise ease-out both;
       animation-timeline: --team;
-      animation-range: cover calc(20px + var(--d, 0px)) cover
-        calc(80px + var(--d, 0px));
+      animation-range: cover calc(40px + 2 * var(--d, 0px)) cover
+        calc(160px + 2 * var(--d, 0px));
     }
 
-    /* the cue: a ball bounces on a short track that ends where the line starts, settles there and becomes the line's tip */
+    /* the carry lies over the head (93px) and --carry of the room above it, and ends where the line starts */
+    .runin {
+      display: block;
+      position: absolute;
+      inset: auto 0 100%;
+      z-index: 7;
+      height: calc(var(--carry) + 93px);
+      pointer-events: none;
+      view-timeline: --ride block;
+      view-timeline-inset: var(--tip) calc(100% - var(--tip));
+      /* --started flips where the timeline starts; the cue fades on a transition, so a fast scroll cannot cut the fade short */
+      animation: started linear forwards;
+      animation-timeline: --ride;
+      animation-range: cover var(--carry) cover 100%;
+    }
+
+    .runin::before,
+    .cue > span,
+    .track {
+      opacity: calc(1 - var(--started));
+      transition: opacity 0.6s ease;
+    }
+
+    /* the cue's line grows down to the riding dot; a scale, so the compositor draws it */
+    .runin::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 var(--x);
+      width: 1px;
+      margin-left: -0.5px;
+      background: var(--faint);
+      transform-origin: top;
+      animation: grow linear both;
+      animation-timeline: --ride;
+      animation-range: cover;
+    }
+
+    /* the cue's ball becomes this dot; it rides at the tip's height until the line's tip takes over */
+    .ride {
+      display: block;
+      position: sticky;
+      top: var(--tip);
+      height: 0;
+      opacity: 0;
+      animation: on linear;
+      animation-timeline: --ride;
+      animation-range: cover;
+    }
+
+    /* the cue: a ball bounces on a short track that ends where the carry starts, and settles there;
+       the label and the track stay through the carry and fade when the timeline starts */
     .cue {
       display: flex;
       position: absolute;
       bottom: 100%;
       left: var(--x);
-      z-index: 7;
       flex-direction: column;
       align-items: center;
       gap: 12px;
       padding-top: 40px;
       translate: -50% 0;
-      pointer-events: none;
-      animation:
-        settle ease-in-out both,
-        gone steps(1) forwards;
-      animation-timeline:
-        view(block var(--tip) calc(100% - var(--tip))), --line;
-      animation-range: cover, cover;
+      animation: settle ease-in-out both;
+      animation-timeline: view(block var(--tip) calc(100% - var(--tip)));
+      animation-range: cover;
     }
 
     .cue > span {
@@ -509,14 +559,12 @@
       padding-left: 0.2em;
       text-transform: uppercase;
       color: var(--color-muted);
-      opacity: max(0, 1 - 2 * var(--e));
     }
 
     .track {
       width: 1px;
       height: 46px;
       background: linear-gradient(rgb(29 29 27 / 0.04), var(--faint));
-      opacity: calc(1 - var(--e));
     }
 
     .ball {
@@ -531,7 +579,11 @@
       box-shadow: 0 0 0 5px rgb(29 29 27 / 0.1);
       translate: 0 calc((var(--b) - 38) * (1 - var(--e)) * 1px);
       opacity: calc(var(--o) + (1 - var(--o)) * var(--e));
-      animation: bounce 1.9s infinite;
+      animation:
+        bounce 1.9s infinite,
+        gone steps(1) forwards;
+      animation-timeline: auto, --ride;
+      animation-range: normal, cover;
     }
   }
 }
@@ -552,6 +604,12 @@
   syntax: "<number>";
   inherits: false;
   initial-value: 1;
+}
+
+@property --started {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
 }
 
 @keyframes grow {
@@ -615,6 +673,20 @@
   }
   to {
     --e: 1;
+  }
+}
+
+@keyframes on {
+  from,
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes started {
+  from,
+  to {
+    --started: 1;
   }
 }
 
