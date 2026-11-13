@@ -212,7 +212,7 @@ export const community = {
   } satisfies Record<BrushShape, string>,
   colours: {
     "#1D1D1B": "Black",
-    "#EFEBE4": "Off-white",
+    "#FAF8F4": "Off-white",
     "#E2573B": "Red",
     "#FF6A13": "Tangerine",
     "#9C3A12": "Rust",

@@ -2,7 +2,7 @@ import type { SceneId } from "./types";
 
 export const indexColors = {
   ink: "#1D1D1B",
-  ground: "#EFEBE4",
+  ground: "#FAF8F4",
   red: "#E2573B",
   blue: "#2F4FD8",
   yellow: "#F2C14E",
@@ -13,7 +13,7 @@ export const indexColors = {
 export const educationColors = {
   yellow: "#F2C14E",
   ink: "#1D1D1B",
-  ground: "#EFEBE4",
+  ground: "#FAF8F4",
   cream: "#F6DC97",
   ochre: "#C9962A",
 };
@@ -22,20 +22,20 @@ export const dryftColors = {
   blue: "#1F3DFF",
   deep: "#131F71",
   tint: "#B5BAEC",
-  ground: "#EFEBE4",
+  ground: "#FAF8F4",
 };
 
 export const writingColors = {
   lavender: "#ADA2DD",
   violet: "#3E2C8A",
-  ground: "#EFEBE4",
+  ground: "#FAF8F4",
   ink: "#1D1D1B",
   yellow: "#F2C14E",
 };
 
 export const musicColors = {
   ink: "#1D1D1B",
-  ground: "#EFEBE4",
+  ground: "#FAF8F4",
   tangerine: "#FF6A13",
   peach: "#F7C7A6",
   rust: "#9C3A12",
@@ -51,14 +51,14 @@ export const linksColors = {
 export const contactColors = {
   terracotta: "#E2573B",
   blush: "#E9B8A6",
-  ground: "#EFEBE4",
+  ground: "#FAF8F4",
   ink: "#1D1D1B",
   yellow: "#F2C14E",
 };
 
 export const notFoundColors = {
   red: "#D9432B",
-  ground: "#EFEBE4",
+  ground: "#FAF8F4",
   ink: "#1D1D1B",
   stone: "#CFCAC0",
 };

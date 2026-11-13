@@ -31,9 +31,9 @@ const EMPTY_MOTIF: MarkTile[] = Array.from({ length: MOTIF_TILES }, () => ({
   shape: "none",
   rot: 0,
   fg: "#1D1D1B",
-  bg: "#EFEBE4",
+  bg: "#FAF8F4",
 }));
-const DEFAULT_BRUSH: Brush = { shape: "qdisc", fg: "#E2573B", bg: "#EFEBE4" };
+const DEFAULT_BRUSH: Brush = { shape: "qdisc", fg: "#E2573B", bg: "#FAF8F4" };
 
 const QUARTER_TURN = { 0: 90, 90: 180, 180: 270, 270: 0 } as const;
 

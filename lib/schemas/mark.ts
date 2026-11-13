@@ -32,7 +32,7 @@ export const TILE_SHAPES = [...BRUSH_SHAPES, "none"] as const;
 export const TILE_ROTATIONS = [0, 90, 180, 270] as const;
 export const BRUSH_COLORS = [
   "#1D1D1B",
-  "#EFEBE4",
+  "#FAF8F4",
   "#E2573B",
   "#FF6A13",
   "#9C3A12",
