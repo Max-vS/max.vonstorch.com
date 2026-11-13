@@ -5,6 +5,7 @@
 @theme inline {
   --font-sans: var(--font-familjen-grotesk), sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
+  --font-serif: var(--font-source-serif), Georgia, serif;
 }
 
 @theme {
@@ -14,6 +15,7 @@
   --color-danger: #c0392b;
   --color-violet: #3e2c8a;
   --color-lede: #5e5a53;
+  --color-copy: color-mix(in srgb, var(--color-ink) 92%, var(--color-ground));
   --color-links-black: #111111;
   --color-links-chartreuse: #c7f03a;
   --color-chart-red: #e2573b;
@@ -97,8 +99,38 @@
 
 /* Long-form text in fixed sizes, after Linear's articles: on the tile scale, body text shrank to 13px on a short window.
    Familjen Grotesk runs smaller than Linear's Inter, so the body is a pixel larger. */
+/* Titled points with a number, after Linear's Method pages. */
+@utility post-points {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  counter-reset: point;
+  font-family: var(--font-source-serif), Georgia, serif;
+  font-size: var(--body);
+  line-height: 1.6;
+  color: var(--color-copy);
+
+  & > li {
+    counter-increment: point;
+  }
+  & > li > b {
+    display: block;
+    margin-bottom: 12px;
+    font: 600 20px / 1.33 var(--font-sans);
+    letter-spacing: -0.012em;
+    color: var(--color-ink);
+  }
+  & > li > b::before {
+    content: counter(point);
+    margin-right: 12px;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-muted);
+  }
+}
+
 @utility post-body {
-  --body: 16px;
+  --body: 17px;
   --flow: 16px;
 
   & > * + * {
@@ -107,19 +139,25 @@
   & :is(p, li) {
     text-wrap: pretty;
   }
+  & > :is(p, ul, ol, dl, blockquote) {
+    font-family: var(--font-source-serif), Georgia, serif;
+  }
   & > :is(p, ul, ol) {
     font-size: var(--body);
     line-height: 1.6;
   }
+  & > p {
+    color: var(--color-copy);
+  }
   & > :is(h2, h3) {
-    margin-top: 48px;
+    margin-top: 56px;
     font-weight: 700;
     letter-spacing: -0.02em;
     text-wrap: balance;
   }
   & > h2 {
-    font-size: 20px;
-    line-height: 1.3;
+    font-size: 24px;
+    line-height: 1.33;
   }
   & > h3 {
     margin-top: 36px;
@@ -128,6 +166,10 @@
   }
   & > :is(h2, h3) + * {
     margin-top: 12px;
+  }
+  /* A block of titled items needs more room under its heading than a paragraph. */
+  & > h2 + div {
+    margin-top: 24px;
   }
   & > :is(ul, ol) {
     display: flex;
@@ -183,14 +225,11 @@
   }
 
   @variant sm {
-    --body: 18px;
+    --body: 19px;
     --flow: 20px;
 
-    & > :is(h2, h3) {
-      margin-top: 56px;
-    }
     & > h2 {
-      font-size: 24px;
+      font-size: 28px;
     }
     & > h3 {
       margin-top: 40px;

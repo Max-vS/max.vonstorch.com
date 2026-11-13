@@ -1,9 +1,10 @@
+import { cn } from "cn";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { JsonLd } from "@/components/json-ld";
 import { PanelControl } from "@/components/tiles/panel-control";
+import { sourceSerif } from "@/components/writing/post-font";
 import { formatDate } from "@/components/writing/post-meta";
-import { PostTitle } from "@/components/writing/post-title";
 import { panelControls } from "@/content/site";
 import { getLocalPosts, getPost } from "@/content/writing";
 import { SITE_NAME, SITE_URL } from "@/lib/metadata";
@@ -36,7 +37,7 @@ function Post({ slug }: { slug: string }) {
   };
 
   return (
-    <div className="relative flex h-full flex-col">
+    <div className={cn("relative flex h-full flex-col", sourceSerif.variable)}>
       <div className="flex h-(--tile) shrink-0 items-center justify-between px-24 sm:px-(--tile) lg:pointer-events-none lg:absolute lg:inset-x-0 lg:top-0 lg:z-10">
         <PanelControl
           href="/writing"
@@ -48,16 +49,16 @@ function Post({ slug }: { slug: string }) {
           {formatDate(post.date)}
         </time>
       </div>
-      {/* From lg the column clears the controls, so the title shares their row; --aside keeps wide figures clear of them, --cap-top is their cap line. */}
+      {/* --aside keeps wide figures clear of the controls; --cap-top is the controls' cap line, for a figure's sticky head. */}
       <div className="@container min-h-0 flex-1 overflow-y-auto lg:[--aside:calc(2*var(--tile)+16px)] lg:[--cap-top:--spacing(40.5)]">
-        <article className="mx-auto max-w-720 px-24 pt-20 pb-96 sm:px-40 sm:pt-40 sm:pb-120 lg:pt-[calc(var(--cap-top)-13px)]">
-          <h1 className="text-balance font-bold text-[32px] leading-[1.1] tracking-[-0.03em] sm:text-[48px] sm:leading-[1.05]">
-            <PostTitle title={post.title} />
+        <article className="mx-auto max-w-[736px] px-[24px] pt-[56px] pb-[128px] lg:pt-[calc(var(--tile)+46px)]">
+          <h1 className="text-balance font-bold text-[40px] leading-none tracking-[-0.03em] sm:text-[64px]">
+            {post.title}
           </h1>
-          <p className="mt-[12px] text-pretty text-[18px] text-lede leading-[1.5] sm:mt-[16px] sm:text-[20px]">
+          <p className="mt-[16px] text-pretty font-serif text-[18px] text-lede leading-[1.5] sm:mt-[20px] sm:text-[20px]">
             {post.summary}
           </p>
-          <div className="post-body mt-[32px] sm:mt-[40px]">
+          <div className="post-body mt-[48px] sm:mt-[64px]">
             <post.Body />
           </div>
         </article>
